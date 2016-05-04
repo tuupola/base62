@@ -1,0 +1,35 @@
+{
+    "name": "tuupola/base",
+    "description": "Base62 encoder and decoder for arbitary data",
+    "keywords": [
+        "base62"
+    ],
+    "homepage": "https://github.com/tuupola/base",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mika Tuupola",
+            "email": "tuupola@appelsiini.net",
+            "homepage": "http://www.appelsiini.net/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php" : "^5.5 || ^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tuupola\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tuupola\\": "tests"
+        }
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^2.5",
+        "phpunit/phpunit": "^4.8",
+        "paragonie/random_compat": "^2.0"
+    }
+}
