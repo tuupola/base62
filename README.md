@@ -23,7 +23,7 @@ $decoded = Base62::decode($encoded);
 
 ## Why yet another Base62 encoder?
 
-Because all encoders I found were encoders for integer numbers. I needed to be able to encode abritrary data. This is usefull for example when generating [random tokens for database identifiers](https://paragonie.com/blog/2015/09/comprehensive-guide-url-parameter-encryption-in-php).
+Because all encoders I found were encoders for integer numbers. I needed to be able to encode arbitrary data. This is usefull for example when generating [random tokens for database identifiers](https://paragonie.com/blog/2015/09/comprehensive-guide-url-parameter-encryption-in-php).
 
 ``` php
 $uid = Base62::encode(random_bytes(9));
