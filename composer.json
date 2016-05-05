@@ -1,5 +1,5 @@
 {
-    "name": "tuupola/base",
+    "name": "tuupola/base62",
     "description": "Base62 encoder and decoder for arbitrary data",
     "keywords": [
         "base62"
