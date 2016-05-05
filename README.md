@@ -1,4 +1,4 @@
-# All your base62 are belong to us
+# All your Base62
 
 [![Latest Version](https://img.shields.io/github/release/tuupola/base62.svg?style=flat-square)](https://github.com/tuupola/base62/releases)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
