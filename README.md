@@ -3,8 +3,8 @@
 [![Latest Version](https://img.shields.io/github/release/tuupola/base62.svg?style=flat-square)](https://github.com/tuupola/base62/releases)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/tuupola/base62/master.svg?style=flat-square)](https://travis-ci.org/tuupola/base62)
-[![HHVM Status](https://img.shields.io/hhvm/tuupola/slim-jwt-auth.svg?style=flat-square)](http://hhvm.h4cc.de/package/tuupola/base62)
-[![Coverage](http://img.shields.io/codecov/c/github/tuupola/slim-jwt-auth.svg?style=flat-square)](https://codecov.io/github/tuupola/base62)
+[![HHVM Status](https://img.shields.io/hhvm/tuupola/base62.svg?style=flat-square)](http://hhvm.h4cc.de/package/tuupola/base62)
+[![Coverage](http://img.shields.io/codecov/c/github/tuupola/base62.svg?style=flat-square)](https://codecov.io/github/tuupola/base62)
 
 ## Install
 
