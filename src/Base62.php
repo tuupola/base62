@@ -25,11 +25,11 @@ class Base62
         return Base62\PhpEncoder::encode($data);
     }
 
-    public static function decode($data)
+    public static function decode($data, $integer = false)
     {
         if (function_exists("gmp_init")) {
-            return Base62\GmpEncoder::decode($data);
+            return Base62\GmpEncoder::decode($data, $integer);
         }
-        return Base62\PhpEncoder::decode($data);
+        return Base62\PhpEncoder::decode($data, $integer);
     }
 }
