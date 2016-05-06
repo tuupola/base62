@@ -24,10 +24,14 @@ class PhpEncoder
 
     public static function encode($data)
     {
-        $data = str_split($data);
-        $data = array_map(function ($character) {
-            return ord($character);
-        }, $data);
+        if (is_integer($data)) {
+            $data = [$data];
+        } else {
+            $data = str_split($data);
+            $data = array_map(function ($character) {
+                return ord($character);
+            }, $data);
+        }
 
         $converted = self::baseConvert($data, 256, 62);
 
@@ -36,12 +40,18 @@ class PhpEncoder
         }, $converted));
     }
 
-    public static function decode($data)
+    public static function decode($data, $integer = false)
     {
         $data = str_split($data);
         $data = array_map(function ($character) {
             return strpos(self::$characters, $character);
         }, $data);
+
+        /* Return as integer when requested. */
+        if ($integer) {
+            $converted = self::baseConvert($data, 62, 10);
+            return (integer) implode("", $converted);
+        }
 
         $converted = self::baseConvert($data, 62, 256);
 

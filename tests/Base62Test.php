@@ -38,6 +38,19 @@ class Base62Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data, $decoded2);
     }
 
+    public function testShouldEncodeAndDecodeIntegers()
+    {
+        $data = 987654321;
+        $encoded = PhpEncoder::encode($data);
+        $encoded2 = GmpEncoder::encode($data);
+        $decoded = PhpEncoder::decode($encoded, true);
+        $decoded2 = GmpEncoder::decode($encoded2, true);
+
+        $this->assertEquals($decoded2, $decoded);
+        $this->assertEquals($data, $decoded);
+        $this->assertEquals($data, $decoded2);
+    }
+
     public function testShouldEncodeAndDecodeWithLeadingZero()
     {
         $data = hex2bin("07d8e31da269bf28");

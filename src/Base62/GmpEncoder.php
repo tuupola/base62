@@ -19,16 +19,26 @@ class GmpEncoder
 {
     public static function encode($data)
     {
-        $hex = bin2hex($data);
+        if (is_integer($data)) {
+            $hex = dechex($data);
+        } else {
+            $hex = bin2hex($data);
+        }
         return gmp_strval(gmp_init($hex, 16), 62);
     }
 
-    public static function decode($data)
+    public static function decode($data, $integer = false)
     {
         $hex = gmp_strval(gmp_init($data, 62), 16);
         if (strlen($hex) % 2) {
             $hex = "0" . $hex;
         }
+
+        /* Return as integer when requested. */
+        if ($integer) {
+            return hexdec($hex);
+        }
+
         return hex2bin($hex);
     }
 }
