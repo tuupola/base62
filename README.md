@@ -17,16 +17,44 @@ $ composer require tuupola/base62
 ## Usage
 
 ``` php
+use Tuupola\Base62;
+
 $encoded = Base62::encode(random_bytes(128));
 $decoded = Base62::decode($encoded);
 ```
 
 ## Why yet another Base62 encoder?
 
-Because all encoders I found were encoders for integer numbers. I needed to be able to encode arbitrary data. This is usefull for example when generating [random tokens for database identifiers](https://paragonie.com/blog/2015/09/comprehensive-guide-url-parameter-encryption-in-php).
+Because all encoders I found were encoders only for integer numbers. I needed to be able to encode arbitrary data. This is usefull for example when generating url safe [random tokens for database identifiers](https://paragonie.com/blog/2015/09/comprehensive-guide-url-parameter-encryption-in-php).
 
 ``` php
-$uid = Base62::encode(random_bytes(9));
+$token = Base62::encode(random_bytes(9));
+```
+
+If you are already using UUIDs, they can also be encoded.
+
+``` php
+use Ramsey\Uuid\Uuid;
+use Tuupola\Base62;
+
+$uuid = Uuid::fromString("d84560c8-134f-11e6-a1e2-34363bd26dae");
+Base62::encode($uuid->getBytes()); /* 6a630O1jrtMjCrQDyG3D3O */
+$uuid = Uuid::fromBytes(Base62::decode("6a630O1jrtMjCrQDyG3D3O"));
+print $uuid; /* d84560c8-134f-11e6-a1e2-34363bd26dae */
+```
+
+Note that if you are encoding to and from integer you need to pass boolean `true` as the second argument for `decode()` method. This is because `decode()` method does not know if the original data was an integer or binary data.
+
+``` php
+$integer =  Base62::encode(987654321); /* 14q60P */
+print Base62::decode("14q60P", true); /* 987654321 */
+```
+
+Also note that encoding a string and an integer will yield different results.
+
+``` php
+$integer =  Base62::encode(987654321); /* 14q60P */
+$string = Base62::encode("987654321"); /* KHc6iHtXW3iD */
 ```
 
 ## Testing
