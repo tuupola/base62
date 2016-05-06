@@ -60,7 +60,7 @@ class PhpEncoder
         }, $converted));
     }
 
-    /* http://codegolf.stackexchange.com/questions/1620/arbitrary-base-conversion/1626#1626 */
+    /* http://codegolf.stackexchange.com/a/21672 */
 
     public static function baseConvert(array $source, $source_base, $target_base)
     {
@@ -70,7 +70,7 @@ class PhpEncoder
             $remainder = 0;
             for ($i = 0; $i !== $count; $i++) {
                 $accumulator = $source[$i] + $remainder * $source_base;
-                $digit = floor($accumulator / $target_base);
+                $digit = (integer) ($accumulator / $target_base);
                 $remainder = $accumulator % $target_base;
                 if (count($quotient) || $digit) {
                     array_push($quotient, $digit);
