@@ -1,0 +1,10 @@
+{
+    "bootstrap": "vendor/autoload.php",
+    "reports": {
+        "default": {
+            "generator": "table",
+            "cols": [ "subject", "mean", "diff" ],
+            "break": ["benchmark"]
+        }
+    }
+}
