@@ -30,12 +30,16 @@ class Base62Test extends \PHPUnit_Framework_TestCase
         $data = random_bytes(128);
         $encoded = PhpEncoder::encode($data);
         $encoded2 = GmpEncoder::encode($data);
+        $encoded3 = BcmathEncoder::encode($data);
         $decoded = PhpEncoder::decode($encoded);
         $decoded2 = GmpEncoder::decode($encoded2);
+        $decoded3 = BcmathEncoder::decode($encoded3);
 
         $this->assertEquals($decoded2, $decoded);
+        $this->assertEquals($decoded3, $decoded);
         $this->assertEquals($data, $decoded);
         $this->assertEquals($data, $decoded2);
+        $this->assertEquals($data, $decoded3);
     }
 
     public function testShouldEncodeAndDecodeIntegers()
@@ -43,12 +47,16 @@ class Base62Test extends \PHPUnit_Framework_TestCase
         $data = 987654321;
         $encoded = PhpEncoder::encode($data);
         $encoded2 = GmpEncoder::encode($data);
+        $encoded3 = BcmathEncoder::encode($data);
         $decoded = PhpEncoder::decode($encoded, true);
         $decoded2 = GmpEncoder::decode($encoded2, true);
+        $decoded3 = BcmathEncoder::decode($encoded2, true);
 
         $this->assertEquals($decoded2, $decoded);
+        $this->assertEquals($decoded3, $decoded);
         $this->assertEquals($data, $decoded);
         $this->assertEquals($data, $decoded2);
+        $this->assertEquals($data, $decoded3);
     }
 
     public function testShouldEncodeAndDecodeWithLeadingZero()
@@ -56,12 +64,16 @@ class Base62Test extends \PHPUnit_Framework_TestCase
         $data = hex2bin("07d8e31da269bf28");
         $encoded = PhpEncoder::encode($data);
         $encoded2 = GmpEncoder::encode($data);
+        $encoded3 = BcmathEncoder::encode($data);
         $decoded = PhpEncoder::decode($encoded);
         $decoded2 = GmpEncoder::decode($encoded2);
+        $decoded3 = BcmathEncoder::decode($encoded3);
 
         $this->assertEquals($decoded2, $decoded);
+        $this->assertEquals($decoded3, $decoded);
         $this->assertEquals($data, $decoded);
         $this->assertEquals($data, $decoded2);
+        $this->assertEquals($data, $decoded3);
     }
 
     public function testShouldAutoSelectEncoder()
