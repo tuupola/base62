@@ -16,11 +16,27 @@ $ composer require tuupola/base62
 
 ## Usage
 
+This package has both pure PHP and [GMP](http://php.net/manual/en/ref.gmp.php) based encoders. By default encoder and decoder will use GMP functions if the extension is installed. If GMP is not available pure PHP encoder will be used instead.
+
 ``` php
 use Tuupola\Base62;
 
 $encoded = Base62::encode(random_bytes(128));
 $decoded = Base62::decode($encoded);
+```
+
+Install GMP if you can. It is much faster pure PHP encoder. Below benchmarks are for encoding `random_bytes(128)` data. BCMatch encoder is also included but it is mostly just a curiocity. It is too slow to be usable.
+
+```
+$ phpbench run benchmarks/ --report=default
+
++--------------------+---------------+---------+
+| subject            | mean          | diff    |
++--------------------+---------------+---------+
+| benchGmpEncoder    | 50.900μs      | 0.00%   |
+| benchPhpEncoder    | 39,044.400μs  | +99.87% |
+| benchBcmathEncoder | 139,278.500μs | +99.96% |
++--------------------+---------------+---------+
 ```
 
 ## Why yet another Base62 encoder?
