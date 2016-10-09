@@ -25,7 +25,7 @@ $encoded = Base62::encode(random_bytes(128));
 $decoded = Base62::decode($encoded);
 ```
 
-Or if you prefer not to use objects.
+Or if you prefer to use object syntax.
 
 ``` php
 use Tuupola\Base62\Encoder as Base62;
