@@ -40,6 +40,11 @@ class Base62Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data, $decoded);
         $this->assertEquals($data, $decoded2);
         $this->assertEquals($data, $decoded3);
+
+        $base62 = new Encoder;
+        $encoded4 = $base62->encode($data);
+        $decoded4 = $base62->decode($encoded4);
+        $this->assertEquals($data, $decoded4);
     }
 
     public function testShouldEncodeAndDecodeIntegers()
@@ -57,6 +62,11 @@ class Base62Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data, $decoded);
         $this->assertEquals($data, $decoded2);
         $this->assertEquals($data, $decoded3);
+
+        $base62 = new Encoder;
+        $encoded4 = $base62->encode($data);
+        $decoded4 = $base62->decode($encoded4, true);
+        $this->assertEquals($data, $decoded4);
     }
 
     public function testShouldEncodeAndDecodeWithLeadingZero()
@@ -74,6 +84,11 @@ class Base62Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data, $decoded);
         $this->assertEquals($data, $decoded2);
         $this->assertEquals($data, $decoded3);
+
+        $base62 = new Encoder;
+        $encoded4 = $base62->encode($data);
+        $decoded4 = $base62->decode($encoded4);
+        $this->assertEquals($data, $decoded4);
     }
 
     public function testShouldAutoSelectEncoder()

@@ -25,7 +25,18 @@ $encoded = Base62::encode(random_bytes(128));
 $decoded = Base62::decode($encoded);
 ```
 
-Install GMP if you can. It is much faster pure PHP encoder. Below benchmarks are for encoding `random_bytes(128)` data. BCMatch encoder is also included but it is mostly just a curiocity. It is too slow to be usable.
+Or if you prefer not to use objects.
+
+``` php
+use Tuupola\Base62\Encoder as Base62;
+
+$base62 = new Base62;
+
+$encoded = $base62->encode(random_bytes(128));
+$decoded = $base62->decode($encoded);
+```
+
+Install GMP if you can. It is much faster pure PHP encoder. Below benchmarks are for encoding `random_bytes(128)` data. BCMatch encoder is also included but it is mostly just a curiosity. It is too slow to be usable.
 
 ```
 $ phpbench run benchmarks/ --report=default
