@@ -3,7 +3,7 @@
 /*
  * This file is part of the Base62 package
  *
- * Copyright (c) 2011-2016 Anthony Ferrara, Mika Tuupola
+ * Copyright (c) 2011-2017 Anthony Ferrara, Mika Tuupola
  *
  * Based on BaseConverter by Anthony Ferrara
  *   https://github.com/ircmaxell/SecurityLib/tree/master/lib/SecurityLib
