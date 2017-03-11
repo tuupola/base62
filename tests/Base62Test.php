@@ -16,6 +16,7 @@
 namespace Tuupola\Base62;
 
 use Tuupola\Base62;
+use Tuupola\Base62Proxy;
 
 class Base62Test extends \PHPUnit_Framework_TestCase
 {
@@ -44,6 +45,11 @@ class Base62Test extends \PHPUnit_Framework_TestCase
         $encoded4 = (new Base62)->encode($data);
         $decoded4 = (new Base62)->decode($encoded4);
         $this->assertEquals($data, $decoded4);
+
+        $encoded5 = Base62Proxy::encode($data);
+        $decoded5 = Base62Proxy::decode($encoded5);
+        $this->assertEquals($encoded, $encoded5);
+        $this->assertEquals($data, $decoded5);
     }
 
     public function testShouldEncodeAndDecodeIntegers()
@@ -65,6 +71,11 @@ class Base62Test extends \PHPUnit_Framework_TestCase
         $encoded4 = (new Base62)->encode($data);
         $decoded4 = (new Base62)->decode($encoded4, true);
         $this->assertEquals($data, $decoded4);
+
+        $encoded5 = Base62Proxy::encode($data);
+        $decoded5 = Base62Proxy::decode($encoded5, true);
+        $this->assertEquals($encoded, $encoded5);
+        $this->assertEquals($data, $decoded5);
     }
 
     public function testShouldEncodeAndDecodeWithLeadingZero()
@@ -86,6 +97,11 @@ class Base62Test extends \PHPUnit_Framework_TestCase
         $encoded4 = (new Base62)->encode($data);
         $decoded4 = (new Base62)->decode($encoded4);
         $this->assertEquals($data, $decoded4);
+
+        $encoded5 = Base62Proxy::encode($data);
+        $decoded5 = Base62Proxy::decode($encoded5);
+        $this->assertEquals($encoded, $encoded5);
+        $this->assertEquals($data, $decoded5);
     }
 
     public function testShouldAutoSelectEncoder()
