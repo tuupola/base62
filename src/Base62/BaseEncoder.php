@@ -20,7 +20,7 @@ use Tuupola\Base62;
 abstract class BaseEncoder
 {
     private $options = [
-        "characters" => Base62::DEFAULT,
+        "characters" => Base62::GMP,
     ];
 
     public function __construct($options = [])

@@ -20,7 +20,7 @@ use Tuupola\Base62;
 class GmpEncoder
 {
     private $options = [
-        "characters" => Base62::DEFAULT,
+        "characters" => Base62::GMP,
     ];
 
     public function __construct($options = [])
@@ -37,16 +37,16 @@ class GmpEncoder
         }
         $base62 = gmp_strval(gmp_init($hex, 16), 62);
 
-        if (Base62::DEFAULT === $this->options["characters"]) {
+        if (Base62::GMP === $this->options["characters"]) {
             return $base62;
         }
-        return strtr($base62, Base62::DEFAULT, $this->options["characters"]);
+        return strtr($base62, Base62::GMP, $this->options["characters"]);
     }
 
     public function decode($data, $integer = false)
     {
-        if (Base62::DEFAULT !== $this->options["characters"]) {
-            $data = strtr($data, $this->options["characters"], Base62::DEFAULT);
+        if (Base62::GMP !== $this->options["characters"]) {
+            $data = strtr($data, $this->options["characters"], Base62::GMP);
         }
 
         $hex = gmp_strval(gmp_init($data, 62), 16);
