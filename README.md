@@ -39,6 +39,22 @@ $integer = $base62->encode(987654321); /* 14q60P */
 $string = $base62->encode("987654321"); /* KHc6iHtXW3iD */
 ```
 
+## Character sets
+
+By default Base62 uses GMP style character set. Shortcut is provided for the inverted character set which is also commonly used. You can also use any custom character set of 62 unique characters.
+
+```php
+use Tuupola\Base62;
+
+print Base62:DEFAULT; /* 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz */
+print Base62:INVERTED; /* 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ */
+
+$default = new Base62(["characters" => Base62:DEFAULT]);
+$inverted = new Base62(["characters" => Base62:INVERTED]);
+print $default->encode("Hello world!");/* T8dgcjRGuYUueWht */
+print $inverted->encode("Hello world!"); /* t8DGCJrgUyuUEwHT */
+```
+
 ## Speed
 
 Install GMP if you can. It is much faster pure PHP encoder. Below benchmarks are for encoding `random_bytes(128)` data. BCMatch encoder is also included but it is mostly just a curiosity. It is too slow to be usable.
@@ -46,13 +62,14 @@ Install GMP if you can. It is much faster pure PHP encoder. Below benchmarks are
 ```
 $ phpbench run benchmarks/ --report=default
 
-+--------------------+-----------------+--------------+
-| subject            | mean            | diff         |
-+--------------------+-----------------+--------------+
-| benchGmpEncoder    | 75,918.615ops/s | 0.00%        |
-| benchPhpEncoder    | 26.029ops/s     | +291,571.39% |
-| benchBcmathEncoder | 8.170ops/s      | +929,154.93% |
-+--------------------+-----------------+--------------+
++-----------------------+-----------------+----------------+
+| subject               | mean            | diff           |
++-----------------------+-----------------+----------------+
+| benchGmpEncoder       | 73,099.415ops/s | 0.00%          |
+| benchGmpEncoderCustom | 61,349.693ops/s | +19.15%        |
+| benchPhpEncoder       | 25.192ops/s     | +290,072.37%   |
+| benchBcmathEncoder    | 7.264ops/s      | +1,006,253.07% |
++-----------------------+-----------------+----------------+
 ```
 
 ## Why yet another Base62 encoder?

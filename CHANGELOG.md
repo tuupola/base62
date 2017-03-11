@@ -4,9 +4,16 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ## 0.8.0 - unreleased
 
+This release is not compatible with `0.7.0`. Object syntax is now default. A quick way to upgrade is to add the following to your code:
+
+```php
+use Tuupola\Base62Proxy as Base62;
+```
+
 ### Added
 
-- Nothing.
+- Possibility to use custom character sets.
+- Static proxy for those who want to use static syntax `Base62::decode("foo)`.
 
 ### Deprecated
 
@@ -24,8 +31,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Allow using object syntax, for example `$base62->decode($encoded)`.
-- Optional BCMath encoder. Mostly a curiosity since it is slower than pure PHP encoder.∏
+- Allow using object syntax, for example `$base62->decode("foo")`.
+- Optional BCMath encoder. Mostly a curiosity since it is slower than pure PHP encoder.
 
 ### Deprecated
 

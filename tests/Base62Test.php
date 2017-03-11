@@ -78,6 +78,15 @@ class Base62Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data, $decoded5);
     }
 
+    public function testShouldAutoSelectEncoder()
+    {
+        $data = random_bytes(128);
+        $encoded = (new Base62)->encode($data);
+        $decoded = (new Base62)->decode($encoded);
+
+        $this->assertEquals($data, $decoded);
+    }
+
     public function testShouldEncodeAndDecodeWithLeadingZero()
     {
         $data = hex2bin("07d8e31da269bf28");
@@ -104,12 +113,94 @@ class Base62Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data, $decoded5);
     }
 
-    public function testShouldAutoSelectEncoder()
+    public function testShouldUseDefaultCharacterSet()
     {
-        $data = random_bytes(128);
-        $encoded = (new Base62)->encode($data);
-        $decoded = (new Base62)->decode($encoded);
+        $data = "Hello world!";
 
+        $encoded = (new PhpEncoder)->encode($data);
+        $encoded2 = (new GmpEncoder)->encode($data);
+        $encoded3 = (new BcmathEncoder)->encode($data);
+        $decoded = (new PhpEncoder)->decode($encoded);
+        $decoded2 = (new GmpEncoder)->decode($encoded2);
+        $decoded3 = (new BcmathEncoder)->decode($encoded2);
+
+        $this->assertEquals($encoded, "T8dgcjRGuYUueWht");
+        $this->assertEquals($encoded2, "T8dgcjRGuYUueWht");
+        $this->assertEquals($encoded3, "T8dgcjRGuYUueWht");
         $this->assertEquals($data, $decoded);
+        $this->assertEquals($data, $decoded2);
+        $this->assertEquals($data, $decoded3);
+
+        $encoded4 = (new Base62)->encode($data);
+        $decoded4 = (new Base62)->decode($encoded4);
+        $this->assertEquals($data, $decoded4);
+
+        $encoded5 = Base62Proxy::encode($data);
+        $decoded5 = Base62Proxy::decode($encoded5);
+        $this->assertEquals($encoded, $encoded5);
+        $this->assertEquals($data, $decoded5);
+    }
+
+    public function testShouldUseInvertedCharacterSet()
+    {
+        $data = "Hello world!";
+
+        $encoded = (new PhpEncoder(["characters" => Base62::INVERTED]))->encode($data);
+        $encoded2 = (new GmpEncoder(["characters" => Base62::INVERTED]))->encode($data);
+        $encoded3 = (new BcmathEncoder(["characters" => Base62::INVERTED]))->encode($data);
+        $decoded = (new PhpEncoder(["characters" => Base62::INVERTED]))->decode($encoded);
+        $decoded2 = (new GmpEncoder(["characters" => Base62::INVERTED]))->decode($encoded2);
+        $decoded3 = (new BcmathEncoder(["characters" => Base62::INVERTED]))->decode($encoded2);
+
+        $this->assertEquals($encoded, "t8DGCJrgUyuUEwHT");
+        $this->assertEquals($encoded2, "t8DGCJrgUyuUEwHT");
+        $this->assertEquals($encoded3, "t8DGCJrgUyuUEwHT");
+        $this->assertEquals($data, $decoded);
+        $this->assertEquals($data, $decoded2);
+        $this->assertEquals($data, $decoded3);
+
+        $encoded4 = (new Base62)->encode($data);
+        $decoded4 = (new Base62)->decode($encoded4);
+        $this->assertEquals($data, $decoded4);
+
+        Base62Proxy::$options = [
+            "characters" => Base62::INVERTED,
+        ];
+        $encoded5 = Base62Proxy::encode($data);
+        $decoded5 = Base62Proxy::decode($encoded5);
+        $this->assertEquals($encoded5, "t8DGCJrgUyuUEwHT");
+        $this->assertEquals($data, $decoded5);
+    }
+
+    public function testShouldUseICustomCharacterSet()
+    {
+        $data = "Hello world!";
+        $characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+        $encoded = (new PhpEncoder(["characters" => $characters]))->encode($data);
+        $encoded2 = (new GmpEncoder(["characters" => $characters]))->encode($data);
+        $encoded3 = (new BcmathEncoder(["characters" => $characters]))->encode($data);
+        $decoded = (new PhpEncoder(["characters" => $characters]))->decode($encoded);
+        $decoded2 = (new GmpEncoder(["characters" => $characters]))->decode($encoded2);
+        $decoded3 = (new BcmathEncoder(["characters" => $characters]))->decode($encoded2);
+
+        $this->assertEquals($encoded, "DiNQMTBq4IE4OGR3");
+        $this->assertEquals($encoded2, "DiNQMTBq4IE4OGR3");
+        $this->assertEquals($encoded3, "DiNQMTBq4IE4OGR3");
+        $this->assertEquals($data, $decoded);
+        $this->assertEquals($data, $decoded2);
+        $this->assertEquals($data, $decoded3);
+
+        $encoded4 = (new Base62)->encode($data);
+        $decoded4 = (new Base62)->decode($encoded4);
+        $this->assertEquals($data, $decoded4);
+
+        Base62Proxy::$options = [
+            "characters" => $characters,
+        ];
+        $encoded5 = Base62Proxy::encode($data);
+        $decoded5 = Base62Proxy::decode($encoded5);
+        $this->assertEquals($encoded5, "DiNQMTBq4IE4OGR3");
+        $this->assertEquals($data, $decoded5);
     }
 }

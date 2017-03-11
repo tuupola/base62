@@ -20,7 +20,7 @@ use Tuupola\Base62;
 class Base62Proxy
 {
     public static $options = [
-        "characters" => Base62::GMP,
+        "characters" => Base62::DEFAULT,
     ];
 
     public static function encode($data, $options = [])
