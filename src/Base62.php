@@ -17,19 +17,27 @@ namespace Tuupola;
 
 class Base62
 {
-    public static function encode($data)
+    const GMP = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+    private $encoder;
+    private $options = [];
+
+    public function __construct($options = [])
     {
+        $this->options = array_merge($this->options, (array) $options);
         if (function_exists("gmp_init")) {
-            return Base62\GmpEncoder::encode($data);
+            $this->encoder = new Base62\GmpEncoder($this->options);
         }
-        return Base62\PhpEncoder::encode($data);
+        $this->encoder = new Base62\PhpEncoder($this->options);
     }
 
-    public static function decode($data, $integer = false)
+    public function encode($data)
     {
-        if (function_exists("gmp_init")) {
-            return Base62\GmpEncoder::decode($data, $integer);
-        }
-        return Base62\PhpEncoder::decode($data, $integer);
+        return $this->encoder->encode($data);
+    }
+
+    public function decode($data, $integer = false)
+    {
+        return $this->encoder->decode($data, $integer);
     }
 }

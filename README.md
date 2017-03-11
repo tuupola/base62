@@ -41,13 +41,13 @@ Install GMP if you can. It is much faster pure PHP encoder. Below benchmarks are
 ```
 $ phpbench run benchmarks/ --report=default
 
-+--------------------+---------------+--------------+
-| subject            | mean          | diff         |
-+--------------------+---------------+--------------+
-| benchGmpEncoder    | 37.500μs      | 0.00%        |
-| benchPhpEncoder    | 37,204.600μs  | +99,112.27%  |
-| benchBcmathEncoder | 123,914.700μs | +330,339.20% |
-+--------------------+---------------+--------------+
++--------------------+-----------------+--------------+
+| subject            | mean            | diff         |
++--------------------+-----------------+--------------+
+| benchGmpEncoder    | 75,918.615ops/s | 0.00%        |
+| benchPhpEncoder    | 26.029ops/s     | +291,571.39% |
+| benchBcmathEncoder | 8.170ops/s      | +929,154.93% |
++--------------------+-----------------+--------------+
 ```
 
 ## Why yet another Base62 encoder?

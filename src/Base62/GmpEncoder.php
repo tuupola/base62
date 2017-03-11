@@ -15,9 +15,20 @@
 
 namespace Tuupola\Base62;
 
+use Tuupola\Base62;
+
 class GmpEncoder
 {
-    public static function encode($data)
+    private $options = [
+        "characters" => Base62::GMP,
+    ];
+
+    public function __construct($options = [])
+    {
+        $this->options = array_merge($this->options, (array) $options);
+    }
+
+    public function encode($data)
     {
         if (is_integer($data)) {
             $hex = dechex($data);
@@ -27,7 +38,7 @@ class GmpEncoder
         return gmp_strval(gmp_init($hex, 16), 62);
     }
 
-    public static function decode($data, $integer = false)
+    public function decode($data, $integer = false)
     {
         $hex = gmp_strval(gmp_init($data, 62), 16);
         if (strlen($hex) % 2) {

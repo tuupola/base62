@@ -18,51 +18,13 @@
 
 namespace Tuupola\Base62;
 
-class PhpEncoder
+use Tuupola\Base62;
+
+class PhpEncoder extends BaseEncoder
 {
-    public static $characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-
-    public static function encode($data)
-    {
-        if (is_integer($data)) {
-            $data = [$data];
-        } else {
-            $data = str_split($data);
-            $data = array_map(function ($character) {
-                return ord($character);
-            }, $data);
-        }
-
-        $converted = self::baseConvert($data, 256, 62);
-
-        return implode("", array_map(function ($index) {
-            return self::$characters[$index];
-        }, $converted));
-    }
-
-    public static function decode($data, $integer = false)
-    {
-        $data = str_split($data);
-        $data = array_map(function ($character) {
-            return strpos(self::$characters, $character);
-        }, $data);
-
-        /* Return as integer when requested. */
-        if ($integer) {
-            $converted = self::baseConvert($data, 62, 10);
-            return (integer) implode("", $converted);
-        }
-
-        $converted = self::baseConvert($data, 62, 256);
-
-        return implode("", array_map(function ($ascii) {
-            return chr($ascii);
-        }, $converted));
-    }
-
     /* http://codegolf.stackexchange.com/a/21672 */
 
-    public static function baseConvert(array $source, $source_base, $target_base)
+    public function baseConvert(array $source, $source_base, $target_base)
     {
         $result = [];
         while ($count = count($source)) {

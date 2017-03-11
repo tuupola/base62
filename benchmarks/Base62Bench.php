@@ -19,6 +19,10 @@ use Tuupola\Base62\GmpEncoder;
 
 /**
  * @BeforeMethods({"init"})
+ * @Iterations(5)
+ * @Warmup(2)
+ * @OutputTimeUnit("seconds")
+ * @OutputMode("throughput")
  */
 
 class Base62Bench
@@ -28,32 +32,36 @@ class Base62Bench
     public function init()
     {
         $this->data = random_bytes(128);
+        $this->gmp = new GmpEncoder;
+        $this->php = new PhpEncoder;
+        $this->bcmath = new BcmathEncoder;
     }
 
     /**
-     * @Revs(10)
+     * @Revs(100)
      */
     public function benchGmpEncoder()
     {
-        $encoded = GmpEncoder::encode($this->data);
-        $decoded = GmpEncoder::decode($encoded);
+        $encoded = $this->gmp->encode($this->data);
+        $decoded = $this->gmp->decode($encoded);
     }
 
     /**
-     * @Revs(10)
+     * @Revs(100)
      */
     public function benchPhpEncoder()
     {
-        $encoded = PhpEncoder::encode($this->data);
-        $decoded = PhpEncoder::decode($encoded);
+        $encoded = $this->php->encode($this->data);
+        $decoded = $this->php->decode($encoded);
     }
 
     /**
-     * @Revs(10)
+     * @Revs(100)
      */
     public function benchBcmathEncoder()
     {
-        $encoded = BcmathEncoder::encode($this->data);
-        $decoded = BcmathEncoder::decode($encoded);
+        $encoded = $this->bcmath->encode($this->data);
+        $decoded = $this->bcmath->decode($encoded);
     }
+
 }
