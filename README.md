@@ -46,10 +46,10 @@ By default Base62 uses GMP style character set. Shortcut is provided for the inv
 ```php
 use Tuupola\Base62;
 
-print Base62:DEFAULT; /* 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz */
+print Base62:GMP; /* 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz */
 print Base62:INVERTED; /* 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ */
 
-$default = new Base62(["characters" => Base62:DEFAULT]);
+$default = new Base62(["characters" => Base62:GMP]);
 $inverted = new Base62(["characters" => Base62:INVERTED]);
 print $default->encode("Hello world!");/* T8dgcjRGuYUueWht */
 print $inverted->encode("Hello world!"); /* t8DGCJrgUyuUEwHT */
