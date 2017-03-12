@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 0.8.0 - unreleased
+## 0.8.0 - 2016-03-12
 
 This release is not compatible with `0.7.0`. Object syntax is now default. A quick way to upgrade is to add the following to your code:
 
@@ -13,7 +13,12 @@ use Tuupola\Base62Proxy as Base62;
 ### Added
 
 - Possibility to use custom character sets.
-- Static proxy for those who want to use static syntax `Base62::decode("foo)`.
+- Static proxy for those who want to use static syntax
+    ```php
+    use Tuupola\Base62Proxy as Base62;
+
+    Base62::decode("foo");
+    ```
 
 ### Deprecated
 
