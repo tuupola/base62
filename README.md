@@ -1,4 +1,7 @@
-# All your Base62
+# Base62
+
+This library implements base62 encoding. In addition to integers it can encode and decode any arbitrary data. This is useful for example when generating url safe [random tokens for database identifiers](https://paragonie.com/blog/2015/09/comprehensive-guide-url-parameter-encryption-in-php). For quick testing try the [online base62 encoder](http://base62.net).
+
 
 [![Latest Version](https://img.shields.io/packagist/v/tuupola/base62.svg?style=flat-square)](https://packagist.org/packages/tuupola/base62)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
@@ -70,14 +73,6 @@ $ phpbench run benchmarks/ --report=default
 | benchPhpEncoder       | 25.192ops/s     | +290,072.37%   |
 | benchBcmathEncoder    | 7.264ops/s      | +1,006,253.07% |
 +-----------------------+-----------------+----------------+
-```
-
-## Why yet another Base62 encoder?
-
-Because all encoders I found were encoders only for integer numbers. I needed to be able to encode arbitrary data. This is usefull for example when generating url safe [random tokens for database identifiers](https://paragonie.com/blog/2015/09/comprehensive-guide-url-parameter-encryption-in-php).
-
-``` php
-$token = $base62->encode(random_bytes(9));
 ```
 
 ## Static Proxy
