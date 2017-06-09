@@ -31,11 +31,11 @@ class GmpEncoder
     public function encode($data)
     {
         if (is_integer($data)) {
-            $hex = dechex($data);
+            $base62 = gmp_strval(gmp_init($data, 10), 62);
         } else {
             $hex = bin2hex($data);
+            $base62 = gmp_strval(gmp_init($hex, 16), 62);
         }
-        $base62 = gmp_strval(gmp_init($hex, 16), 62);
 
         if (Base62::GMP === $this->options["characters"]) {
             return $base62;
