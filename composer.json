@@ -31,14 +31,7 @@
         "squizlabs/php_codesniffer": "^2.5",
         "phpunit/phpunit": "^4.8",
         "paragonie/random_compat": "^2.0",
-        "phpbench/phpbench": "^0.13.0"
-    },
-    "scripts": {
-        "test": "composer phplint && composer phpcs && composer phpunit",
-        "phpcs": "vendor/bin/phpcs --standard=PSR2 --extensions=php --encoding=utf-8 --ignore=*/vendor/*,*/benchmarks/* . -p",
-        "phpunit": "vendor/bin/phpunit --coverage-text --coverage-html ./report/",
-        "phplint": "env phplint  '**/*.php' '!vendor/**'",
-        "phpbench": "vendor/bin/phpbench run benchmarks/ --report=default",
-        "watch": "find . -name \"*.php\" -not -path \"./vendor/*\" -o -name \"*.json\" -not -path \"./vendor/*\"| entr -c composer test"
+        "phpbench/phpbench": "^0.13.0",
+        "overtrue/phplint": "^0.2.4"
     }
 }
