@@ -28,9 +28,9 @@ class GmpEncoder
         $this->options = array_merge($this->options, (array) $options);
     }
 
-    public function encode($data)
+    public function encode($data, $integer = false)
     {
-        if (is_integer($data)) {
+        if (is_integer($data) || true === $integer) {
             $base62 = gmp_strval(gmp_init($data, 10), 62);
         } else {
             $hex = bin2hex($data);
@@ -60,5 +60,15 @@ class GmpEncoder
         }
 
         return hex2bin($hex);
+    }
+
+    public function encodeInteger($data)
+    {
+        return $this->encode($data, true);
+    }
+
+    public function decodeInteger($data)
+    {
+        return $this->decode($data, true);
     }
 }

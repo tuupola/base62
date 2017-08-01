@@ -23,13 +23,23 @@ class Base62Proxy
         "characters" => Base62::GMP,
     ];
 
-    public static function encode($data, $options = [])
+    public static function encode($data, $integer = false, $options = [])
     {
-        return (new Base62(self::$options))->encode($data);
+        return (new Base62(self::$options))->encode($data, $integer);
     }
 
     public static function decode($data, $integer = false, $options = [])
     {
         return (new Base62(self::$options))->decode($data, $integer);
+    }
+
+    public static function encodeInteger($data, $options = [])
+    {
+        return (new Base62(self::$options))->encodeInteger($data);
+    }
+
+    public static function decodeInteger($data, $options = [])
+    {
+        return (new Base62(self::$options))->decodeInteger($data);
     }
 }

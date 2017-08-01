@@ -28,9 +28,9 @@ abstract class BaseEncoder
         $this->options = array_merge($this->options, (array) $options);
     }
 
-    public function encode($data)
+    public function encode($data, $integer = false)
     {
-        if (is_integer($data)) {
+        if (is_integer($data) || true === $integer) {
             $data = [$data];
         } else {
             $data = str_split($data);
@@ -64,6 +64,16 @@ abstract class BaseEncoder
         return implode("", array_map(function ($ascii) {
             return chr($ascii);
         }, $converted));
+    }
+
+    public function encodeInteger($data)
+    {
+        return $this->encode($data, true);
+    }
+
+    public function decodeInteger($data)
+    {
+        return $this->decode($data, true);
     }
 
     abstract public function baseConvert(array $source, $source_base, $target_base);

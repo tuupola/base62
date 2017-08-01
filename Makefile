@@ -14,7 +14,7 @@ unit: ## Run unit tests and generate coverage
 	vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml --coverage-html=./report/
 
 watch: ## Run make build when any of the source files change
-	find . -name "*.php" -not -path "./vendor/*" -o -name "*.json" -not -path "./vendor/*" | entr -c make build
+	find . -name "*.php" -not -path "./vendor/*" -o -name "*.json" -not -path "./vendor/*" | entr -c make test
 
 test: ## Same as make lint && make unit
 	make lint

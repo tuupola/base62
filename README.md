@@ -27,11 +27,18 @@ $encoded = $base62->encode(random_bytes(128));
 $decoded = $base62->decode($encoded);
 ```
 
-Note that if you are encoding to and from integer you need to pass boolean `true` as the second argument for `decode()` method. This is because `decode()` method does not know if the original data was an integer or binary data.
+Note that if you are encoding to and from integer you need to pass boolean `true` as the second argument for `decode()` method. This is because `decode()` does not know if the original data was an integer or binary data.
 
 ``` php
 $integer = $base62->encode(987654321); /* 14q60P */
 print $base62->decode("14q60P", true); /* 987654321 */
+```
+
+If you prefer you can also use the implicit `decodeInteger()` method.
+
+``` php
+$integer = $base62->encode(987654321); /* 14q60P */
+print $base62->decodeInteger("14q60P"); /* 987654321 */
 ```
 
 Also note that encoding a string and an integer will yield different results.
@@ -53,7 +60,7 @@ print Base62:INVERTED; /* 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR
 
 $default = new Base62(["characters" => Base62:GMP]);
 $inverted = new Base62(["characters" => Base62:INVERTED]);
-print $default->encode("Hello world!");/* T8dgcjRGuYUueWht */
+print $default->encode("Hello world!"); /* T8dgcjRGuYUueWht */
 print $inverted->encode("Hello world!"); /* t8DGCJrgUyuUEwHT */
 ```
 
@@ -104,7 +111,7 @@ print $uuid; /* d84560c8-134f-11e6-a1e2-34363bd26dae */
 You can run tests either manually or automatically on every code change. Automatic tests require [entr](http://entrproject.org/) to work.
 
 ``` bash
-$ make build
+$ make test
 ```
 ``` bash
 $ brew install entr

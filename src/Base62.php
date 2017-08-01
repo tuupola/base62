@@ -32,13 +32,23 @@ class Base62
         $this->encoder = new Base62\PhpEncoder($this->options);
     }
 
-    public function encode($data)
+    public function encode($data, $integer = false)
     {
-        return $this->encoder->encode($data);
+        return $this->encoder->encode($data, $integer);
     }
 
     public function decode($data, $integer = false)
     {
         return $this->encoder->decode($data, $integer);
+    }
+
+    public function encodeInteger($data)
+    {
+        return $this->encoder->encodeInteger($data);
+    }
+
+    public function decodeInteger($data)
+    {
+        return $this->encoder->decodeInteger($data);
     }
 }

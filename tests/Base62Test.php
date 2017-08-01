@@ -78,6 +78,34 @@ class Base62Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data, $decoded5);
     }
 
+    public function testShouldEncodeAndDecodeStringsAsIntegers()
+    {
+        $data = "987654321";
+        $encoded = (new PhpEncoder)->encodeInteger($data);
+        $encoded2 = (new GmpEncoder)->encodeInteger($data);
+        $encoded3 = (new BcmathEncoder)->encodeInteger($data);
+        $decoded = (new PhpEncoder)->decodeInteger($encoded);
+        $decoded2 = (new GmpEncoder)->decodeInteger($encoded2);
+        $decoded3 = (new BcmathEncoder)->decodeInteger($encoded2);
+
+        $this->assertEquals($encoded, (new Base62)->encode(987654321));
+
+        $this->assertEquals($decoded2, $decoded);
+        $this->assertEquals($decoded3, $decoded);
+        $this->assertEquals($data, $decoded);
+        $this->assertEquals($data, $decoded2);
+        $this->assertEquals($data, $decoded3);
+
+        $encoded4 = (new Base62)->encodeInteger($data);
+        $decoded4 = (new Base62)->decodeInteger($encoded4);
+        $this->assertEquals($data, $decoded4);
+
+        $encoded5 = Base62Proxy::encodeInteger($data);
+        $decoded5 = Base62Proxy::decodeInteger($encoded5);
+        $this->assertEquals($encoded, $encoded5);
+        $this->assertEquals($data, $decoded5);
+    }
+
     public function testShouldAutoSelectEncoder()
     {
         $data = random_bytes(128);

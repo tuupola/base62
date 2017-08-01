@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 0.9.0 - unreleased
+
+### Added
+- Implicit `decodeInteger()` and `encodeInteger()` methods.
+
 ## 0.8.0 - 2016-03-12
 
 This release is not compatible with `0.7.0`. Object syntax is now default. A quick way to upgrade is to add the following to your code:
