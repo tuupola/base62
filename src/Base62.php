@@ -28,8 +28,9 @@ class Base62
         $this->options = array_merge($this->options, (array) $options);
         if (function_exists("gmp_init")) {
             $this->encoder = new Base62\GmpEncoder($this->options);
+        } else {
+            $this->encoder = new Base62\PhpEncoder($this->options);
         }
-        $this->encoder = new Base62\PhpEncoder($this->options);
     }
 
     public function encode($data, $integer = false)
