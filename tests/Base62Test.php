@@ -252,8 +252,12 @@ class Base62Test extends \PHPUnit_Framework_TestCase
         $decoded4 = (new Base62)->decode($encoded4, true);
         $this->assertEquals($data, $decoded4);
 
+        Base62Proxy::$options = [
+            "characters" => Base62::GMP,
+        ];
         $encoded5 = Base62Proxy::encode($data);
         $decoded5 = Base62Proxy::decode($encoded5, true);
+
         $this->assertEquals($encoded, $encoded5);
         $this->assertEquals($data, $decoded5);
     }

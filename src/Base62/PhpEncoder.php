@@ -32,7 +32,8 @@ class PhpEncoder extends BaseEncoder
             $remainder = 0;
             for ($i = 0; $i !== $count; $i++) {
                 $accumulator = $source[$i] + $remainder * $source_base;
-                $digit = (integer) ($accumulator / $target_base);
+                /* Same as PHP 7 intdiv($accumulator, $target_base) */
+                $digit = ($accumulator - ($accumulator % $target_base)) / $target_base;
                 $remainder = $accumulator % $target_base;
                 if (count($quotient) || $digit) {
                     array_push($quotient, $digit);
