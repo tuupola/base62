@@ -231,4 +231,34 @@ class Base62Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($encoded5, "DiNQMTBq4IE4OGR3");
         $this->assertEquals($data, $decoded5);
     }
+
+    public function testShouldEncodeAndDecodeBigIntegers()
+    {
+        $data = PHP_INT_MAX;
+        $encoded = (new PhpEncoder)->encode($data);
+        $encoded2 = (new GmpEncoder)->encode($data);
+        $encoded3 = (new BcmathEncoder)->encode($data);
+        $decoded = (new PhpEncoder)->decode($encoded, true);
+        $decoded2 = (new GmpEncoder)->decode($encoded2, true);
+        $decoded3 = (new BcmathEncoder)->decode($encoded2, true);
+
+        $this->assertEquals($decoded2, $decoded);
+        $this->assertEquals($decoded3, $decoded);
+        $this->assertEquals($data, $decoded);
+        $this->assertEquals($data, $decoded2);
+        $this->assertEquals($data, $decoded3);
+
+        $encoded4 = (new Base62)->encode($data);
+        $decoded4 = (new Base62)->decode($encoded4, true);
+        $this->assertEquals($data, $decoded4);
+
+        Base62Proxy::$options = [
+            "characters" => Base62::GMP,
+        ];
+        $encoded5 = Base62Proxy::encode($data);
+        $decoded5 = Base62Proxy::decode($encoded5, true);
+
+        $this->assertEquals($encoded, $encoded5);
+        $this->assertEquals($data, $decoded5);
+    }
 }
