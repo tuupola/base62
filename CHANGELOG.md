@@ -2,10 +2,13 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 0.9.0 - unreleased
+## 0.9.0 - 2016-10-09
 
 ### Added
 - Implicit `decodeInteger()` and `encodeInteger()` methods.
+
+### Fixed
+- PHP encoder was returning returning wrong output when encoding integers and the float representation of the integer was wider than 53 bits. If your application uses big integers and PHP encoder only might be BC issues with `0.8.0`. GMP and BCMath encoders were not affected.
 
 ## 0.8.0 - 2016-03-12
 
