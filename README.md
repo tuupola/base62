@@ -55,11 +55,11 @@ By default Base62 uses GMP style character set. Shortcut is provided for the inv
 ```php
 use Tuupola\Base62;
 
-print Base62:GMP; /* 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz */
-print Base62:INVERTED; /* 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ */
+print Base62::GMP; /* 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz */
+print Base62::INVERTED; /* 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ */
 
-$default = new Base62(["characters" => Base62:GMP]);
-$inverted = new Base62(["characters" => Base62:INVERTED]);
+$default = new Base62(["characters" => Base62::GMP]);
+$inverted = new Base62(["characters" => Base62::INVERTED]);
 print $default->encode("Hello world!"); /* T8dgcjRGuYUueWht */
 print $inverted->encode("Hello world!"); /* t8DGCJrgUyuUEwHT */
 ```
@@ -88,8 +88,8 @@ If you prefer to use static syntax use the provided static proxy.
 ``` php
 use Tuupola\Base62Proxy as Base62;
 
-$encoded = $base62::encode(random_bytes(128));
-$decoded = $base62::decode($encoded);
+$encoded = Base62::encode(random_bytes(128));
+$decoded = Base62::decode($encoded);
 ```
 
 ## Short UUID
