@@ -15,6 +15,7 @@
 
 namespace Tuupola\Base62;
 
+use InvalidArgumentException;
 use Tuupola\Base62;
 
 abstract class BaseEncoder
@@ -48,6 +49,11 @@ abstract class BaseEncoder
 
     public function decode($data, $integer = false)
     {
+        // If the data contains characters that aren't in the character set
+        if (strlen($data) !== strspn($data, $this->options["characters"])) {
+            throw new InvalidArgumentException('Data contains invalid characters');
+        }
+
         $data = str_split($data);
         $data = array_map(function ($character) {
             return strpos($this->options["characters"], $character);
