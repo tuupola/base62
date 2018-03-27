@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## [0.10.0](https://github.com/tuupola/base62/compare/0.9.0...master) - unreleased
+
+### Changed
+- The `decode()` and `decodeInteger()` methods now throw `InvalidArgumentException` if the input string contains invalid characters ([#6](https://github.com/tuupola/base62/pull/6)).
+
 ## [0.9.0](https://github.com/tuupola/base62/compare/0.8.0...0.9.0) - 2017-10-09
 
 ### Added
