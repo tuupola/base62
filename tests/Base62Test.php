@@ -15,6 +15,7 @@
 
 namespace Tuupola\Base62;
 
+use InvalidArgumentException;
 use Tuupola\Base62;
 use Tuupola\Base62Proxy;
 
@@ -260,5 +261,59 @@ class Base62Test extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($encoded, $encoded5);
         $this->assertEquals($data, $decoded5);
+    }
+
+    public function testShouldThrowExceptionOnDecodeInvalidData()
+    {
+        $invalid_data = "invalid~data-%@#!@*#-foo";
+
+        InvalidArgumentException::class;
+
+        $decoders = [
+            new PhpEncoder(),
+            new GmpEncoder(),
+            new BcmathEncoder(),
+            new Base62(),
+        ];
+
+        foreach ($decoders as $decoder) {
+            $caught = null;
+
+            try {
+                $decoder->decode($invalid_data, false);
+            } catch (InvalidArgumentException $e) {
+                $caught = $e;
+            }
+
+            $this->assertInstanceOf(InvalidArgumentException::class, $caught);
+        }
+    }
+
+    public function testShouldThrowExceptionOnDecodeInvalidDataWithCustomCharacterSet()
+    {
+        $invalid_data = "normallyvaliddata";
+        $character_set = "01abc";
+        $options = ["characters" => $character_set];
+
+        InvalidArgumentException::class;
+
+        $decoders = [
+            new PhpEncoder($options),
+            new GmpEncoder($options),
+            new BcmathEncoder($options),
+            new Base62($options),
+        ];
+
+        foreach ($decoders as $decoder) {
+            $caught = null;
+
+            try {
+                $decoder->decode($invalid_data, false);
+            } catch (InvalidArgumentException $e) {
+                $caught = $e;
+            }
+
+            $this->assertInstanceOf(InvalidArgumentException::class, $caught);
+        }
     }
 }

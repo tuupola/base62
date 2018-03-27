@@ -15,6 +15,7 @@
 
 namespace Tuupola\Base62;
 
+use InvalidArgumentException;
 use Tuupola\Base62;
 
 class GmpEncoder
@@ -45,6 +46,11 @@ class GmpEncoder
 
     public function decode($data, $integer = false)
     {
+        // If the data contains characters that aren't in the character set
+        if (strlen($data) !== strspn($data, $this->options["characters"])) {
+            throw new InvalidArgumentException("Data contains invalid characters");
+        }
+
         if (Base62::GMP !== $this->options["characters"]) {
             $data = strtr($data, $this->options["characters"], Base62::GMP);
         }
