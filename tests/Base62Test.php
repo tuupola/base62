@@ -265,7 +265,7 @@ class Base62Test extends \PHPUnit_Framework_TestCase
 
     public function testShouldThrowExceptionOnDecodeInvalidData()
     {
-        $invalid_data = 'invalid~data-%@#!@*#-foo';
+        $invalid_data = "invalid~data-%@#!@*#-foo";
 
         InvalidArgumentException::class;
 
@@ -291,8 +291,8 @@ class Base62Test extends \PHPUnit_Framework_TestCase
 
     public function testShouldThrowExceptionOnDecodeInvalidDataWithCustomCharacterSet()
     {
-        $invalid_data = 'normallyvaliddata';
-        $character_set = '01abc';
+        $invalid_data = "normallyvaliddata";
+        $character_set = "01abc";
         $options = ["characters" => $character_set];
 
         InvalidArgumentException::class;

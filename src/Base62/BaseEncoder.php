@@ -51,7 +51,7 @@ abstract class BaseEncoder
     {
         // If the data contains characters that aren't in the character set
         if (strlen($data) !== strspn($data, $this->options["characters"])) {
-            throw new InvalidArgumentException('Data contains invalid characters');
+            throw new InvalidArgumentException("Data contains invalid characters");
         }
 
         $data = str_split($data);
