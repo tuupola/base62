@@ -2,10 +2,12 @@
 /.gitignore export-ignore
 /.travis.yml export-ignore
 /.editorconfig export-ignore
-/phpunit.xml export-ignore
-/tests export-ignore
-/Gruntfile.js export-ignore
+/benchmarks export-ignore
+/codecov.yml export-ignore
 /package.json export-ignore
-/phpunit.xml export-ignore
-/README.md export-ignore
+/phpbench.json export-ignore
+/phpunit.xml.dist export-ignore
+/tests export-ignore
 /CONTRIBUTING.md export-ignore
+/Makefile export-ignore
+/README.md export-ignore
