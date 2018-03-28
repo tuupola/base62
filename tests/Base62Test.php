@@ -265,9 +265,7 @@ class Base62Test extends \PHPUnit_Framework_TestCase
 
     public function testShouldThrowExceptionOnDecodeInvalidData()
     {
-        $invalid_data = "invalid~data-%@#!@*#-foo";
-
-        InvalidArgumentException::class;
+        $invalid = "invalid~data-%@#!@*#-foo";
 
         $decoders = [
             new PhpEncoder(),
@@ -280,9 +278,9 @@ class Base62Test extends \PHPUnit_Framework_TestCase
             $caught = null;
 
             try {
-                $decoder->decode($invalid_data, false);
-            } catch (InvalidArgumentException $e) {
-                $caught = $e;
+                $decoder->decode($invalid, false);
+            } catch (InvalidArgumentException $exception) {
+                $caught = $exception;
             }
 
             $this->assertInstanceOf(InvalidArgumentException::class, $caught);
@@ -291,11 +289,12 @@ class Base62Test extends \PHPUnit_Framework_TestCase
 
     public function testShouldThrowExceptionOnDecodeInvalidDataWithCustomCharacterSet()
     {
-        $invalid_data = "normallyvaliddata";
-        $character_set = "01abc";
-        $options = ["characters" => $character_set];
-
-        InvalidArgumentException::class;
+        /* This would normally be valid, however the custom character set */
+        /* is missing the T character. */
+        $invalid = "T8dgcjRGuYUueWht";
+        $options = [
+            "characters" => "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRS-UVWXYZ"
+        ];
 
         $decoders = [
             new PhpEncoder($options),
@@ -308,9 +307,35 @@ class Base62Test extends \PHPUnit_Framework_TestCase
             $caught = null;
 
             try {
-                $decoder->decode($invalid_data, false);
-            } catch (InvalidArgumentException $e) {
-                $caught = $e;
+                $decoder->decode($invalid, false);
+            } catch (InvalidArgumentException $exception) {
+                $caught = $exception;
+            }
+
+            $this->assertInstanceOf(InvalidArgumentException::class, $caught);
+        }
+    }
+
+    public function testShouldThrowExceptionWithInvalidCharacterSet()
+    {
+        $options = [
+            "characters" => "00123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXY"
+        ];
+
+        $decoders = [
+            PhpEncoder::class,
+            GmpEncoder::class,
+            BcmathEncoder::class,
+            Base62::class,
+        ];
+
+        foreach ($decoders as $decoder) {
+            $caught = null;
+
+            try {
+                new $decoder($options);
+            } catch (InvalidArgumentException $exception) {
+                $caught = $exception;
             }
 
             $this->assertInstanceOf(InvalidArgumentException::class, $caught);
