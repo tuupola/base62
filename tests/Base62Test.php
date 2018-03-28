@@ -319,7 +319,7 @@ class Base62Test extends \PHPUnit_Framework_TestCase
     public function testShouldThrowExceptionWithInvalidCharacterSet()
     {
         $options = [
-            "characters" => "00123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXY"
+            "characters" => "0023456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
         ];
 
         $decoders = [
@@ -328,6 +328,23 @@ class Base62Test extends \PHPUnit_Framework_TestCase
             BcmathEncoder::class,
             Base62::class,
         ];
+
+        foreach ($decoders as $decoder) {
+            $caught = null;
+
+            try {
+                new $decoder($options);
+            } catch (InvalidArgumentException $exception) {
+                $caught = $exception;
+            }
+
+            $this->assertInstanceOf(InvalidArgumentException::class, $caught);
+        }
+
+        $options = [
+            "characters" => "00123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+        ];
+
 
         foreach ($decoders as $decoder) {
             $caught = null;
