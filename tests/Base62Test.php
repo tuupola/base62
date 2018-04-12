@@ -18,8 +18,9 @@ namespace Tuupola\Base62;
 use InvalidArgumentException;
 use Tuupola\Base62;
 use Tuupola\Base62Proxy;
+use PHPUnit\Framework\TestCase;
 
-class Base62Test extends \PHPUnit_Framework_TestCase
+class Base62Test extends TestCase
 {
 
     public function testShouldBeTrue()
