@@ -35,6 +35,7 @@
         "overtrue/phplint": "^0.2.4"
     },
     "suggest": {
-        "ext-gmp": "This extension will generate the encoded string fastly."
+        "ext-gmp": "This extension will generate the encoded string fastly.",
+        "ext-bcmath": "This extension will generate the encoded string fastly."
     }
 }
