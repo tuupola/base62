@@ -40,12 +40,19 @@ abstract class BaseEncoder
             $data = [$data];
         } else {
             $data = str_split($data);
-            $data = array_map(function ($character) {
-                return ord($character);
-            }, $data);
+            $data = array_map("ord", $data);
         }
 
-        $converted = $this->baseConvert($data, 256, 62);
+        $leadingZeroes = 0;
+        while (!empty($data) && 0 === $data[0]) {
+            $leadingZeroes++;
+            array_shift($data);
+        }
+
+        $converted = array_merge(
+            array_fill(0, $leadingZeroes, 0),
+            $this->baseConvert($data, 256, 62)
+        );
 
         return implode("", array_map(function ($index) {
             return $this->options["characters"][$index];
@@ -64,17 +71,24 @@ abstract class BaseEncoder
             return strpos($this->options["characters"], $character);
         }, $data);
 
+        $leadingZeroes = 0;
+        while (!empty($data) && 0 === $data[0]) {
+            $leadingZeroes++;
+            array_shift($data);
+        }
+
         /* Return as integer when requested. */
         if ($integer) {
             $converted = $this->baseConvert($data, 62, 10);
             return (integer) implode("", $converted);
         }
 
-        $converted = $this->baseConvert($data, 62, 256);
+        $converted = array_merge(
+            array_fill(0, $leadingZeroes, 0),
+            $this->baseConvert($data, 62, 256)
+        );
 
-        return implode("", array_map(function ($ascii) {
-            return chr($ascii);
-        }, $converted));
+        return implode("", array_map("chr", $converted));
     }
 
     public function encodeInteger($data)

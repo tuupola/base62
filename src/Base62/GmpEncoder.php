@@ -42,7 +42,19 @@ class GmpEncoder
             $base62 = gmp_strval(gmp_init($data, 10), 62);
         } else {
             $hex = bin2hex($data);
-            $base62 = gmp_strval(gmp_init($hex, 16), 62);
+
+            $leadZeroBytes = 0;
+            while ('' !== $hex && 0 === strpos($hex, '00')) {
+                $leadZeroBytes++;
+                $hex = substr($hex, 2);
+            }
+
+            // gmp_init() cannot cope with a zero-length string
+            if ('' === $hex) {
+                return str_repeat($this->options["characters"][0], $leadZeroBytes);
+            }
+
+            $base62 = str_repeat($this->options["characters"][0], $leadZeroBytes) . gmp_strval(gmp_init($hex, 16), 62);
         }
 
         if (Base62::GMP === $this->options["characters"]) {
@@ -62,6 +74,17 @@ class GmpEncoder
             $data = strtr($data, $this->options["characters"], Base62::GMP);
         }
 
+        $leadZeroBytes = 0;
+        while ('' !== $data && 0 === strpos($data, $this->options["characters"][0])) {
+            $leadZeroBytes++;
+            $data = substr($data, 1);
+        }
+
+        // gmp_init() cannot cope with a zero-length string
+        if ('' === $data) {
+            return str_repeat("\x00", $leadZeroBytes);
+        }
+
         $hex = gmp_strval(gmp_init($data, 62), 16);
         if (strlen($hex) % 2) {
             $hex = "0" . $hex;
@@ -72,7 +95,7 @@ class GmpEncoder
             return hexdec($hex);
         }
 
-        return hex2bin($hex);
+        return hex2bin(str_repeat('00', $leadZeroBytes) . $hex);
     }
 
     public function encodeInteger($data)
