@@ -49,10 +49,14 @@ abstract class BaseEncoder
             array_shift($data);
         }
 
-        $converted = array_merge(
-            array_fill(0, $leadingZeroes, 0),
-            $this->baseConvert($data, 256, 62)
-        );
+        $converted = $this->baseConvert($data, 256, 62);
+
+        if (0 < $leadingZeroes) {
+            $converted = array_merge(
+                array_fill(0, $leadingZeroes, 0),
+                $converted
+            );
+        }
 
         return implode("", array_map(function ($index) {
             return $this->options["characters"][$index];
@@ -83,10 +87,14 @@ abstract class BaseEncoder
             return (integer) implode("", $converted);
         }
 
-        $converted = array_merge(
-            array_fill(0, $leadingZeroes, 0),
-            $this->baseConvert($data, 62, 256)
-        );
+        $converted = $this->baseConvert($data, 62, 256);
+
+        if (0 < $leadingZeroes) {
+            $converted = array_merge(
+                array_fill(0, $leadingZeroes, 0),
+                $converted
+            );
+        }
 
         return implode("", array_map("chr", $converted));
     }
