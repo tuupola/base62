@@ -49,6 +49,12 @@ class GmpEncoder
                 $hex = substr($hex, 2);
             }
 
+            // Prior to PHP 7.0 substr() returns false
+            // instead of the empty string
+            if (false === $hex) {
+                $hex = '';
+            }
+
             // gmp_init() cannot cope with a zero-length string
             if ('' === $hex) {
                 return str_repeat($this->options["characters"][0], $leadZeroBytes);
@@ -78,6 +84,12 @@ class GmpEncoder
         while ('' !== $data && 0 === strpos($data, $this->options["characters"][0])) {
             $leadZeroBytes++;
             $data = substr($data, 1);
+        }
+
+        // Prior to PHP 7.0 substr() returns false
+        // instead of the empty string
+        if (false === $data) {
+            $data = '';
         }
 
         // gmp_init() cannot cope with a zero-length string
