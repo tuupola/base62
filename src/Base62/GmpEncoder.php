@@ -44,7 +44,7 @@ class GmpEncoder
             $hex = bin2hex($data);
 
             $leadZeroBytes = 0;
-            while ('' !== $hex && 0 === strpos($hex, '00')) {
+            while ("" !== $hex && 0 === strpos($hex, "00")) {
                 $leadZeroBytes++;
                 $hex = substr($hex, 2);
             }
@@ -52,11 +52,11 @@ class GmpEncoder
             // Prior to PHP 7.0 substr() returns false
             // instead of the empty string
             if (false === $hex) {
-                $hex = '';
+                $hex = "";
             }
 
             // gmp_init() cannot cope with a zero-length string
-            if ('' === $hex) {
+            if ("" === $hex) {
                 return str_repeat($this->options["characters"][0], $leadZeroBytes);
             }
 
@@ -81,7 +81,7 @@ class GmpEncoder
         }
 
         $leadZeroBytes = 0;
-        while ('' !== $data && 0 === strpos($data, $this->options["characters"][0])) {
+        while ("" !== $data && 0 === strpos($data, $this->options["characters"][0])) {
             $leadZeroBytes++;
             $data = substr($data, 1);
         }
@@ -89,11 +89,11 @@ class GmpEncoder
         // Prior to PHP 7.0 substr() returns false
         // instead of the empty string
         if (false === $data) {
-            $data = '';
+            $data = "";
         }
 
         // gmp_init() cannot cope with a zero-length string
-        if ('' === $data) {
+        if ("" === $data) {
             return str_repeat("\x00", $leadZeroBytes);
         }
 
@@ -107,7 +107,7 @@ class GmpEncoder
             return hexdec($hex);
         }
 
-        return hex2bin(str_repeat('00', $leadZeroBytes) . $hex);
+        return hex2bin(str_repeat("00", $leadZeroBytes) . $hex);
     }
 
     public function encodeInteger($data)

@@ -377,11 +377,11 @@ class Base62Test extends TestCase
     public function zeroPrefixProvider()
     {
         return [
-            'no leading zero bytes' => ["\x01"],
-            'single zero byte' => ["\x00"],
-            'multiple zero bytes' => ["\x00\x00"],
-            'single zero byte prefix' => ["\x00\x01"],
-            'multiple zero byte prefix' => ["\x00\x00\x00\x01"]
+            "no leading zero bytes" => ["\x01"],
+            "single zero byte" => ["\x00"],
+            "multiple zero bytes" => ["\x00\x00"],
+            "single zero byte prefix" => ["\x00\x01"],
+            "multiple zero byte prefix" => ["\x00\x00\x00\x01"]
         ];
     }
 }
