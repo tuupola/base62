@@ -37,8 +37,8 @@ class PhpEncoder extends BaseEncoder
                 $digit = ($accumulator - ($accumulator % $target_base)) / $target_base;
                 $remainder = $accumulator % $target_base;
                 if (count($quotient) || $digit) {
-                    array_push($quotient, $digit);
-                };
+                    $quotient[] = $digit;
+                }
             }
             array_unshift($result, $remainder);
             $source = $quotient;
