@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## [0.10.0](https://github.com/tuupola/base62/compare/0.9.0...0.10.0) - 20180328
+## [0.11.0](https://github.com/tuupola/base62/compare/0.10.0...0.11.0) - 2018-09-05
+
+### Fixed
+- Leading 0x00 was stripped from binary data ([#4](https://github.com/tuupola/base62/issues/4), [#12](https://github.com/tuupola/base62/pull/12))
+
+
+## [0.10.0](https://github.com/tuupola/base62/compare/0.9.0...0.10.0) - 2018-03-28
 
 ### Changed
 - The `decode()` and `decodeInteger()` methods now throw `InvalidArgumentException` if the input string contains invalid characters ([#6](https://github.com/tuupola/base62/pull/6)).
