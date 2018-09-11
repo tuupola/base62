@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## [0.11.1](https://github.com/tuupola/base62/compare/0.11.0...0.11.1) - 2018-09-11
+
+### Fixed
+- GMP driver output was not matching others when binary data had leading 0x00 [#13](https://github.com/tuupola/base62/pull/12))
+
 ## [0.11.0](https://github.com/tuupola/base62/compare/0.10.0...0.11.0) - 2018-09-05
 
 ### Fixed
