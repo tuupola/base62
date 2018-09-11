@@ -202,10 +202,10 @@ class Base62Test extends TestCase
         $this->assertEquals($data, $decoded5);
     }
 
-    public function testShouldUseICustomCharacterSet()
+    public function testShouldUseCustomCharacterSet()
     {
         $data = "Hello world!";
-        $characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        $characters = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         $encoded = (new PhpEncoder(["characters" => $characters]))->encode($data);
         $encoded2 = (new GmpEncoder(["characters" => $characters]))->encode($data);
@@ -214,9 +214,9 @@ class Base62Test extends TestCase
         $decoded2 = (new GmpEncoder(["characters" => $characters]))->decode($encoded2);
         $decoded3 = (new BcmathEncoder(["characters" => $characters]))->decode($encoded2);
 
-        $this->assertEquals($encoded, "DiNQMTBq4IE4OGR3");
-        $this->assertEquals($encoded2, "DiNQMTBq4IE4OGR3");
-        $this->assertEquals($encoded3, "DiNQMTBq4IE4OGR3");
+        $this->assertEquals($encoded, "t9DGCJrgUyuUEwHT");
+        $this->assertEquals($encoded2, "t9DGCJrgUyuUEwHT");
+        $this->assertEquals($encoded3, "t9DGCJrgUyuUEwHT");
         $this->assertEquals($data, $decoded);
         $this->assertEquals($data, $decoded2);
         $this->assertEquals($data, $decoded3);
@@ -230,7 +230,7 @@ class Base62Test extends TestCase
         ];
         $encoded5 = Base62Proxy::encode($data);
         $decoded5 = Base62Proxy::decode($encoded5);
-        $this->assertEquals($encoded5, "DiNQMTBq4IE4OGR3");
+        $this->assertEquals($encoded5, "t9DGCJrgUyuUEwHT");
         $this->assertEquals($data, $decoded5);
     }
 
@@ -365,13 +365,43 @@ class Base62Test extends TestCase
      */
     public function testEncodingAZeroBitStream($data)
     {
-        $bcEncoder = new BcmathEncoder();
-        $gmpEncoder = new GmpEncoder();
-        $phpEncoder = new PhpEncoder();
+        $encoded = (new PhpEncoder)->encode($data);
+        $encoded2 = (new GmpEncoder)->encode($data);
+        $encoded3 = (new BcmathEncoder)->encode($data);
 
-        $this->assertSame($data, $bcEncoder->decode($bcEncoder->encode($data)));
-        $this->assertSame($data, $gmpEncoder->decode($gmpEncoder->encode($data)));
-        $this->assertSame($data, $phpEncoder->decode($phpEncoder->encode($data)));
+        $decoded = (new PhpEncoder)->decode($encoded);
+        $decoded2 = (new GmpEncoder)->decode($encoded2);
+        $decoded3 = (new BcmathEncoder)->decode($encoded2);
+
+        $this->assertEquals($decoded2, $decoded);
+        $this->assertEquals($decoded3, $decoded);
+
+        $this->assertEquals($data, $decoded);
+        $this->assertEquals($data, $decoded2);
+        $this->assertEquals($data, $decoded3);
+    }
+
+     /**
+     * @dataProvider zeroPrefixProvider
+     */
+    public function testEncodingAZeroBitStreamWithCustomCharacterSet($data)
+    {
+        $characters = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        $encoded = (new PhpEncoder(["characters" => $characters]))->encode($data);
+        $encoded2 = (new GmpEncoder(["characters" => $characters]))->encode($data);
+        $encoded3 = (new BcmathEncoder(["characters" => $characters]))->encode($data);
+
+        $decoded = (new PhpEncoder(["characters" => $characters]))->decode($encoded);
+        $decoded2 = (new GmpEncoder(["characters" => $characters]))->decode($encoded2);
+        $decoded3 = (new BcmathEncoder(["characters" => $characters]))->decode($encoded2);
+
+        $this->assertEquals($encoded, $encoded2);
+        $this->assertEquals($encoded, $encoded3);
+
+        $this->assertEquals($data, $decoded);
+        $this->assertEquals($data, $decoded2);
+        $this->assertEquals($data, $decoded3);
     }
 
     public function zeroPrefixProvider()
