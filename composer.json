@@ -31,7 +31,7 @@
         "squizlabs/php_codesniffer": "^2.5",
         "phpunit/phpunit": "^5.0|^6.0|^7.0",
         "paragonie/random_compat": "^2.0",
-        "phpbench/phpbench": "^0.13.0",
+        "phpbench/phpbench": "^0.14.0",
         "overtrue/phplint": "^0.2.4"
     },
     "suggest": {
