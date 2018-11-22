@@ -8,7 +8,6 @@ php:
     - 7.1
     - 7.2
     - nightly
-    - hhvm
 
 matrix:
     allow_failures:
@@ -25,7 +24,7 @@ script:
     - make travis
 
 after_success:
-    - if [[ $TRAVIS_PHP_VERSION != "hhvm" ]]; then bash <(curl -s https://codecov.io/bash); fi
+    - bash <(curl -s https://codecov.io/bash)
 
 cache:
     directories:
