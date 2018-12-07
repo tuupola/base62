@@ -508,7 +508,7 @@ class Base62Test extends TestCase
         $encoded2 = $gmp->encode($data);
         $encoded3 = $bcmath->encode($data);
         $encoded4 = $base62->encode($data);
-        print_r($encoded);
+
         Base62Proxy::$options = [
             "characters" => $characters,
         ];
