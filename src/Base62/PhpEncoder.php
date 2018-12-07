@@ -39,17 +39,17 @@ class PhpEncoder extends BaseEncoder
 {
     /* http://codegolf.stackexchange.com/a/21672 */
 
-    public function baseConvert(array $source, $source_base, $target_base)
+    public function baseConvert(array $source, $sourceBase, $targetBase)
     {
         $result = [];
         while ($count = count($source)) {
             $quotient = [];
             $remainder = 0;
             for ($i = 0; $i !== $count; $i++) {
-                $accumulator = $source[$i] + $remainder * $source_base;
-                /* Same as PHP 7 intdiv($accumulator, $target_base) */
-                $digit = ($accumulator - ($accumulator % $target_base)) / $target_base;
-                $remainder = $accumulator % $target_base;
+                $accumulator = $source[$i] + $remainder * $sourceBase;
+                /* Same as PHP 7 intdiv($accumulator, $targetBase) */
+                $digit = ($accumulator - ($accumulator % $targetBase)) / $targetBase;
+                $remainder = $accumulator % $targetBase;
                 if (count($quotient) || $digit) {
                     $quotient[] = $digit;
                 }
