@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## [1.0.0](https://github.com/tuupola/base62/compare/0.11.1...1.0.0-rc1) - unreleased
+
+### Changed
+- Tests are now run with all character sets ([#14](https://github.com/tuupola/base62/pull/14)).
+
 ## [0.11.1](https://github.com/tuupola/base62/compare/0.11.0...0.11.1) - 2018-09-11
 
 ### Fixed
