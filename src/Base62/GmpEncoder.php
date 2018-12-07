@@ -65,13 +65,12 @@ class GmpEncoder
                 $hex = substr($hex, 2);
             }
 
-            // Prior to PHP 7.0 substr() returns false
-            // instead of the empty string
+            /* Prior to PHP 7.0 substr() returns false instead of empty string. */
             if (false === $hex) {
                 $hex = "";
             }
 
-            // gmp_init() cannot cope with a zero-length string
+            /* gmp_init() cannot cope with a zero-length string. */
             if ("" === $hex) {
                 $base62 = str_repeat(Base62::GMP[0], $leadZeroBytes);
             } else {
@@ -88,7 +87,7 @@ class GmpEncoder
 
     public function decode($data, $integer = false)
     {
-        // If the data contains characters that aren't in the character set
+        /* If the data contains characters that aren't in the character set. */
         if (strlen($data) !== strspn($data, $this->options["characters"])) {
             throw new InvalidArgumentException("Data contains invalid characters");
         }
@@ -103,13 +102,12 @@ class GmpEncoder
             $data = substr($data, 1);
         }
 
-        // Prior to PHP 7.0 substr() returns false
-        // instead of the empty string
+        /* Prior to PHP 7.0 substr() returns false instead of empty string. */
         if (false === $data) {
             $data = "";
         }
 
-        // gmp_init() cannot cope with a zero-length string
+        /* gmp_init() cannot cope with a zero-length string. */
         if ("" === $data) {
             return str_repeat("\x00", $leadZeroBytes);
         }
