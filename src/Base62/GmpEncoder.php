@@ -89,7 +89,13 @@ class GmpEncoder
     {
         /* If the data contains characters that aren't in the character set. */
         if (strlen($data) !== strspn($data, $this->options["characters"])) {
-            throw new InvalidArgumentException("Data contains invalid characters");
+            $valid = str_split($this->options["characters"]);
+            $invalid = str_replace($valid, "", $data);
+            $invalid = count_chars($invalid, 3);
+
+            throw new InvalidArgumentException(
+                "Data contains invalid characters \"{$invalid}\""
+            );
         }
 
         if (Base62::GMP !== $this->options["characters"]) {
