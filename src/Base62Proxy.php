@@ -64,7 +64,7 @@ class Base62Proxy
     }
 
     /**
-     * Decode given base62 string to an integer
+     * Decode given base62 string back to an integer
      */
     public static function decodeInteger($data, $options = [])
     {

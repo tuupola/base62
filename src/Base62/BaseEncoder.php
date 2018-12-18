@@ -136,7 +136,7 @@ abstract class BaseEncoder
     }
 
     /**
-     * Decode given base62 string to an integer
+     * Decode given base62 string back to an integer
      */
     public function decodeInteger($data)
     {
