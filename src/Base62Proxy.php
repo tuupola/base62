@@ -39,21 +39,33 @@ class Base62Proxy
         "characters" => Base62::GMP,
     ];
 
+    /**
+     * Encode given data to a base62 string
+     */
     public static function encode($data, $integer = false, $options = [])
     {
         return (new Base62(self::$options))->encode($data, $integer);
     }
 
+    /**
+     * Decode given a base62 string back to data
+     */
     public static function decode($data, $integer = false, $options = [])
     {
         return (new Base62(self::$options))->decode($data, $integer);
     }
 
+    /**
+     * Encode given integer to a base62 string
+     */
     public static function encodeInteger($data, $options = [])
     {
         return (new Base62(self::$options))->encodeInteger($data);
     }
 
+    /**
+     * Decode given base62 string to an integer
+     */
     public static function decodeInteger($data, $options = [])
     {
         return (new Base62(self::$options))->decodeInteger($data);

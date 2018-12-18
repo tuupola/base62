@@ -49,21 +49,33 @@ class Base62
         }
     }
 
+    /**
+     * Encode given data to a base62 string
+     */
     public function encode($data, $integer = false)
     {
         return $this->encoder->encode($data, $integer);
     }
 
+    /**
+     * Decode given a base62 string back to data
+     */
     public function decode($data, $integer = false)
     {
         return $this->encoder->decode($data, $integer);
     }
 
+    /**
+     * Encode given integer to a base62 string
+     */
     public function encodeInteger($data)
     {
         return $this->encoder->encodeInteger($data);
     }
 
+    /**
+     * Decode given base62 string to an integer
+     */
     public function decodeInteger($data)
     {
         return $this->encoder->decodeInteger($data);
