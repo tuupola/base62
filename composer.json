@@ -35,6 +35,6 @@
         "overtrue/phplint": "^0.2.4"
     },
     "suggest": {
-        "ext-gmp": "GMP provides fasters encoding and decoding."
+        "ext-gmp": "GMP extension provides the fastest encoding and decoding."
     }
 }
