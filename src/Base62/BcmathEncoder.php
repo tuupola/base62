@@ -50,8 +50,10 @@ class BcmathEncoder extends BaseEncoder
         while ($count = count($source)) {
             $quotient = [];
             $remainder = "0";
+            $sourceBase = (string) $sourceBase;
+            $targetBase = (string) $targetBase;
             for ($i = 0; $i !== $count; $i++) {
-                $accumulator = bcadd($source[$i], bcmul($remainder, $sourceBase));
+                $accumulator = bcadd((string) $source[$i], bcmul($remainder, $sourceBase));
                 $digit = bcdiv($accumulator, $targetBase, 0);
                 $remainder = bcmod($accumulator, $targetBase);
                 if (count($quotient) || $digit) {
