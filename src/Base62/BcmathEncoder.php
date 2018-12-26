@@ -47,7 +47,7 @@ class BcmathEncoder extends BaseEncoder
         $result = [];
         while ($count = count($source)) {
             $quotient = [];
-            $remainder = 0;
+            $remainder = "0";
             for ($i = 0; $i !== $count; $i++) {
                 $accumulator = bcadd($source[$i], bcmul($remainder, $sourceBase));
                 $digit = bcdiv($accumulator, $targetBase, 0);
