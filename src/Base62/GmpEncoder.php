@@ -98,11 +98,6 @@ class GmpEncoder
             $data = substr($data, 1);
         }
 
-        /* Prior to PHP 7.0 substr() returns false instead of empty string. */
-        if (false === $data) {
-            $data = "";
-        }
-
         /* gmp_init() cannot cope with a zero-length string. */
         if ("" === $data) {
             return str_repeat("\x00", $leadZeroBytes);
