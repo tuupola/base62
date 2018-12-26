@@ -53,7 +53,7 @@ abstract class BaseEncoder
     /**
      * Encode given data to a base62 string
      */
-    public function encode($data, $integer = false)
+    public function encode($data, $integer = false): string
     {
         if (is_integer($data) || true === $integer) {
             $data = [$data];
@@ -130,7 +130,7 @@ abstract class BaseEncoder
     /**
      * Encode given integer to a base62 string
      */
-    public function encodeInteger($data)
+    public function encodeInteger($data): string
     {
         return $this->encode($data, true);
     }
@@ -138,7 +138,7 @@ abstract class BaseEncoder
     /**
      * Decode given base62 string back to an integer
      */
-    public function decodeInteger($data)
+    public function decodeInteger($data): int
     {
         return $this->decode($data, true);
     }
@@ -146,5 +146,5 @@ abstract class BaseEncoder
     /**
      * Convert an integer between artbitrary bases
      */
-    abstract public function baseConvert(array $source, $sourceBase, $targetBase);
+    abstract public function baseConvert(array $source, $sourceBase, $targetBase): array;
 }

@@ -52,7 +52,7 @@ class Base62
     /**
      * Encode given data to a base62 string
      */
-    public function encode($data, $integer = false)
+    public function encode($data, $integer = false): string
     {
         return $this->encoder->encode($data, $integer);
     }
@@ -68,7 +68,7 @@ class Base62
     /**
      * Encode given integer to a base62 string
      */
-    public function encodeInteger($data)
+    public function encodeInteger($data): string
     {
         return $this->encoder->encodeInteger($data);
     }
@@ -76,7 +76,7 @@ class Base62
     /**
      * Decode given base62 string back to an integer
      */
-    public function decodeInteger($data)
+    public function decodeInteger($data): int
     {
         return $this->encoder->decodeInteger($data);
     }
