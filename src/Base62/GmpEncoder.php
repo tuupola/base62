@@ -108,7 +108,7 @@ class GmpEncoder
             $hex = "0" . $hex;
         }
 
-        return hex2bin(str_repeat("00", $leadZeroBytes) . $hex);
+        return (string) hex2bin(str_repeat("00", $leadZeroBytes) . $hex);
     }
 
     /**
@@ -141,7 +141,7 @@ class GmpEncoder
             $hex = "0" . $hex;
         }
 
-        return hexdec($hex);
+        return (int) hexdec($hex);
     }
 
     private function validateInput(string $data): void
