@@ -54,17 +54,17 @@ class Base62
     /**
      * Encode given data to a base62 string
      */
-    public function encode($data, bool $integer = false): string
+    public function encode(string $data): string
     {
-        return $this->encoder->encode($data, $integer);
+        return $this->encoder->encode($data);
     }
 
     /**
      * Decode given a base62 string back to data
      */
-    public function decode(string $data, bool $integer = false)
+    public function decode(string $data): string
     {
-        return $this->encoder->decode($data, $integer);
+        return $this->encoder->decode($data);
     }
 
     /**

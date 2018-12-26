@@ -55,30 +55,23 @@ abstract class BaseEncoder
     /**
      * Encode given data to a base62 string
      */
-    public function encode(string $data, bool $integer = false): string
+    public function encode(string $data): string
     {
-        if (is_integer($data) || true === $integer) {
-            $data = [$data];
-        } else {
-            $data = str_split($data);
-            $data = array_map("ord", $data);
-        }
+        $data = str_split($data);
+        $data = array_map("ord", $data);
 
         $leadingZeroes = 0;
         while (!empty($data) && 0 === $data[0]) {
             $leadingZeroes++;
             array_shift($data);
         }
-
         $converted = $this->baseConvert($data, 256, 62);
-
         if (0 < $leadingZeroes) {
             $converted = array_merge(
                 array_fill(0, $leadingZeroes, 0),
                 $converted
             );
         }
-
         return implode("", array_map(function ($index) {
             return $this->options["characters"][$index];
         }, $converted));
@@ -87,18 +80,9 @@ abstract class BaseEncoder
     /**
      * Decode given a base62 string back to data
      */
-    public function decode(string $data, bool $integer = false)
+    public function decode(string $data): string
     {
-        /* If the data contains characters that aren't in the character set. */
-        if (strlen($data) !== strspn($data, $this->options["characters"])) {
-            $valid = str_split($this->options["characters"]);
-            $invalid = str_replace($valid, "", $data);
-            $invalid = count_chars($invalid, 3);
-
-            throw new InvalidArgumentException(
-                "Data contains invalid characters \"{$invalid}\""
-            );
-        }
+        $this->validateInput($data);
 
         $data = str_split($data);
         $data = array_map(function ($character) {
@@ -109,12 +93,6 @@ abstract class BaseEncoder
         while (!empty($data) && 0 === $data[0]) {
             $leadingZeroes++;
             array_shift($data);
-        }
-
-        /* Return as integer when requested. */
-        if ($integer) {
-            $converted = $this->baseConvert($data, 62, 10);
-            return (integer) implode("", $converted);
         }
 
         $converted = $this->baseConvert($data, 62, 256);
@@ -129,12 +107,32 @@ abstract class BaseEncoder
         return implode("", array_map("chr", $converted));
     }
 
+    private function validateInput(string $data): void
+    {
+        /* If the data contains characters that aren't in the character set. */
+        if (strlen($data) !== strspn($data, $this->options["characters"])) {
+            $valid = str_split($this->options["characters"]);
+            $invalid = str_replace($valid, "", $data);
+            $invalid = count_chars($invalid, 3);
+
+            throw new InvalidArgumentException(
+                "Data contains invalid characters \"{$invalid}\""
+            );
+        }
+    }
+
     /**
      * Encode given integer to a base62 string
      */
     public function encodeInteger(int $data): string
     {
-        return $this->encode($data, true);
+        $data = [$data];
+
+        $converted = $this->baseConvert($data, 256, 62);
+
+        return implode("", array_map(function ($index) {
+            return $this->options["characters"][$index];
+        }, $converted));
     }
 
     /**
@@ -142,7 +140,21 @@ abstract class BaseEncoder
      */
     public function decodeInteger(string $data): int
     {
-        return $this->decode($data, true);
+        $this->validateInput($data);
+
+        $data = str_split($data);
+        $data = array_map(function ($character) {
+            return strpos($this->options["characters"], $character);
+        }, $data);
+
+        $leadingZeroes = 0;
+        while (!empty($data) && 0 === $data[0]) {
+            $leadingZeroes++;
+            array_shift($data);
+        }
+
+        $converted = $this->baseConvert($data, 62, 10);
+        return (integer) implode("", $converted);
     }
 
     /**

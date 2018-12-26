@@ -44,17 +44,17 @@ class Base62Proxy
     /**
      * Encode given data to a base62 string
      */
-    public static function encode($data, bool $integer = false, array $options = []): string
+    public static function encode(string $data, array $options = []): string
     {
-        return (new Base62(self::$options))->encode($data, $integer);
+        return (new Base62(self::$options))->encode($data);
     }
 
     /**
      * Decode given a base62 string back to data
      */
-    public static function decode(string $data, bool $integer = false, array $options = [])
+    public static function decode(string $data, array $options = []): string
     {
-        return (new Base62(self::$options))->decode($data, $integer);
+        return (new Base62(self::$options))->decode($data);
     }
 
     /**

@@ -96,40 +96,6 @@ class Base62Test extends TestCase
         $bcmath = new BcmathEncoder(["characters" => $characters]);
         $base62 = new Base62(["characters" => $characters]);
 
-        $encoded = $php->encode($data);
-        $encoded2 = $gmp->encode($data);
-        $encoded3 = $bcmath->encode($data);
-        $encoded4 = $base62->encode($data);
-
-        Base62Proxy::$options = [
-            "characters" => $characters,
-        ];
-        $encoded5 = Base62Proxy::encode($data);
-
-        $this->assertEquals($encoded2, $encoded);
-        $this->assertEquals($encoded3, $encoded);
-        $this->assertEquals($encoded4, $encoded);
-        $this->assertEquals($encoded5, $encoded);
-
-        $this->assertEquals($data, $php->decodeInteger($encoded));
-        $this->assertEquals($data, $gmp->decodeInteger($encoded2));
-        $this->assertEquals($data, $bcmath->decodeInteger($encoded3));
-        $this->assertEquals($data, $base62->decodeInteger($encoded4));
-        $this->assertEquals($data, Base62Proxy::decodeInteger($encoded5));
-    }
-
-    /**
-     * @dataProvider characterSetProvider
-     */
-    public function testShouldEncodeAndDecodeStringsAsIntegers($characters)
-    {
-        $data = "987654321";
-
-        $php = new PhpEncoder(["characters" => $characters]);
-        $gmp = new GmpEncoder(["characters" => $characters]);
-        $bcmath = new BcmathEncoder(["characters" => $characters]);
-        $base62 = new Base62(["characters" => $characters]);
-
         $encoded = $php->encodeInteger($data);
         $encoded2 = $gmp->encodeInteger($data);
         $encoded3 = $bcmath->encodeInteger($data);
@@ -139,8 +105,6 @@ class Base62Test extends TestCase
             "characters" => $characters,
         ];
         $encoded5 = Base62Proxy::encodeInteger($data);
-
-        $this->assertEquals($encoded, $base62->encode(987654321));
 
         $this->assertEquals($encoded2, $encoded);
         $this->assertEquals($encoded3, $encoded);

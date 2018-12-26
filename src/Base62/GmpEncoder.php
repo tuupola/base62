@@ -57,25 +57,21 @@ class GmpEncoder
     /**
      * Encode given data to a base62 string
      */
-    public function encode($data, bool $integer = false): string
+    public function encode(string $data): string
     {
-        if (is_integer($data) || true === $integer) {
-            $base62 = gmp_strval(gmp_init($data, 10), 62);
+        $hex = bin2hex($data);
+
+        $leadZeroBytes = 0;
+        while ("" !== $hex && 0 === strpos($hex, "00")) {
+            $leadZeroBytes++;
+            $hex = substr($hex, 2);
+        }
+
+        /* gmp_init() cannot cope with a zero-length string. */
+        if ("" === $hex) {
+            $base62 = str_repeat(Base62::GMP[0], $leadZeroBytes);
         } else {
-            $hex = bin2hex($data);
-
-            $leadZeroBytes = 0;
-            while ("" !== $hex && 0 === strpos($hex, "00")) {
-                $leadZeroBytes++;
-                $hex = substr($hex, 2);
-            }
-
-            /* gmp_init() cannot cope with a zero-length string. */
-            if ("" === $hex) {
-                $base62 = str_repeat(Base62::GMP[0], $leadZeroBytes);
-            } else {
-                $base62 = str_repeat(Base62::GMP[0], $leadZeroBytes) . gmp_strval(gmp_init($hex, 16), 62);
-            }
+            $base62 = str_repeat(Base62::GMP[0], $leadZeroBytes) . gmp_strval(gmp_init($hex, 16), 62);
         }
 
         if (Base62::GMP === $this->options["characters"]) {
@@ -88,18 +84,9 @@ class GmpEncoder
     /**
      * Decode given a base62 string back to data
      */
-    public function decode(string $data, bool $integer = false)
+    public function decode(string $data): string
     {
-        /* If the data contains characters that aren't in the character set. */
-        if (strlen($data) !== strspn($data, $this->options["characters"])) {
-            $valid = str_split($this->options["characters"]);
-            $invalid = str_replace($valid, "", $data);
-            $invalid = count_chars($invalid, 3);
-
-            throw new InvalidArgumentException(
-                "Data contains invalid characters \"{$invalid}\""
-            );
-        }
+        $this->validateInput($data);
 
         if (Base62::GMP !== $this->options["characters"]) {
             $data = strtr($data, $this->options["characters"], Base62::GMP);
@@ -126,11 +113,6 @@ class GmpEncoder
             $hex = "0" . $hex;
         }
 
-        /* Return as integer when requested. */
-        if ($integer) {
-            return hexdec($hex);
-        }
-
         return hex2bin(str_repeat("00", $leadZeroBytes) . $hex);
     }
 
@@ -139,7 +121,13 @@ class GmpEncoder
      */
     public function encodeInteger(int $data): string
     {
-        return $this->encode($data, true);
+        $base62 = gmp_strval(gmp_init($data, 10), 62);
+
+        if (Base62::GMP === $this->options["characters"]) {
+            return $base62;
+        }
+
+        return strtr($base62, Base62::GMP, $this->options["characters"]);
     }
 
     /**
@@ -147,6 +135,31 @@ class GmpEncoder
      */
     public function decodeInteger(string $data): int
     {
-        return $this->decode($data, true);
+        $this->validateInput($data);
+
+        if (Base62::GMP !== $this->options["characters"]) {
+            $data = strtr($data, $this->options["characters"], Base62::GMP);
+        }
+
+        $hex = gmp_strval(gmp_init($data, 62), 16);
+        if (strlen($hex) % 2) {
+            $hex = "0" . $hex;
+        }
+
+        return hexdec($hex);
+    }
+
+    private function validateInput(string $data): void
+    {
+        /* If the data contains characters that aren't in the character set. */
+        if (strlen($data) !== strspn($data, $this->options["characters"])) {
+            $valid = str_split($this->options["characters"]);
+            $invalid = str_replace($valid, "", $data);
+            $invalid = count_chars($invalid, 3);
+
+            throw new InvalidArgumentException(
+                "Data contains invalid characters \"{$invalid}\""
+            );
+        }
     }
 }
