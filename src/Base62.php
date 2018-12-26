@@ -43,7 +43,7 @@ class Base62
 
     public function __construct(array $options = [])
     {
-        $this->options = array_merge($this->options, (array) $options);
+        $this->options = array_merge($this->options, $options);
         if (function_exists("gmp_init")) {
             $this->encoder = new Base62\GmpEncoder($this->options);
         } else {

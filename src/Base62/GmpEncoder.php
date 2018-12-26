@@ -44,7 +44,7 @@ class GmpEncoder
 
     public function __construct(array $options = [])
     {
-        $this->options = array_merge($this->options, (array) $options);
+        $this->options = array_merge($this->options, $options);
 
         $uniques = count_chars($this->options["characters"], 3);
         if (62 !== strlen($uniques) || 62 !== strlen($this->options["characters"])) {
