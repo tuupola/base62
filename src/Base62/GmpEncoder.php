@@ -68,11 +68,6 @@ class GmpEncoder
                 $hex = substr($hex, 2);
             }
 
-            /* Prior to PHP 7.0 substr() returns false instead of empty string. */
-            if (false === $hex) {
-                $hex = "";
-            }
-
             /* gmp_init() cannot cope with a zero-length string. */
             if ("" === $hex) {
                 $base62 = str_repeat(Base62::GMP[0], $leadZeroBytes);
