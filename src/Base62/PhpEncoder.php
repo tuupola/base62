@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /*
 
 Copyright (c) 2011 Anthony Ferrara
@@ -42,7 +44,7 @@ class PhpEncoder extends BaseEncoder
      *
      * @see http://codegolf.stackexchange.com/a/21672
      */
-    public function baseConvert(array $source, $sourceBase, $targetBase): array
+    public function baseConvert(array $source, int $sourceBase, int $targetBase): array
     {
         $result = [];
         while ($count = count($source)) {

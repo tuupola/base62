@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /*
 
 Copyright (c) 2016-2018 Mika Tuupola
@@ -40,7 +42,7 @@ class GmpEncoder
         "characters" => Base62::GMP,
     ];
 
-    public function __construct($options = [])
+    public function __construct(array $options = [])
     {
         $this->options = array_merge($this->options, (array) $options);
 
@@ -55,7 +57,7 @@ class GmpEncoder
     /**
      * Encode given data to a base62 string
      */
-    public function encode($data, $integer = false): string
+    public function encode($data, bool $integer = false): string
     {
         if (is_integer($data) || true === $integer) {
             $base62 = gmp_strval(gmp_init($data, 10), 62);
@@ -86,7 +88,7 @@ class GmpEncoder
     /**
      * Decode given a base62 string back to data
      */
-    public function decode($data, $integer = false)
+    public function decode(string $data, bool $integer = false)
     {
         /* If the data contains characters that aren't in the character set. */
         if (strlen($data) !== strspn($data, $this->options["characters"])) {
@@ -135,7 +137,7 @@ class GmpEncoder
     /**
      * Encode given integer to a base62 string
      */
-    public function encodeInteger($data): string
+    public function encodeInteger(int $data): string
     {
         return $this->encode($data, true);
     }
@@ -143,7 +145,7 @@ class GmpEncoder
     /**
      * Decode given base62 string back to an integer
      */
-    public function decodeInteger($data): int
+    public function decodeInteger(string $data): int
     {
         return $this->decode($data, true);
     }

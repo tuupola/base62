@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /*
 
 Copyright (c) 2016-2018 Mika Tuupola
@@ -39,7 +41,7 @@ class Base62
     private $encoder;
     private $options = [];
 
-    public function __construct($options = [])
+    public function __construct(array $options = [])
     {
         $this->options = array_merge($this->options, (array) $options);
         if (function_exists("gmp_init")) {
@@ -52,7 +54,7 @@ class Base62
     /**
      * Encode given data to a base62 string
      */
-    public function encode($data, $integer = false): string
+    public function encode($data, bool $integer = false): string
     {
         return $this->encoder->encode($data, $integer);
     }
@@ -60,7 +62,7 @@ class Base62
     /**
      * Decode given a base62 string back to data
      */
-    public function decode($data, $integer = false)
+    public function decode(string $data, bool $integer = false)
     {
         return $this->encoder->decode($data, $integer);
     }
@@ -68,7 +70,7 @@ class Base62
     /**
      * Encode given integer to a base62 string
      */
-    public function encodeInteger($data): string
+    public function encodeInteger(int $data): string
     {
         return $this->encoder->encodeInteger($data);
     }
@@ -76,7 +78,7 @@ class Base62
     /**
      * Decode given base62 string back to an integer
      */
-    public function decodeInteger($data): int
+    public function decodeInteger(string $data): int
     {
         return $this->encoder->decodeInteger($data);
     }

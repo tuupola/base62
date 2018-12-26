@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 /*
 
 Copyright (c) 2016-2018 Mika Tuupola
@@ -40,7 +42,7 @@ abstract class BaseEncoder
         "characters" => Base62::GMP,
     ];
 
-    public function __construct($options = [])
+    public function __construct(array $options = [])
     {
         $this->options = array_merge($this->options, (array) $options);
 
@@ -53,7 +55,7 @@ abstract class BaseEncoder
     /**
      * Encode given data to a base62 string
      */
-    public function encode($data, $integer = false): string
+    public function encode(string $data, bool $integer = false): string
     {
         if (is_integer($data) || true === $integer) {
             $data = [$data];
@@ -85,7 +87,7 @@ abstract class BaseEncoder
     /**
      * Decode given a base62 string back to data
      */
-    public function decode($data, $integer = false)
+    public function decode(string $data, bool $integer = false)
     {
         /* If the data contains characters that aren't in the character set. */
         if (strlen($data) !== strspn($data, $this->options["characters"])) {
@@ -130,7 +132,7 @@ abstract class BaseEncoder
     /**
      * Encode given integer to a base62 string
      */
-    public function encodeInteger($data): string
+    public function encodeInteger(int $data): string
     {
         return $this->encode($data, true);
     }
@@ -138,7 +140,7 @@ abstract class BaseEncoder
     /**
      * Decode given base62 string back to an integer
      */
-    public function decodeInteger($data): int
+    public function decodeInteger(string $data): int
     {
         return $this->decode($data, true);
     }
@@ -146,5 +148,5 @@ abstract class BaseEncoder
     /**
      * Convert an integer between artbitrary bases
      */
-    abstract public function baseConvert(array $source, $sourceBase, $targetBase): array;
+    abstract public function baseConvert(array $source, int $sourceBase, int $targetBase): array;
 }
