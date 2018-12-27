@@ -44,7 +44,7 @@ class Base62Proxy
     /**
      * Encode given data to a base62 string
      */
-    public static function encode(string $data, array $options = []): string
+    public static function encode(string $data): string
     {
         return (new Base62(self::$options))->encode($data);
     }
@@ -52,7 +52,7 @@ class Base62Proxy
     /**
      * Decode given a base62 string back to data
      */
-    public static function decode(string $data, array $options = []): string
+    public static function decode(string $data): string
     {
         return (new Base62(self::$options))->decode($data);
     }
@@ -60,7 +60,7 @@ class Base62Proxy
     /**
      * Encode given integer to a base62 string
      */
-    public static function encodeInteger(int $data, array $options = []): string
+    public static function encodeInteger(int $data): string
     {
         return (new Base62(self::$options))->encodeInteger($data);
     }
@@ -68,7 +68,7 @@ class Base62Proxy
     /**
      * Decode given base62 string back to an integer
      */
-    public static function decodeInteger(string $data, array $options = []): int
+    public static function decodeInteger(string $data): int
     {
         return (new Base62(self::$options))->decodeInteger($data);
     }
