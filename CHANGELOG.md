@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## [1.0.1](https://github.com/tuupola/base62/compare/1.0.0...1.0.1) - 2018-12-27
+### Removed
+- The unused and undocumented second parameter from static proxy methods. Parameter was accidentally forgotten into the code. This could be considered a BC break. However since there have been practically no installs for 1.0.0 yet I doubt this will break anyones code.
+
 ## [1.0.0](https://github.com/tuupola/base62/compare/0.11.1...1.0.0) - 2018-12-20
 
 ### Changed
