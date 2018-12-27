@@ -185,6 +185,24 @@ class Base62Test extends TestCase
         $this->assertEquals($encoded3, "T8dgcjRGuYUueWht");
         $this->assertEquals($encoded4, "T8dgcjRGuYUueWht");
         $this->assertEquals($encoded5, "T8dgcjRGuYUueWht");
+
+        $data = hex2bin(0000010203040506);
+
+        $encoded = $php->encode($data);
+        $encoded2 = $gmp->encode($data);
+        $encoded3 = $bcmath->encode($data);
+        $encoded4 = $base62->encode($data);
+
+        // Base62Proxy::$options = [
+        //     "characters" => $characters,
+        // ];
+        $encoded5 = Base62Proxy::encode($data);
+
+        $this->assertEquals($encoded, "1HqQxjs");
+        $this->assertEquals($encoded2, "1HqQxjs");
+        $this->assertEquals($encoded3, "1HqQxjs");
+        $this->assertEquals($encoded4, "1HqQxjs");
+        $this->assertEquals($encoded5, "1HqQxjs");
     }
 
     public function testShouldUseInvertedCharacterSet()
@@ -211,6 +229,20 @@ class Base62Test extends TestCase
         $this->assertEquals($encoded3, "t8DGCJrgUyuUEwHT");
         $this->assertEquals($encoded4, "t8DGCJrgUyuUEwHT");
         $this->assertEquals($encoded5, "t8DGCJrgUyuUEwHT");
+
+        $data = hex2bin(0000010203040506);
+
+        $encoded = $php->encode($data);
+        $encoded2 = $gmp->encode($data);
+        $encoded3 = $bcmath->encode($data);
+        $encoded4 = $base62->encode($data);
+        $encoded5 = Base62Proxy::encode($data);
+
+        $this->assertEquals($encoded, "1hQqXJS");
+        $this->assertEquals($encoded2, "1hQqXJS");
+        $this->assertEquals($encoded3, "1hQqXJS");
+        $this->assertEquals($encoded4, "1hQqXJS");
+        $this->assertEquals($encoded5, "1hQqXJS");
     }
 
     public function testShouldUseCustomCharacterSet()
@@ -238,6 +270,20 @@ class Base62Test extends TestCase
         $this->assertEquals($encoded3, "t9DGCJrgUyuUEwHT");
         $this->assertEquals($encoded4, "t9DGCJrgUyuUEwHT");
         $this->assertEquals($encoded5, "t9DGCJrgUyuUEwHT");
+
+        $data = hex2bin(0000010203040506);
+
+        $encoded = $php->encode($data);
+        $encoded2 = $gmp->encode($data);
+        $encoded3 = $bcmath->encode($data);
+        $encoded4 = $base62->encode($data);
+        $encoded5 = Base62Proxy::encode($data);
+
+        $this->assertEquals($encoded, "2hQqXJS");
+        $this->assertEquals($encoded2, "2hQqXJS");
+        $this->assertEquals($encoded3, "2hQqXJS");
+        $this->assertEquals($encoded4, "2hQqXJS");
+        $this->assertEquals($encoded5, "2hQqXJS");
     }
 
     /**
