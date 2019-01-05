@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## [2.0.0](https://github.com/tuupola/base62/compare/1.0.1...2.x) - unreleased
+## [2.0.0](https://github.com/tuupola/base62/compare/1.0.1...2.0.0) - 2018-12-30
 
 ### Changed
 - PHP 7.1 is now minimum requirement
