@@ -7,7 +7,7 @@ help:
 	@echo "    watch   Run all tests and coverage when a source file is upaded"
 	@echo "    lint    Run only linter and code style checker"
 	@echo "    unit    Run unit tests and generate coverage"
-	@echo "    unit    Run static analysis"
+	@echo "    static  Run static analysis"
 	@echo "    vendor  Install dependencies"
 	@echo "    clean   Remove vendor and composer.lock"
 	@echo ""
