@@ -95,20 +95,6 @@ $encoded2 = Base62::encodeInteger(987654321);
 $decoded2 = Base62::decodeInteger($encoded2);
 ```
 
-## Short UUID
-
-If you are already using UUIDs they can be encoded.
-
-``` php
-use Ramsey\Uuid\Uuid;
-use Tuupola\Base62Proxy as Base62;
-
-$uuid = Uuid::fromString("d84560c8-134f-11e6-a1e2-34363bd26dae");
-Base62::encode($uuid->getBytes()); /* 6a630O1jrtMjCrQDyG3D3O */
-$uuid = Uuid::fromBytes(Base62::decode("6a630O1jrtMjCrQDyG3D3O"));
-print $uuid; /* d84560c8-134f-11e6-a1e2-34363bd26dae */
-```
-
 ## Testing
 
 You can run tests either manually or automatically on every code change. Automatic tests require [entr](http://entrproject.org/) to work.
