@@ -90,6 +90,9 @@ use Tuupola\Base62Proxy as Base62;
 
 $encoded = Base62::encode(random_bytes(128));
 $decoded = Base62::decode($encoded);
+
+$encoded2 = Base62::encodeInteger(987654321);
+$decoded2 = Base62::decodeInteger($encoded2);
 ```
 
 ## Short UUID
