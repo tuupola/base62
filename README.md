@@ -1,6 +1,6 @@
 # Base62
 
-This library implements base62 encoding. In addition to integers it can encode and decode any arbitrary data. This is useful for example when generating url safe [random tokens for database identifiers](https://paragonie.com/blog/2015/09/comprehensive-guide-url-parameter-encryption-in-php). For quick testing try the [online base62 encoder](https://base62.io).
+This library implements base62 encoding. In addition to integers it can encode and decode any arbitrary data. This is useful for example when generating url safe [random tokens for database identifiers](https://paragonie.com/blog/2015/09/comprehensive-guide-url-parameter-encryption-in-php).
 
 
 [![Latest Version](https://img.shields.io/packagist/v/tuupola/base62.svg?style=flat-square)](https://packagist.org/packages/tuupola/base62)
