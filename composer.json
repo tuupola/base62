@@ -32,7 +32,7 @@
         "phpunit/phpunit": "^5.0|^6.0|^7.0",
         "phpbench/phpbench": "^0.15.0",
         "overtrue/phplint": "^1.0",
-        "phpstan/phpstan": "^0.10.6"
+        "phpstan/phpstan": "^0.12.38"
     },
     "suggest": {
         "ext-gmp": "GMP extension provides the fastest encoding and decoding."

@@ -38,7 +38,14 @@ class Base62
     const GMP = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     const INVERTED = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+    /**
+     * @var Base62\GmpEncoder|Base62\PhpEncoder|Base62\BcmathEncoder
+     */
     private $encoder;
+
+    /**
+     * @var mixed[]
+     */
     private $options = [];
 
     public function __construct(array $options = [])
