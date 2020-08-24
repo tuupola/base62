@@ -40,7 +40,7 @@ use PHPUnit\Framework\TestCase;
 
 class Base62Test extends TestCase
 {
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Base62Proxy::$options = [
             "characters" => Base62::GMP,

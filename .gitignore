@@ -3,3 +3,5 @@
 composer.lock
 .phplint-cache
 coverage.xml
+.phpunit.result.cache
+
