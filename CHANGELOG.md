@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## [2.1.0](https://github.com/tuupola/base62/compare/2.0.0...2.1.0) - unreleased
+
+### Added
+- Allow installing with PHP 8 ([#20](https://github.com/tuupola/base62/pull/20)).
+
 ## [2.0.0](https://github.com/tuupola/base62/compare/1.0.1...2.0.0) - 2018-12-30
 
 ### Changed
