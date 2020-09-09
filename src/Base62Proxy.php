@@ -37,6 +37,9 @@ use Tuupola\Base62;
 
 class Base62Proxy
 {
+    /**
+     * @var mixed[]
+     */
     public static $options = [
         "characters" => Base62::GMP,
     ];

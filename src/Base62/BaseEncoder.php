@@ -38,6 +38,9 @@ use Tuupola\Base62;
 
 abstract class BaseEncoder
 {
+    /**
+     * @var mixed[]
+     */
     private $options = [
         "characters" => Base62::GMP,
     ];
