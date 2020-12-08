@@ -1,4 +1,4 @@
-name: Run lint, unit and static analysis
+name: Tests
 on: [push, pull_request]
 jobs:
   build:
