@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup PHP, with composer and extensions
+      - name: Setup PHP and extensions
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
@@ -34,3 +34,5 @@ jobs:
         run: make unit
       - name: Static analysis with phpstan
         run: make static
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
