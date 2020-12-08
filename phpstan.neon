@@ -1,2 +1,3 @@
 parameters:
+    reportUnmatchedIgnoredErrors: false
     checkMissingIterableValueType: false
