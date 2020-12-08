@@ -31,6 +31,6 @@ jobs:
       - name: Lint with phplint
         run: make lint
       - name: Test with phpunit
-        run: vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
+        run: make unit
       - name: Static analysis with phpstan
         run: make static
