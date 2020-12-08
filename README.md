@@ -71,14 +71,14 @@ Install GMP if you can. It is much faster pure PHP encoder. Below benchmarks are
 ```
 $ vendor/bin/phpbench run benchmarks/ --report=default
 
-+-----------------------+-----------------+----------------+
-| subject               | mean            | diff           |
-+-----------------------+-----------------+----------------+
-| benchGmpEncoder       | 73,099.415ops/s | 0.00%          |
-| benchGmpEncoderCustom | 61,349.693ops/s | +19.15%        |
-| benchPhpEncoder       | 25.192ops/s     | +290,072.37%   |
-| benchBcmathEncoder    | 7.264ops/s      | +1,006,253.07% |
-+-----------------------+-----------------+----------------+
++-----------------------+------------------+-----------+
+| subject               | mean             | diff      |
++-----------------------+------------------+-----------+
+| benchGmpEncoder       | 110,619.469ops/s | 1.00x     |
+| benchGmpEncoderCustom | 106,157.113ops/s | 1.04x     |
+| benchPhpEncoder       | 373.204ops/s     | 296.40x   |
+| benchBcmathEncoder    | 35.494ops/s      | 3,116.58x |
++-----------------------+------------------+-----------+
 ```
 
 ## Static Proxy
