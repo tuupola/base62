@@ -3,7 +3,7 @@
 /*
  * This file is part of the Base62 package
  *
- * Copyright (c) 2016-2018 Mika Tuupola
+ * Copyright (c) 2016-2021 Mika Tuupola
  *
  * Licensed under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
