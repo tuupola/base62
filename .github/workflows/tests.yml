@@ -15,6 +15,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: gmp
+          coverage: xdebug
           #coverage: pcov
       - name: Set composer cache
         id: composer-cache
