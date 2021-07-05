@@ -11,3 +11,5 @@
 /CONTRIBUTING.md export-ignore
 /Makefile export-ignore
 /README.md export-ignore
+/phpbench.json export-ignore
+/phpstan.neon export-ignore
