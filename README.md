@@ -69,15 +69,27 @@ print $inverted->encode("Hello world!"); /* t8DGCJrgUyuUEwHT */
 Install GMP if you can. It is much faster pure PHP encoder. Below benchmarks are for encoding `random_bytes(128)` data. BCMatch encoder is also included but it is mostly just a curiosity. It is too slow to be usable.
 
 ```
+$  php --version
+PHP 8.0.7 (cli) (built: Jun  4 2021 03:50:01) ( NTS )
+
 $ vendor/bin/phpbench run benchmarks/ --report=default
 
 +-----------------------+------------------+-----------+
 | subject               | mean             | diff      |
 +-----------------------+------------------+-----------+
-| benchGmpEncoder       | 110,619.469ops/s | 1.00x     |
-| benchGmpEncoderCustom | 106,157.113ops/s | 1.04x     |
-| benchPhpEncoder       | 373.204ops/s     | 296.40x   |
-| benchBcmathEncoder    | 35.494ops/s      | 3,116.58x |
+| benchGmpDecoder       | 140,409.997ops/s | 1.10x     |
+| benchGmpDecoderCustom | 154,607.297ops/s | 1.00x     |
+| benchPhpDecoder       | 721.147ops/s     | 214.39x   |
+| benchBcmathDecoder    | 72.191ops/s      | 2,141.64x |
++-----------------------+------------------+-----------+
+
++-----------------------+------------------+-----------+
+| subject               | mean             | diff      |
++-----------------------+------------------+-----------+
+| benchGmpEncoder       | 352,609.309ops/s | 1.00x     |
+| benchGmpEncoderCustom | 350,140.056ops/s | 1.01x     |
+| benchPhpEncoder       | 669.959ops/s     | 526.31x   |
+| benchBcmathEncoder    | 72.956ops/s      | 4,833.21x |
 +-----------------------+------------------+-----------+
 ```
 

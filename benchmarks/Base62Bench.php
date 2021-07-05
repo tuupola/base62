@@ -29,6 +29,10 @@ use Tuupola\Base62\GmpEncoder;
 class Base62Bench
 {
     private $data;
+    private $gmp;
+    private $php;
+    private $bcmath;
+    private $encoded;
 
     public function init()
     {
@@ -37,42 +41,78 @@ class Base62Bench
         $this->gmp2 = new GmpEncoder(["characters" => Base62::INVERTED]);
         $this->php = new PhpEncoder;
         $this->bcmath = new BcmathEncoder;
+        $this->encoded = $this->php->encode($this->data);
     }
 
     /**
-     * @Revs(10)
+     * @Revs(100)
+     * @Groups({"encoder"})
      */
     public function benchGmpEncoder()
     {
         $encoded = $this->gmp->encode($this->data);
-        $decoded = $this->gmp->decode($encoded);
     }
 
     /**
-     * @Revs(10)
+     * @Revs(100)
+     * @Groups({"encoder"})
      */
     public function benchGmpEncoderCustom()
     {
         $encoded = $this->gmp2->encode($this->data);
-        $decoded = $this->gmp2->decode($encoded);
     }
 
     /**
-     * @Revs(10)
+     * @Revs(100)
+     * @Groups({"encoder"})
      */
     public function benchPhpEncoder()
     {
         $encoded = $this->php->encode($this->data);
-        $decoded = $this->php->decode($encoded);
     }
 
     /**
-     * @Revs(10)
+     * @Revs(100)
+     * @Groups({"encoder"})
      */
     public function benchBcmathEncoder()
     {
         $encoded = $this->bcmath->encode($this->data);
-        $decoded = $this->bcmath->decode($encoded);
     }
 
+   /**
+     * @Revs(100)
+     * @Groups({"decoder"})
+     */
+    public function benchGmpDecoder()
+    {
+        $encoded = $this->gmp->decode($this->encoded);
+    }
+
+    /**
+     * @Revs(100)
+     * @Groups({"decoder"})
+     */
+    public function benchGmpDecoderCustom()
+    {
+        $encoded = $this->gmp2->decode($this->encoded);
+    }
+
+    /**
+     * @Revs(100)
+     * @Groups({"decoder"})
+     */
+    public function benchPhpDecoder()
+    {
+        $encoded = $this->php->decode($this->encoded);
+    }
+
+    /**
+     * @Revs(100)
+     * @Groups({"decoder"})
+     */
+    public function benchBcmathDecoder()
+    {
+        $encoded = $this->bcmath->decode($this->encoded);
+    }
 }
