@@ -5,7 +5,7 @@ This library implements base62 encoding. In addition to integers it can encode a
 
 [![Latest Version](https://img.shields.io/packagist/v/tuupola/base62.svg?style=flat-square)](https://packagist.org/packages/tuupola/base62)
 [![Packagist](https://img.shields.io/packagist/dm/tuupola/base62.svg)](https://packagist.org/packages/tuupola/base62)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 [![Build Status](https://img.shields.io/github/workflow/status/tuupola/base62/Tests/2.x?style=flat-square)](https://github.com/tuupola/base62/actions)
 [![Coverage](https://img.shields.io/codecov/c/github/tuupola/base62.svg?style=flat-square)](https://codecov.io/github/tuupola/base62)
 
@@ -129,4 +129,4 @@ If you discover any security related issues, please email tuupola@appelsiini.net
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The MIT License (MIT). Please see [License File](LICENSE) for more information.
