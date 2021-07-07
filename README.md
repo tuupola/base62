@@ -69,10 +69,10 @@ print $inverted->encode("Hello world!"); /* t8DGCJrgUyuUEwHT */
 Install GMP if you can. It is much faster pure PHP encoder. Below benchmarks are for encoding `random_bytes(128)` data. BCMatch encoder is also included but it is mostly just a curiosity. It is too slow to be usable.
 
 ```
-$  php --version
+$ php --version
 PHP 8.0.7 (cli) (built: Jun  4 2021 03:50:01) ( NTS )
 
-$ vendor/bin/phpbench run benchmarks/ --report=default
+$ make bench
 
 +-----------------------+------------------+-----------+
 | subject               | mean             | diff      |
