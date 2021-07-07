@@ -35,8 +35,6 @@ SOFTWARE.
 
 namespace Tuupola\Base62;
 
-use Tuupola\Base62;
-
 class PhpEncoder extends BaseEncoder
 {
     /**
