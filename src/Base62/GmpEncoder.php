@@ -38,23 +38,12 @@ use Tuupola\Base62;
 
 class GmpEncoder
 {
-    /**
-     * @var mixed[]
-     */
-    private $options = [
-        "characters" => Base62::GMP,
-    ];
-
-    public function __construct(array $options = [])
+    public function __construct(private string $characters = Base62::GMP)
     {
-        $this->options = array_merge($this->options, $options);
-
-        $uniques = count_chars($this->options["characters"], 3);
+        $uniques = count_chars($characters, 3);
         /** @phpstan-ignore-next-line */
-        if (62 !== strlen($uniques) || 62 !== strlen($this->options["characters"])) {
-            throw new InvalidArgumentException(
-                "Character set must contain 62 unique characters"
-            );
+        if (62 !== strlen($uniques) || 62 !== strlen($characters)) {
+            throw new InvalidArgumentException("Character set must contain 62 unique characters");
         }
     }
 
@@ -78,11 +67,11 @@ class GmpEncoder
             $base62 = str_repeat(Base62::GMP[0], $leadZeroBytes) . gmp_strval(gmp_init($hex, 16), 62);
         }
 
-        if (Base62::GMP === $this->options["characters"]) {
+        if (Base62::GMP === $this->characters) {
             return $base62;
         }
 
-        return strtr($base62, Base62::GMP, $this->options["characters"]);
+        return strtr($base62, Base62::GMP, $this->characters);
     }
 
     /**
@@ -92,8 +81,8 @@ class GmpEncoder
     {
         $this->validateInput($data);
 
-        if (Base62::GMP !== $this->options["characters"]) {
-            $data = strtr($data, $this->options["characters"], Base62::GMP);
+        if (Base62::GMP !== $this->characters) {
+            $data = strtr($data, $this->characters, Base62::GMP);
         }
 
         $leadZeroBytes = 0;
@@ -122,11 +111,11 @@ class GmpEncoder
     {
         $base62 = gmp_strval(gmp_init($data, 10), 62);
 
-        if (Base62::GMP === $this->options["characters"]) {
+        if (Base62::GMP === $this->characters) {
             return $base62;
         }
 
-        return strtr($base62, Base62::GMP, $this->options["characters"]);
+        return strtr($base62, Base62::GMP, $this->characters);
     }
 
     /**
@@ -136,8 +125,8 @@ class GmpEncoder
     {
         $this->validateInput($data);
 
-        if (Base62::GMP !== $this->options["characters"]) {
-            $data = strtr($data, $this->options["characters"], Base62::GMP);
+        if (Base62::GMP !== $this->characters) {
+            $data = strtr($data, $this->characters, Base62::GMP);
         }
 
         $hex = gmp_strval(gmp_init($data, 62), 16);
@@ -151,8 +140,8 @@ class GmpEncoder
     private function validateInput(string $data): void
     {
         /* If the data contains characters that aren't in the character set. */
-        if (strlen($data) !== strspn($data, $this->options["characters"])) {
-            $valid = str_split($this->options["characters"]);
+        if (strlen($data) !== strspn($data, $this->characters)) {
+            $valid = str_split($this->characters);
             $invalid = str_replace($valid, "", $data);
             $invalid = count_chars($invalid, 3);
 

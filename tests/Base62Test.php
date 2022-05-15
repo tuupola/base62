@@ -42,9 +42,7 @@ class Base62Test extends TestCase
 {
     protected function tearDown(): void
     {
-        Base62Proxy::$options = [
-            "characters" => Base62::GMP,
-        ];
+        Base62Proxy::$characters = Base62::GMP;
     }
 
     public function testShouldBeTrue()
@@ -59,19 +57,18 @@ class Base62Test extends TestCase
     {
         $data = random_bytes(128);
 
-        $php = new PhpEncoder(["characters" => $characters]);
-        $gmp = new GmpEncoder(["characters" => $characters]);
-        $bcmath = new BcmathEncoder(["characters" => $characters]);
-        $base62 = new Base62(["characters" => $characters]);
+        $php = new PhpEncoder(characters: $characters);
+        $gmp = new GmpEncoder(characters: $characters);
+        $bcmath = new BcmathEncoder(characters: $characters);
+        $base62 = new Base62(characters: $characters);
 
         $encoded = $php->encode($data);
         $encoded2 = $gmp->encode($data);
         $encoded3 = $bcmath->encode($data);
         $encoded4 = $base62->encode($data);
 
-        Base62Proxy::$options = [
-            "characters" => $characters,
-        ];
+        Base62Proxy::$characters = $characters;
+
         $encoded5 = Base62Proxy::encode($data);
 
         $this->assertEquals($encoded2, $encoded);
@@ -93,19 +90,18 @@ class Base62Test extends TestCase
     {
         $data = 987654321;
 
-        $php = new PhpEncoder(["characters" => $characters]);
-        $gmp = new GmpEncoder(["characters" => $characters]);
-        $bcmath = new BcmathEncoder(["characters" => $characters]);
-        $base62 = new Base62(["characters" => $characters]);
+        $php = new PhpEncoder(characters: $characters);
+        $gmp = new GmpEncoder(characters: $characters);
+        $bcmath = new BcmathEncoder(characters: $characters);
+        $base62 = new Base62(characters: $characters);
 
         $encoded = $php->encodeInteger($data);
         $encoded2 = $gmp->encodeInteger($data);
         $encoded3 = $bcmath->encodeInteger($data);
         $encoded4 = $base62->encodeInteger($data);
 
-        Base62Proxy::$options = [
-            "characters" => $characters,
-        ];
+        Base62Proxy::$characters = $characters;
+
         $encoded5 = Base62Proxy::encodeInteger($data);
 
         $this->assertEquals($encoded2, $encoded);
@@ -136,19 +132,18 @@ class Base62Test extends TestCase
     {
         $data = hex2bin("07d8e31da269bf28");
 
-        $php = new PhpEncoder(["characters" => $characters]);
-        $gmp = new GmpEncoder(["characters" => $characters]);
-        $bcmath = new BcmathEncoder(["characters" => $characters]);
-        $base62 = new Base62(["characters" => $characters]);
+        $php = new PhpEncoder(characters: $characters);
+        $gmp = new GmpEncoder(characters: $characters);
+        $bcmath = new BcmathEncoder(characters: $characters);
+        $base62 = new Base62(characters: $characters);
 
         $encoded = $php->encode($data);
         $encoded2 = $gmp->encode($data);
         $encoded3 = $bcmath->encode($data);
         $encoded4 = $base62->encode($data);
 
-        Base62Proxy::$options = [
-            "characters" => $characters,
-        ];
+        Base62Proxy::$characters = $characters;
+
         $encoded5 = Base62Proxy::encode($data);
 
         $this->assertEquals($encoded2, $encoded);
@@ -177,9 +172,8 @@ class Base62Test extends TestCase
         $encoded3 = $bcmath->encode($data);
         $encoded4 = $base62->encode($data);
 
-        // Base62Proxy::$options = [
-        //     "characters" => $characters,
-        // ];
+        // Base62Proxy::$characters = => $characters,
+
         $encoded5 = Base62Proxy::encode($data);
 
         $this->assertEquals($encoded, "T8dgcjRGuYUueWht");
@@ -194,9 +188,8 @@ class Base62Test extends TestCase
         $encoded3 = $bcmath->encode($data);
         $encoded4 = $base62->encode($data);
 
-        // Base62Proxy::$options = [
-        //     "characters" => $characters,
-        // ];
+        // Base62Proxy::$characters = => $characters,
+
         $encoded5 = Base62Proxy::encode($data);
 
         $this->assertEquals($encoded, "00JVb3WII");
@@ -210,19 +203,18 @@ class Base62Test extends TestCase
     {
         $data = "Hello world!";
 
-        $php = new PhpEncoder(["characters" => Base62::INVERTED]);
-        $gmp = new GmpEncoder(["characters" => Base62::INVERTED]);
-        $bcmath = new BcmathEncoder(["characters" => Base62::INVERTED]);
-        $base62 = new Base62(["characters" => Base62::INVERTED]);
+        $php = new PhpEncoder(characters: Base62::INVERTED);
+        $gmp = new GmpEncoder(characters: Base62::INVERTED);
+        $bcmath = new BcmathEncoder(characters: Base62::INVERTED);
+        $base62 = new Base62(characters: Base62::INVERTED);
 
         $encoded = $php->encode($data);
         $encoded2 = $gmp->encode($data);
         $encoded3 = $bcmath->encode($data);
         $encoded4 = $base62->encode($data);
 
-        Base62Proxy::$options = [
-            "characters" => Base62::INVERTED,
-        ];
+        Base62Proxy::$characters = Base62::INVERTED;
+
         $encoded5 = Base62Proxy::encode($data);
 
         $this->assertEquals($encoded, "t8DGCJrgUyuUEwHT");
@@ -251,19 +243,18 @@ class Base62Test extends TestCase
         $data = "Hello world!";
         $characters = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-        $php = new PhpEncoder(["characters" => $characters]);
-        $gmp = new GmpEncoder(["characters" => $characters]);
-        $bcmath = new BcmathEncoder(["characters" => $characters]);
-        $base62 = new Base62(["characters" => $characters]);
+        $php = new PhpEncoder(characters: $characters);
+        $gmp = new GmpEncoder(characters: $characters);
+        $bcmath = new BcmathEncoder(characters: $characters);
+        $base62 = new Base62(characters: $characters);
 
         $encoded = $php->encode($data);
         $encoded2 = $gmp->encode($data);
         $encoded3 = $bcmath->encode($data);
         $encoded4 = $base62->encode($data);
 
-        Base62Proxy::$options = [
-            "characters" => $characters,
-        ];
+        Base62Proxy::$characters = $characters;
+
         $encoded5 = Base62Proxy::encode($data);
 
         $this->assertEquals($encoded, "t9DGCJrgUyuUEwHT");
@@ -294,19 +285,18 @@ class Base62Test extends TestCase
     {
         $data = PHP_INT_MAX;
 
-        $php = new PhpEncoder(["characters" => $characters]);
-        $gmp = new GmpEncoder(["characters" => $characters]);
-        $bcmath = new BcmathEncoder(["characters" => $characters]);
-        $base62 = new Base62(["characters" => $characters]);
+        $php = new PhpEncoder(characters: $characters);
+        $gmp = new GmpEncoder(characters: $characters);
+        $bcmath = new BcmathEncoder(characters: $characters);
+        $base62 = new Base62(characters: $characters);
 
         $encoded = $php->encodeInteger($data);
         $encoded2 = $gmp->encodeInteger($data);
         $encoded3 = $bcmath->encodeInteger($data);
         $encoded4 = $base62->encodeInteger($data);
 
-        Base62Proxy::$options = [
-            "characters" => $characters,
-        ];
+        Base62Proxy::$characters = $characters;
+
         $encoded5 = Base62Proxy::encodeInteger($data);
 
         $this->assertEquals($encoded2, $encoded);
@@ -350,15 +340,13 @@ class Base62Test extends TestCase
         /* This would normally be valid, however the custom character set */
         /* is missing the T character. */
         $invalid = "T8dgcjRGuYUueWht";
-        $options = [
-            "characters" => "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRS-UVWXYZ"
-        ];
+        $characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRS-UVWXYZ";
 
         $decoders = [
-            new PhpEncoder($options),
-            new GmpEncoder($options),
-            new BcmathEncoder($options),
-            new Base62($options),
+            new PhpEncoder($characters),
+            new GmpEncoder($characters),
+            new BcmathEncoder($characters),
+            new Base62($characters),
         ];
 
         foreach ($decoders as $decoder) {
@@ -376,9 +364,7 @@ class Base62Test extends TestCase
 
     public function testShouldThrowExceptionWithInvalidCharacterSet()
     {
-        $options = [
-            "characters" => "0023456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-        ];
+        $characters = "0023456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
         $decoders = [
             PhpEncoder::class,
@@ -391,7 +377,7 @@ class Base62Test extends TestCase
             $caught = null;
 
             try {
-                new $decoder($options);
+                new $decoder($characters);
             } catch (InvalidArgumentException $exception) {
                 $caught = $exception;
             }
@@ -399,16 +385,14 @@ class Base62Test extends TestCase
             $this->assertInstanceOf(InvalidArgumentException::class, $caught);
         }
 
-        $options = [
-            "characters" => "00123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-        ];
+        $characters = "00123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 
         foreach ($decoders as $decoder) {
             $caught = null;
 
             try {
-                new $decoder($options);
+                new $decoder($characters);
             } catch (InvalidArgumentException $exception) {
                 $caught = $exception;
             }
@@ -424,19 +408,18 @@ class Base62Test extends TestCase
     {
         $data = "\x00";
 
-        $php = new PhpEncoder(["characters" => $characters]);
-        $gmp = new GmpEncoder(["characters" => $characters]);
-        $bcmath = new BcmathEncoder(["characters" => $characters]);
-        $base62 = new Base62(["characters" => $characters]);
+        $php = new PhpEncoder(characters: $characters);
+        $gmp = new GmpEncoder(characters: $characters);
+        $bcmath = new BcmathEncoder(characters: $characters);
+        $base62 = new Base62(characters: $characters);
 
         $encoded = $php->encode($data);
         $encoded2 = $gmp->encode($data);
         $encoded3 = $bcmath->encode($data);
         $encoded4 = $base62->encode($data);
 
-        Base62Proxy::$options = [
-            "characters" => $characters,
-        ];
+        Base62Proxy::$characters = $characters;
+
         $encoded5 = Base62Proxy::encode($data);
 
         $this->assertEquals($encoded2, $encoded);
@@ -458,19 +441,18 @@ class Base62Test extends TestCase
     {
         $data = "\x00\x00\x00";
 
-        $php = new PhpEncoder(["characters" => $characters]);
-        $gmp = new GmpEncoder(["characters" => $characters]);
-        $bcmath = new BcmathEncoder(["characters" => $characters]);
-        $base62 = new Base62(["characters" => $characters]);
+        $php = new PhpEncoder(characters: $characters);
+        $gmp = new GmpEncoder(characters: $characters);
+        $bcmath = new BcmathEncoder(characters: $characters);
+        $base62 = new Base62(characters: $characters);
 
         $encoded = $php->encode($data);
         $encoded2 = $gmp->encode($data);
         $encoded3 = $bcmath->encode($data);
         $encoded4 = $base62->encode($data);
 
-        Base62Proxy::$options = [
-            "characters" => $characters,
-        ];
+        Base62Proxy::$characters = $characters;
+
         $encoded5 = Base62Proxy::encode($data);
 
         $this->assertEquals($encoded2, $encoded);
@@ -492,19 +474,17 @@ class Base62Test extends TestCase
     {
         $data = "\x00\x01\x02";
 
-        $php = new PhpEncoder(["characters" => $characters]);
-        $gmp = new GmpEncoder(["characters" => $characters]);
-        $bcmath = new BcmathEncoder(["characters" => $characters]);
-        $base62 = new Base62(["characters" => $characters]);
+        $php = new PhpEncoder(characters: $characters);
+        $gmp = new GmpEncoder(characters: $characters);
+        $bcmath = new BcmathEncoder(characters: $characters);
+        $base62 = new Base62(characters: $characters);
 
         $encoded = $php->encode($data);
         $encoded2 = $gmp->encode($data);
         $encoded3 = $bcmath->encode($data);
         $encoded4 = $base62->encode($data);
 
-        Base62Proxy::$options = [
-            "characters" => $characters,
-        ];
+        Base62Proxy::$characters = $characters;
         $encoded5 = Base62Proxy::encode($data);
 
         $this->assertEquals($encoded2, $encoded);
@@ -526,19 +506,18 @@ class Base62Test extends TestCase
     {
         $data = "\x00\x00\x00\x01\x02";
 
-        $php = new PhpEncoder(["characters" => $characters]);
-        $gmp = new GmpEncoder(["characters" => $characters]);
-        $bcmath = new BcmathEncoder(["characters" => $characters]);
-        $base62 = new Base62(["characters" => $characters]);
+        $php = new PhpEncoder(characters: $characters);
+        $gmp = new GmpEncoder(characters: $characters);
+        $bcmath = new BcmathEncoder(characters: $characters);
+        $base62 = new Base62(characters: $characters);
 
         $encoded = $php->encode($data);
         $encoded2 = $gmp->encode($data);
         $encoded3 = $bcmath->encode($data);
         $encoded4 = $base62->encode($data);
 
-        Base62Proxy::$options = [
-            "characters" => $characters,
-        ];
+        Base62Proxy::$characters = $characters;
+
         $encoded5 = Base62Proxy::encode($data);
 
         $this->assertEquals($encoded2, $encoded);

@@ -38,20 +38,11 @@ use Tuupola\Base62;
 
 abstract class BaseEncoder
 {
-    /**
-     * @var mixed[]
-     */
-    private $options = [
-        "characters" => Base62::GMP,
-    ];
-
-    public function __construct(array $options = [])
+    public function __construct(private string $characters = Base62::GMP)
     {
-        $this->options = array_merge($this->options, $options);
-
-        $uniques = count_chars($this->options["characters"], 3);
+        $uniques = count_chars($characters, 3);
         /** @phpstan-ignore-next-line */
-        if (62 !== strlen($uniques) || 62 !== strlen($this->options["characters"])) {
+        if (62 !== strlen($uniques) || 62 !== strlen($characters)) {
             throw new InvalidArgumentException("Character set must contain 62 unique characters");
         }
     }
@@ -77,7 +68,7 @@ abstract class BaseEncoder
             );
         }
         return implode("", array_map(function ($index) {
-            return $this->options["characters"][$index];
+            return $this->characters[$index];
         }, $converted));
     }
 
@@ -90,7 +81,7 @@ abstract class BaseEncoder
 
         $data = str_split($data);
         $data = array_map(function ($character) {
-            return strpos($this->options["characters"], $character);
+            return strpos($this->characters, $character);
         }, $data);
 
         $leadingZeroes = 0;
@@ -114,8 +105,8 @@ abstract class BaseEncoder
     private function validateInput(string $data): void
     {
         /* If the data contains characters that aren't in the character set. */
-        if (strlen($data) !== strspn($data, $this->options["characters"])) {
-            $valid = str_split($this->options["characters"]);
+        if (strlen($data) !== strspn($data, $this->characters)) {
+            $valid = str_split($this->characters);
             $invalid = str_replace($valid, "", $data);
             $invalid = count_chars($invalid, 3);
 
@@ -136,7 +127,7 @@ abstract class BaseEncoder
         $converted = $this->baseConvert($data, 256, 62);
 
         return implode("", array_map(function ($index) {
-            return $this->options["characters"][$index];
+            return $this->characters[$index];
         }, $converted));
     }
 
@@ -149,7 +140,7 @@ abstract class BaseEncoder
 
         $data = str_split($data);
         $data = array_map(function ($character) {
-            return strpos($this->options["characters"], $character);
+            return strpos($this->characters, $character);
         }, $data);
 
         $converted = $this->baseConvert($data, 62, 10);
