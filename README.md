@@ -17,10 +17,10 @@ Install with [composer](https://getcomposer.org/).
 $ composer require tuupola/base62
 ```
 
-This branch requires PHP 7.1 or up. The older `1.x` branch supports also PHP 5.6 and 7.0.
+This branch requires PHP 8.0 or up. The older `2.x` branch supports also PHP 7.01 and up.
 
 ``` bash
-$ composer require "tuupola/base62:^1.0"
+$ composer require "tuupola/base62:^2.0"
 ```
 
 ## Usage

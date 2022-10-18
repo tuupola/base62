@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 - Constructors now use named parameters ([#30](https://github.com/tuupola/base62/pull/30)).
+- PHP 8.1 is now minimum requirement ([#30](https://github.com/tuupola/base62/pull/30)).
 
 ## [2.1.0](https://github.com/tuupola/base62/compare/2.0.0...2.1.0) - 2020-09-09
 
