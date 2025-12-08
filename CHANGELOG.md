@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## [2.1.1](https://github.com/tuupola/base62/compare/2.1.0...2.x) - unreleased
+
+### Fixed
+- Replace integer cast with int for PHP 8.5 ([#33](https://github.com/tuupola/base62/pull/33)).
+
 ## [2.1.0](https://github.com/tuupola/base62/compare/2.0.0...2.1.0) - 2020-09-09
 
 ### Added
