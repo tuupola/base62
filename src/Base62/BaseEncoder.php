@@ -153,7 +153,7 @@ abstract class BaseEncoder
         }, $data);
 
         $converted = $this->baseConvert($data, 62, 10);
-        return (integer) implode("", $converted);
+        return (int) implode("", $converted);
     }
 
     /**
