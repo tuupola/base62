@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## [3.0.0](https://github.com/tuupola/base62/compare/2.1.0...3.x) - unreleased
+## [3.0.0](https://github.com/tuupola/base62/compare/2.1.1...3.x) - unreleased
 
 ### Changed
 - Make PHP 8.1 minimum requirement ([#37](https://github.com/tuupola/base62/pull/37))
@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file, in reverse 
 ### Fixed
 - PHP 8.1 encoded empty string as 0  ([#36](https://github.com/tuupola/base62/pull/36))
 
-## [2.1.1](https://github.com/tuupola/base62/compare/2.1.0...2.x) - unreleased
+## [2.1.1](https://github.com/tuupola/base62/compare/2.1.0...2.1.1) - 2025-12-08
 
 ### Fixed
 - Replace integer cast with int for PHP 8.5 ([#33](https://github.com/tuupola/base62/pull/33)).
