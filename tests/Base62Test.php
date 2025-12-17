@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /*
 
-Copyright (c) 2016-2021 Mika Tuupola
+Copyright (c) 2016-2025 Mika Tuupola
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -321,28 +321,35 @@ class Base62Test extends TestCase
         $this->assertEquals($data, Base62Proxy::decodeInteger($encoded5));
     }
 
-    public function testShouldThrowExceptionOnDecodeInvalidData()
+    /**
+     * @dataProvider encoderProvider
+     */
+    public function testShouldThrowExceptionOnDecodeInvalidData($encoder)
     {
-        $invalid = "invalid~data-%@#!@*#-foo";
+        $this->expectException(InvalidArgumentException::class);
 
-        $decoders = [
-            new PhpEncoder(),
-            new GmpEncoder(),
-            new BcmathEncoder(),
-            new Base62(),
-        ];
+        $encoder->decode("invalid~data-%@#!@*#-foo", false);
+    }
 
-        foreach ($decoders as $decoder) {
-            $caught = null;
+    /**
+     * @dataProvider encoderProvider
+     */
+    public function testShouldThrowExceptionOnEncodeNegativeInteger($encoder)
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Cannot encode negative integer");
 
-            try {
-                $decoder->decode($invalid, false);
-            } catch (InvalidArgumentException $exception) {
-                $caught = $exception;
-            }
+        $encoder->encodeInteger(-1);
+    }
 
-            $this->assertInstanceOf(InvalidArgumentException::class, $caught);
-        }
+    /**
+     * @dataProvider encoderProvider
+     */
+    public function testShouldThrowExceptionOnDecodeIntegerInvalidData($encoder)
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $encoder->decodeInteger("invalid~data-%@#!@*#-foo");
     }
 
     public function testShouldThrowExceptionOnDecodeInvalidDataWithCustomCharacterSet()
@@ -551,6 +558,120 @@ class Base62Test extends TestCase
         $this->assertEquals($data, $bcmath->decode($encoded3));
         $this->assertEquals($data, $base62->decode($encoded4));
         $this->assertEquals($data, Base62Proxy::decode($encoded5));
+    }
+
+    /**
+     * @dataProvider characterSetProvider
+     */
+    public function testShouldEncodeAndDecodeZeroInteger($characters)
+    {
+        $data = 0;
+
+        $php = new PhpEncoder(["characters" => $characters]);
+        $gmp = new GmpEncoder(["characters" => $characters]);
+        $bcmath = new BcmathEncoder(["characters" => $characters]);
+        $base62 = new Base62(["characters" => $characters]);
+
+        $encoded = $php->encodeInteger($data);
+        $encoded2 = $gmp->encodeInteger($data);
+        $encoded3 = $bcmath->encodeInteger($data);
+        $encoded4 = $base62->encodeInteger($data);
+
+        Base62Proxy::$options = [
+            "characters" => $characters,
+        ];
+        $encoded5 = Base62Proxy::encodeInteger($data);
+
+        $this->assertEquals($encoded2, $encoded);
+        $this->assertEquals($encoded3, $encoded);
+        $this->assertEquals($encoded4, $encoded);
+        $this->assertEquals($encoded5, $encoded);
+
+        $this->assertEquals($data, $php->decodeInteger($encoded));
+        $this->assertEquals($data, $gmp->decodeInteger($encoded2));
+        $this->assertEquals($data, $bcmath->decodeInteger($encoded3));
+        $this->assertEquals($data, $base62->decodeInteger($encoded4));
+        $this->assertEquals($data, Base62Proxy::decodeInteger($encoded5));
+    }
+
+    /**
+     * @dataProvider characterSetProvider
+     */
+    public function testShouldEncodeAndDecodeEmptyString($characters)
+    {
+        $data = "";
+
+        $php = new PhpEncoder(["characters" => $characters]);
+        $gmp = new GmpEncoder(["characters" => $characters]);
+        $bcmath = new BcmathEncoder(["characters" => $characters]);
+        $base62 = new Base62(["characters" => $characters]);
+
+        $encoded = $php->encode($data);
+        $encoded2 = $gmp->encode($data);
+        $encoded3 = $bcmath->encode($data);
+        $encoded4 = $base62->encode($data);
+
+        Base62Proxy::$options = [
+            "characters" => $characters,
+        ];
+        $encoded5 = Base62Proxy::encode($data);
+
+        $this->assertEquals($encoded2, $encoded);
+        $this->assertEquals($encoded3, $encoded);
+        $this->assertEquals($encoded4, $encoded);
+        $this->assertEquals($encoded5, $encoded);
+
+        $this->assertEquals($data, $php->decode($encoded));
+        $this->assertEquals($data, $gmp->decode($encoded2));
+        $this->assertEquals($data, $bcmath->decode($encoded3));
+        $this->assertEquals($data, $base62->decode($encoded4));
+        $this->assertEquals($data, Base62Proxy::decode($encoded5));
+    }
+
+    /**
+     * @dataProvider singleByteProvider
+     */
+    public function testShouldEncodeAndDecodeSingleByte($byte)
+    {
+        $data = chr($byte);
+
+        $php = new PhpEncoder();
+        $gmp = new GmpEncoder();
+        $bcmath = new BcmathEncoder();
+        $base62 = new Base62();
+
+        $encoded = $php->encode($data);
+        $encoded2 = $gmp->encode($data);
+        $encoded3 = $bcmath->encode($data);
+        $encoded4 = $base62->encode($data);
+
+        $this->assertEquals($encoded2, $encoded);
+        $this->assertEquals($encoded3, $encoded);
+        $this->assertEquals($encoded4, $encoded);
+
+        $this->assertEquals($data, $php->decode($encoded));
+        $this->assertEquals($data, $gmp->decode($encoded2));
+        $this->assertEquals($data, $bcmath->decode($encoded3));
+        $this->assertEquals($data, $base62->decode($encoded4));
+    }
+
+    public function encoderProvider()
+    {
+        return [
+            "PhpEncoder" => [new PhpEncoder()],
+            "GmpEncoder" => [new GmpEncoder()],
+            "BcmathEncoder" => [new BcmathEncoder()],
+            "Base62" => [new Base62()],
+        ];
+    }
+
+    public function singleByteProvider()
+    {
+        $bytes = [];
+        for ($i = 0; $i <= 255; $i++) {
+            $bytes[sprintf("0x%02X", $i)] = [$i];
+        }
+        return $bytes;
     }
 
     public function characterSetProvider()
