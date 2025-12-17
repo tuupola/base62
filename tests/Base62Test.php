@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /*
 
-Copyright (c) 2016-2021 Mika Tuupola
+Copyright (c) 2016-2025 Mika Tuupola
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -342,16 +342,6 @@ class Base62Test extends TestCase
         $encoder->encodeInteger(-1);
     }
 
-    public function encoderProvider()
-    {
-        return [
-            "PhpEncoder" => [new PhpEncoder()],
-            "GmpEncoder" => [new GmpEncoder()],
-            "BcmathEncoder" => [new BcmathEncoder()],
-            "Base62" => [new Base62()],
-        ];
-    }
-
     /**
      * @dataProvider encoderProvider
      */
@@ -663,6 +653,16 @@ class Base62Test extends TestCase
         $this->assertEquals($data, $gmp->decode($encoded2));
         $this->assertEquals($data, $bcmath->decode($encoded3));
         $this->assertEquals($data, $base62->decode($encoded4));
+    }
+
+    public function encoderProvider()
+    {
+        return [
+            "PhpEncoder" => [new PhpEncoder()],
+            "GmpEncoder" => [new GmpEncoder()],
+            "BcmathEncoder" => [new BcmathEncoder()],
+            "Base62" => [new Base62()],
+        ];
     }
 
     public function singleByteProvider()
