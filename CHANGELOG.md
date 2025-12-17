@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file, in reverse 
 ### Changed
 - Throw an exception if trying to encode a negative integer ([#35](https://github.com/tuupola/base62/pull/35))
 
+### Fixed
+- PHP 8.1 encoded empty string as 0  ([#36](https://github.com/tuupola/base62/pull/36))
+
 ## [2.1.0](https://github.com/tuupola/base62/compare/2.0.0...2.1.0) - 2020-09-09
 
 ### Added
