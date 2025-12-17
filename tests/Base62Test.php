@@ -553,6 +553,40 @@ class Base62Test extends TestCase
         $this->assertEquals($data, Base62Proxy::decode($encoded5));
     }
 
+    /**
+     * @dataProvider characterSetProvider
+     */
+    public function testShouldEncodeAndDecodeEmptyString($characters)
+    {
+        $data = "";
+
+        $php = new PhpEncoder(["characters" => $characters]);
+        $gmp = new GmpEncoder(["characters" => $characters]);
+        $bcmath = new BcmathEncoder(["characters" => $characters]);
+        $base62 = new Base62(["characters" => $characters]);
+
+        $encoded = $php->encode($data);
+        $encoded2 = $gmp->encode($data);
+        $encoded3 = $bcmath->encode($data);
+        $encoded4 = $base62->encode($data);
+
+        Base62Proxy::$options = [
+            "characters" => $characters,
+        ];
+        $encoded5 = Base62Proxy::encode($data);
+
+        $this->assertEquals($encoded2, $encoded);
+        $this->assertEquals($encoded3, $encoded);
+        $this->assertEquals($encoded4, $encoded);
+        $this->assertEquals($encoded5, $encoded);
+
+        $this->assertEquals($data, $php->decode($encoded));
+        $this->assertEquals($data, $gmp->decode($encoded2));
+        $this->assertEquals($data, $bcmath->decode($encoded3));
+        $this->assertEquals($data, $base62->decode($encoded4));
+        $this->assertEquals($data, Base62Proxy::decode($encoded5));
+    }
+
     public function characterSetProvider()
     {
         return [
