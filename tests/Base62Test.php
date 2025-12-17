@@ -556,6 +556,40 @@ class Base62Test extends TestCase
     /**
      * @dataProvider characterSetProvider
      */
+    public function testShouldEncodeAndDecodeZeroInteger($characters)
+    {
+        $data = 0;
+
+        $php = new PhpEncoder(["characters" => $characters]);
+        $gmp = new GmpEncoder(["characters" => $characters]);
+        $bcmath = new BcmathEncoder(["characters" => $characters]);
+        $base62 = new Base62(["characters" => $characters]);
+
+        $encoded = $php->encodeInteger($data);
+        $encoded2 = $gmp->encodeInteger($data);
+        $encoded3 = $bcmath->encodeInteger($data);
+        $encoded4 = $base62->encodeInteger($data);
+
+        Base62Proxy::$options = [
+            "characters" => $characters,
+        ];
+        $encoded5 = Base62Proxy::encodeInteger($data);
+
+        $this->assertEquals($encoded2, $encoded);
+        $this->assertEquals($encoded3, $encoded);
+        $this->assertEquals($encoded4, $encoded);
+        $this->assertEquals($encoded5, $encoded);
+
+        $this->assertEquals($data, $php->decodeInteger($encoded));
+        $this->assertEquals($data, $gmp->decodeInteger($encoded2));
+        $this->assertEquals($data, $bcmath->decodeInteger($encoded3));
+        $this->assertEquals($data, $base62->decodeInteger($encoded4));
+        $this->assertEquals($data, Base62Proxy::decodeInteger($encoded5));
+    }
+
+    /**
+     * @dataProvider characterSetProvider
+     */
     public function testShouldEncodeAndDecodeEmptyString($characters)
     {
         $data = "";
