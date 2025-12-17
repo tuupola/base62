@@ -345,6 +345,30 @@ class Base62Test extends TestCase
         }
     }
 
+    public function testShouldThrowExceptionOnDecodeIntegerInvalidData()
+    {
+        $invalid = "invalid~data-%@#!@*#-foo";
+
+        $decoders = [
+            new PhpEncoder(),
+            new GmpEncoder(),
+            new BcmathEncoder(),
+            new Base62(),
+        ];
+
+        foreach ($decoders as $decoder) {
+            $caught = null;
+
+            try {
+                $decoder->decodeInteger($invalid);
+            } catch (InvalidArgumentException $exception) {
+                $caught = $exception;
+            }
+
+            $this->assertInstanceOf(InvalidArgumentException::class, $caught);
+        }
+    }
+
     public function testShouldThrowExceptionOnDecodeInvalidDataWithCustomCharacterSet()
     {
         /* This would normally be valid, however the custom character set */
