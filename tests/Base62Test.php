@@ -345,6 +345,27 @@ class Base62Test extends TestCase
         }
     }
 
+    /**
+     * @dataProvider encoderProvider
+     */
+    public function testShouldThrowExceptionOnEncodeNegativeInteger($encoder)
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Cannot encode negative integer");
+
+        $encoder->encodeInteger(-1);
+    }
+
+    public function encoderProvider()
+    {
+        return [
+            "PhpEncoder" => [new PhpEncoder()],
+            "GmpEncoder" => [new GmpEncoder()],
+            "BcmathEncoder" => [new BcmathEncoder()],
+            "Base62" => [new Base62()],
+        ];
+    }
+
     public function testShouldThrowExceptionOnDecodeIntegerInvalidData()
     {
         $invalid = "invalid~data-%@#!@*#-foo";
