@@ -321,28 +321,14 @@ class Base62Test extends TestCase
         $this->assertEquals($data, Base62Proxy::decodeInteger($encoded5));
     }
 
-    public function testShouldThrowExceptionOnDecodeInvalidData()
+    /**
+     * @dataProvider encoderProvider
+     */
+    public function testShouldThrowExceptionOnDecodeInvalidData($encoder)
     {
-        $invalid = "invalid~data-%@#!@*#-foo";
+        $this->expectException(InvalidArgumentException::class);
 
-        $decoders = [
-            new PhpEncoder(),
-            new GmpEncoder(),
-            new BcmathEncoder(),
-            new Base62(),
-        ];
-
-        foreach ($decoders as $decoder) {
-            $caught = null;
-
-            try {
-                $decoder->decode($invalid, false);
-            } catch (InvalidArgumentException $exception) {
-                $caught = $exception;
-            }
-
-            $this->assertInstanceOf(InvalidArgumentException::class, $caught);
-        }
+        $encoder->decode("invalid~data-%@#!@*#-foo", false);
     }
 
     /**
@@ -366,28 +352,14 @@ class Base62Test extends TestCase
         ];
     }
 
-    public function testShouldThrowExceptionOnDecodeIntegerInvalidData()
+    /**
+     * @dataProvider encoderProvider
+     */
+    public function testShouldThrowExceptionOnDecodeIntegerInvalidData($encoder)
     {
-        $invalid = "invalid~data-%@#!@*#-foo";
+        $this->expectException(InvalidArgumentException::class);
 
-        $decoders = [
-            new PhpEncoder(),
-            new GmpEncoder(),
-            new BcmathEncoder(),
-            new Base62(),
-        ];
-
-        foreach ($decoders as $decoder) {
-            $caught = null;
-
-            try {
-                $decoder->decodeInteger($invalid);
-            } catch (InvalidArgumentException $exception) {
-                $caught = $exception;
-            }
-
-            $this->assertInstanceOf(InvalidArgumentException::class, $caught);
-        }
+        $encoder->decodeInteger("invalid~data-%@#!@*#-foo");
     }
 
     public function testShouldThrowExceptionOnDecodeInvalidDataWithCustomCharacterSet()
