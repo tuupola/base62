@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 /*
 
-Copyright (c) 2016-2021 Mika Tuupola
+Copyright (c) 2016-2025 Mika Tuupola
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -131,6 +131,12 @@ abstract class BaseEncoder
      */
     public function encodeInteger(int $data): string
     {
+        if ($data < 0) {
+            throw new InvalidArgumentException(
+                "Cannot encode negative integer"
+            );
+        }
+
         $data = [$data];
 
         $converted = $this->baseConvert($data, 256, 62);
