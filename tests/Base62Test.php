@@ -638,6 +638,42 @@ class Base62Test extends TestCase
         $this->assertEquals($data, Base62Proxy::decode($encoded5));
     }
 
+    /**
+     * @dataProvider singleByteProvider
+     */
+    public function testShouldEncodeAndDecodeSingleByte($byte)
+    {
+        $data = chr($byte);
+
+        $php = new PhpEncoder();
+        $gmp = new GmpEncoder();
+        $bcmath = new BcmathEncoder();
+        $base62 = new Base62();
+
+        $encoded = $php->encode($data);
+        $encoded2 = $gmp->encode($data);
+        $encoded3 = $bcmath->encode($data);
+        $encoded4 = $base62->encode($data);
+
+        $this->assertEquals($encoded2, $encoded);
+        $this->assertEquals($encoded3, $encoded);
+        $this->assertEquals($encoded4, $encoded);
+
+        $this->assertEquals($data, $php->decode($encoded));
+        $this->assertEquals($data, $gmp->decode($encoded2));
+        $this->assertEquals($data, $bcmath->decode($encoded3));
+        $this->assertEquals($data, $base62->decode($encoded4));
+    }
+
+    public function singleByteProvider()
+    {
+        $bytes = [];
+        for ($i = 0; $i <= 255; $i++) {
+            $bytes[sprintf("0x%02X", $i)] = [$i];
+        }
+        return $bytes;
+    }
+
     public function characterSetProvider()
     {
         return [
