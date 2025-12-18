@@ -57,10 +57,10 @@ class Base62Test extends TestCase
     {
         $data = random_bytes(128);
 
-        $php = new PhpEncoder(characters: $characters);
-        $gmp = new GmpEncoder(characters: $characters);
-        $bcmath = new BcmathEncoder(characters: $characters);
-        $base62 = new Base62(characters: $characters);
+        $php = new PhpEncoder($characters);
+        $gmp = new GmpEncoder($characters);
+        $bcmath = new BcmathEncoder($characters);
+        $base62 = new Base62($characters);
 
         $encoded = $php->encode($data);
         $encoded2 = $gmp->encode($data);
@@ -90,10 +90,10 @@ class Base62Test extends TestCase
     {
         $data = 987654321;
 
-        $php = new PhpEncoder(characters: $characters);
-        $gmp = new GmpEncoder(characters: $characters);
-        $bcmath = new BcmathEncoder(characters: $characters);
-        $base62 = new Base62(characters: $characters);
+        $php = new PhpEncoder($characters);
+        $gmp = new GmpEncoder($characters);
+        $bcmath = new BcmathEncoder($characters);
+        $base62 = new Base62($characters);
 
         $encoded = $php->encodeInteger($data);
         $encoded2 = $gmp->encodeInteger($data);
@@ -132,10 +132,10 @@ class Base62Test extends TestCase
     {
         $data = hex2bin("07d8e31da269bf28");
 
-        $php = new PhpEncoder(characters: $characters);
-        $gmp = new GmpEncoder(characters: $characters);
-        $bcmath = new BcmathEncoder(characters: $characters);
-        $base62 = new Base62(characters: $characters);
+        $php = new PhpEncoder($characters);
+        $gmp = new GmpEncoder($characters);
+        $bcmath = new BcmathEncoder($characters);
+        $base62 = new Base62($characters);
 
         $encoded = $php->encode($data);
         $encoded2 = $gmp->encode($data);
@@ -203,10 +203,10 @@ class Base62Test extends TestCase
     {
         $data = "Hello world!";
 
-        $php = new PhpEncoder(characters: Base62::INVERTED);
-        $gmp = new GmpEncoder(characters: Base62::INVERTED);
-        $bcmath = new BcmathEncoder(characters: Base62::INVERTED);
-        $base62 = new Base62(characters: Base62::INVERTED);
+        $php = new PhpEncoder(Base62::INVERTED);
+        $gmp = new GmpEncoder(Base62::INVERTED);
+        $bcmath = new BcmathEncoder(Base62::INVERTED);
+        $base62 = new Base62(Base62::INVERTED);
 
         $encoded = $php->encode($data);
         $encoded2 = $gmp->encode($data);
@@ -243,10 +243,10 @@ class Base62Test extends TestCase
         $data = "Hello world!";
         $characters = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-        $php = new PhpEncoder(characters: $characters);
-        $gmp = new GmpEncoder(characters: $characters);
-        $bcmath = new BcmathEncoder(characters: $characters);
-        $base62 = new Base62(characters: $characters);
+        $php = new PhpEncoder($characters);
+        $gmp = new GmpEncoder($characters);
+        $bcmath = new BcmathEncoder($characters);
+        $base62 = new Base62($characters);
 
         $encoded = $php->encode($data);
         $encoded2 = $gmp->encode($data);
@@ -285,10 +285,10 @@ class Base62Test extends TestCase
     {
         $data = PHP_INT_MAX;
 
-        $php = new PhpEncoder(characters: $characters);
-        $gmp = new GmpEncoder(characters: $characters);
-        $bcmath = new BcmathEncoder(characters: $characters);
-        $base62 = new Base62(characters: $characters);
+        $php = new PhpEncoder($characters);
+        $gmp = new GmpEncoder($characters);
+        $bcmath = new BcmathEncoder($characters);
+        $base62 = new Base62($characters);
 
         $encoded = $php->encodeInteger($data);
         $encoded2 = $gmp->encodeInteger($data);
@@ -415,10 +415,10 @@ class Base62Test extends TestCase
     {
         $data = "\x00";
 
-        $php = new PhpEncoder(characters: $characters);
-        $gmp = new GmpEncoder(characters: $characters);
-        $bcmath = new BcmathEncoder(characters: $characters);
-        $base62 = new Base62(characters: $characters);
+        $php = new PhpEncoder($characters);
+        $gmp = new GmpEncoder($characters);
+        $bcmath = new BcmathEncoder($characters);
+        $base62 = new Base62($characters);
 
         $encoded = $php->encode($data);
         $encoded2 = $gmp->encode($data);
@@ -448,10 +448,10 @@ class Base62Test extends TestCase
     {
         $data = "\x00\x00\x00";
 
-        $php = new PhpEncoder(characters: $characters);
-        $gmp = new GmpEncoder(characters: $characters);
-        $bcmath = new BcmathEncoder(characters: $characters);
-        $base62 = new Base62(characters: $characters);
+        $php = new PhpEncoder($characters);
+        $gmp = new GmpEncoder($characters);
+        $bcmath = new BcmathEncoder($characters);
+        $base62 = new Base62($characters);
 
         $encoded = $php->encode($data);
         $encoded2 = $gmp->encode($data);
@@ -481,10 +481,10 @@ class Base62Test extends TestCase
     {
         $data = "\x00\x01\x02";
 
-        $php = new PhpEncoder(characters: $characters);
-        $gmp = new GmpEncoder(characters: $characters);
-        $bcmath = new BcmathEncoder(characters: $characters);
-        $base62 = new Base62(characters: $characters);
+        $php = new PhpEncoder($characters);
+        $gmp = new GmpEncoder($characters);
+        $bcmath = new BcmathEncoder($characters);
+        $base62 = new Base62($characters);
 
         $encoded = $php->encode($data);
         $encoded2 = $gmp->encode($data);
@@ -513,10 +513,10 @@ class Base62Test extends TestCase
     {
         $data = "\x00\x00\x00\x01\x02";
 
-        $php = new PhpEncoder(characters: $characters);
-        $gmp = new GmpEncoder(characters: $characters);
-        $bcmath = new BcmathEncoder(characters: $characters);
-        $base62 = new Base62(characters: $characters);
+        $php = new PhpEncoder($characters);
+        $gmp = new GmpEncoder($characters);
+        $bcmath = new BcmathEncoder($characters);
+        $base62 = new Base62($characters);
 
         $encoded = $php->encode($data);
         $encoded2 = $gmp->encode($data);
@@ -546,10 +546,10 @@ class Base62Test extends TestCase
     {
         $data = 0;
 
-        $php = new PhpEncoder(characters: $characters);
-        $gmp = new GmpEncoder(characters: $characters);
-        $bcmath = new BcmathEncoder(characters: $characters);
-        $base62 = new Base62(characters: $characters);
+        $php = new PhpEncoder($characters);
+        $gmp = new GmpEncoder($characters);
+        $bcmath = new BcmathEncoder($characters);
+        $base62 = new Base62($characters);
 
         $encoded = $php->encodeInteger($data);
         $encoded2 = $gmp->encodeInteger($data);
@@ -578,10 +578,10 @@ class Base62Test extends TestCase
     {
         $data = "";
 
-        $php = new PhpEncoder(characters: $characters);
-        $gmp = new GmpEncoder(characters: $characters);
-        $bcmath = new BcmathEncoder(characters: $characters);
-        $base62 = new Base62(characters: $characters);
+        $php = new PhpEncoder($characters);
+        $gmp = new GmpEncoder($characters);
+        $bcmath = new BcmathEncoder($characters);
+        $base62 = new Base62($characters);
 
         $encoded = $php->encode($data);
         $encoded2 = $gmp->encode($data);
