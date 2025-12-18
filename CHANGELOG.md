@@ -5,8 +5,10 @@ All notable changes to this project will be documented in this file, in reverse 
 ## [3.0.0](https://github.com/tuupola/base62/compare/2.1.0...3.x) - unreleased
 
 ### Changed
+- Make PHP 8.1 minimum requirement ([#37](https://github.com/tuupola/base62/pull/37))
 - Throw an exception if trying to encode a negative integer ([#35](https://github.com/tuupola/base62/pull/35))
 - Constructors now use named parameters ([#30](https://github.com/tuupola/base62/pull/30)).
+
 
 ### Fixed
 - PHP 8.1 encoded empty string as 0  ([#36](https://github.com/tuupola/base62/pull/36))
