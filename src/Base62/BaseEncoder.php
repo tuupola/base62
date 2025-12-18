@@ -38,7 +38,7 @@ use Tuupola\Base62;
 
 abstract class BaseEncoder
 {
-    public function __construct(private string $characters = Base62::GMP)
+    public function __construct(private readonly string $characters = Base62::GMP)
     {
         $uniques = count_chars($characters, 3);
         /** @phpstan-ignore-next-line */

@@ -38,12 +38,9 @@ class Base62
     final public const GMP = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     final public const INVERTED = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    /**
-     * @var Base62\GmpEncoder|Base62\PhpEncoder|Base62\BcmathEncoder
-     */
-    private $encoder;
+    private readonly Base62\GmpEncoder|Base62\BaseEncoder $encoder;
 
-    public function __construct(private string $characters = Base62::GMP)
+    public function __construct(private readonly string $characters = Base62::GMP)
     {
         if (function_exists("gmp_init")) {
             $this->encoder = new Base62\GmpEncoder($characters);
