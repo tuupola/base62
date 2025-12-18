@@ -17,10 +17,10 @@ Install with [composer](https://getcomposer.org/).
 $ composer require tuupola/base62
 ```
 
-This branch requires PHP 7.1 or up. The older `1.x` branch supports also PHP 5.6 and 7.0.
+This branch requires PHP 8.0 or up. The older `2.x` branch supports also PHP 7.01 and up.
 
 ``` bash
-$ composer require "tuupola/base62:^1.0"
+$ composer require "tuupola/base62:^2.0"
 ```
 
 ## Usage
@@ -58,8 +58,8 @@ use Tuupola\Base62;
 print Base62::GMP; /* 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz */
 print Base62::INVERTED; /* 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ */
 
-$default = new Base62(["characters" => Base62::GMP]);
-$inverted = new Base62(["characters" => Base62::INVERTED]);
+$default = new Base62(Base62::GMP);
+$inverted = new Base62(Base62::INVERTED);
 print $default->encode("Hello world!"); /* T8dgcjRGuYUueWht */
 print $inverted->encode("Hello world!"); /* t8DGCJrgUyuUEwHT */
 ```

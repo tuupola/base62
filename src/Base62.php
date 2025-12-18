@@ -43,18 +43,12 @@ class Base62
      */
     private $encoder;
 
-    /**
-     * @var mixed[]
-     */
-    private $options = [];
-
-    public function __construct(array $options = [])
+    public function __construct(private string $characters = Base62::GMP)
     {
-        $this->options = array_merge($this->options, $options);
         if (function_exists("gmp_init")) {
-            $this->encoder = new Base62\GmpEncoder($this->options);
+            $this->encoder = new Base62\GmpEncoder($characters);
         } else {
-            $this->encoder = new Base62\PhpEncoder($this->options);
+            $this->encoder = new Base62\PhpEncoder($characters);
         }
     }
 
