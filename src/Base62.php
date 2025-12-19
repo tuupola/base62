@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 /*
 
-Copyright (c) 2016-2021 Mika Tuupola
+Copyright (c) 2016-2025 Mika Tuupola
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,15 +35,12 @@ namespace Tuupola;
 
 class Base62
 {
-    const GMP = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    const INVERTED = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    final public const GMP = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    final public const INVERTED = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    /**
-     * @var Base62\GmpEncoder|Base62\PhpEncoder|Base62\BcmathEncoder
-     */
-    private $encoder;
+    private readonly Base62\GmpEncoder|Base62\BaseEncoder $encoder;
 
-    public function __construct(private string $characters = Base62::GMP)
+    public function __construct(string $characters = Base62::GMP)
     {
         if (function_exists("gmp_init")) {
             $this->encoder = new Base62\GmpEncoder($characters);
