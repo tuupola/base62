@@ -38,13 +38,14 @@ use Tuupola\Base62;
 class Base62Proxy
 {
     public static string $characters = Base62::GMP;
+    public static int $blockSize = 0;
 
     /**
      * Encode given data to a base62 string
      */
     public static function encode(string $data): string
     {
-        return (new Base62(self::$characters))->encode($data);
+        return (new Base62(self::$characters, self::$blockSize))->encode($data);
     }
 
     /**
@@ -52,7 +53,7 @@ class Base62Proxy
      */
     public static function decode(string $data): string
     {
-        return (new Base62(self::$characters))->decode($data);
+        return (new Base62(self::$characters, self::$blockSize))->decode($data);
     }
 
     /**
@@ -60,7 +61,7 @@ class Base62Proxy
      */
     public static function encodeInteger(int $data): string
     {
-        return (new Base62(self::$characters))->encodeInteger($data);
+        return (new Base62(self::$characters, self::$blockSize))->encodeInteger($data);
     }
 
     /**
@@ -68,6 +69,6 @@ class Base62Proxy
      */
     public static function decodeInteger(string $data): int
     {
-        return (new Base62(self::$characters))->decodeInteger($data);
+        return (new Base62(self::$characters, self::$blockSize))->decodeInteger($data);
     }
 }

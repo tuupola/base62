@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 /*
 
-Copyright (c) 2016-2025 Mika Tuupola
+Copyright (c) 2016-2026 Mika Tuupola
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,14 +38,26 @@ class Base62
     final public const GMP = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     final public const INVERTED = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    private readonly Base62\GmpEncoder|Base62\BaseEncoder $encoder;
+    private readonly Base62\GmpEncoder|Base62\GmpBlockEncoder|Base62\BaseEncoder|Base62\BaseBlockEncoder $encoder;
 
-    public function __construct(string $characters = Base62::GMP)
+    public function __construct(string $characters = Base62::GMP, int $blockSize = 0)
     {
-        if (function_exists("gmp_init")) {
-            $this->encoder = new Base62\GmpEncoder($characters);
+        if ($blockSize < 0) {
+            throw new \InvalidArgumentException("Block size must be zero or positive");
+        }
+
+        if ($blockSize > 0) {
+            if (function_exists("gmp_init")) {
+                $this->encoder = new Base62\GmpBlockEncoder($characters, $blockSize);
+            } else {
+                $this->encoder = new Base62\PhpBlockEncoder($characters, $blockSize);
+            }
         } else {
-            $this->encoder = new Base62\PhpEncoder($characters);
+            if (function_exists("gmp_init")) {
+                $this->encoder = new Base62\GmpEncoder($characters);
+            } else {
+                $this->encoder = new Base62\PhpEncoder($characters);
+            }
         }
     }
 
@@ -70,6 +82,9 @@ class Base62
      */
     public function encodeInteger(int $data): string
     {
+        if ($this->encoder instanceof Base62\BaseBlockEncoder) {
+            throw new \InvalidArgumentException("Integer encoding not supported in block mode");
+        }
         return $this->encoder->encodeInteger($data);
     }
 
@@ -78,6 +93,9 @@ class Base62
      */
     public function decodeInteger(string $data): int
     {
+        if ($this->encoder instanceof Base62\BaseBlockEncoder) {
+            throw new \InvalidArgumentException("Integer decoding not supported in block mode");
+        }
         return $this->encoder->decodeInteger($data);
     }
 }
