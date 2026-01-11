@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ## [3.0.0](https://github.com/tuupola/base62/compare/2.1.1...3.x) - unreleased
 
+### Added
+- Block encoding support for fixed-length output ([#38](https://github.com/tuupola/base62/pull/38))
+
 ### Changed
 - Make PHP 8.1 minimum requirement ([#37](https://github.com/tuupola/base62/pull/37))
 - Throw an exception if trying to encode a negative integer ([#35](https://github.com/tuupola/base62/pull/35))
