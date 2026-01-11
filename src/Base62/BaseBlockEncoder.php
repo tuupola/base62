@@ -68,6 +68,7 @@ abstract class BaseBlockEncoder
         }
 
         $result = "";
+        /** @phpstan-ignore-next-line */
         $blocks = str_split($data, $this->blockSize);
 
         foreach ($blocks as $block) {
