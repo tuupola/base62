@@ -710,7 +710,7 @@ class Base62Test extends TestCase
         $this->assertEquals($data, $base62->decode($expected));
     }
 
-    public function knownTestVectorProvider()
+    public function ksuidTestVectorProvider()
     {
         return [
             "KSUID example" => [
@@ -729,9 +729,9 @@ class Base62Test extends TestCase
     }
 
     /**
-     * @dataProvider knownTestVectorProvider
+     * @dataProvider ksuidTestVectorProvider
      */
-    public function testShouldMatchKnownTestVectors($hex, $expected)
+    public function testShouldMatchKsuidTestVectors($hex, $expected)
     {
         $data = hex2bin($hex);
 
@@ -739,6 +739,116 @@ class Base62Test extends TestCase
         $gmp = new GmpBlockEncoder(Base62::GMP, 20);
         $bcmath = new BcmathBlockEncoder(Base62::GMP, 20);
         $base62 = new Base62(Base62::GMP, 20);
+
+        $this->assertEquals($expected, $php->encode($data));
+        $this->assertEquals($expected, $gmp->encode($data));
+        $this->assertEquals($expected, $bcmath->encode($data));
+        $this->assertEquals($expected, $base62->encode($data));
+
+        $this->assertEquals($data, $php->decode($expected));
+        $this->assertEquals($data, $gmp->decode($expected));
+        $this->assertEquals($data, $bcmath->decode($expected));
+        $this->assertEquals($data, $base62->decode($expected));
+    }
+
+    public function saltpackTestVectorProvider()
+    {
+        return [
+            "min (all zeros)" => [
+                "0000000000000000000000000000000000000000000000000000000000000000",
+                "0000000000000000000000000000000000000000000",
+            ],
+            "max (all 0xFF)" => [
+                "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                "yhjskwdA6OZ1AL1YmHWZWm8LLG7HjnuCA2j5rOw8Xp1",
+            ],
+            "0x01 at start" => [
+                "0100000000000000000000000000000000000000000000000000000000000000",
+                "0EhWuMzfS7MPuxAu520Mu4XwCuyZfalRej3Z8gTlzA8",
+            ],
+            "0x01 at end" => [
+                "0000000000000000000000000000000000000000000000000000000000000001",
+                "0000000000000000000000000000000000000000001",
+            ],
+            "alternating 0x00 0xFF" => [
+                "00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF",
+                "0Edz0QHWMhWDkqBpHJblBDwAhGSycXFAu0UZU7ZgjU7",
+            ],
+            "alternating 0xFF 0x00" => [
+                "FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00",
+                "yT5tkWLdjh2nPUpjUxuoLYCAdzeJ7Gf1G2EWNHMRoKu",
+            ],
+            "ascending 0x00-0x1F" => [
+                "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F",
+                "003aUlTJC7tjlCTQj2uNU3MFagCXG9LRKRcwGkBIDlf",
+            ],
+            "descending 0x1F-0x00" => [
+                "1F1E1D1C1B1A191817161514131211100F0E0D0C0B0A09080706050403020100",
+                "7NUg80V82zhpOJzCktNvQChgC6CAxRM6U8CUhTn1IIq",
+            ],
+            "all 0x55" => [
+                "5555555555555555555555555555555555555555555555555555555555555555",
+                "KEZxaJXihSr0O70WG5qBqG2mRkhlFGdOigF1x8JNVwL",
+            ],
+            "all 0xAA" => [
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "eT9vAd5ROvi0mE12WBgNgW5YtVPWUXGnRMU3uGcl1sg",
+            ],
+            "first half 0x00 second 0xFF" => [
+                "00000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                "0000000000000000000007n42DGM5Tflk9n8mt7Fhc7",
+            ],
+            "first half 0xFF second 0x00" => [
+                "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000000000000000000000000000",
+                "yhjskwdA6OZ1AL1YmHWZWeLHJ2qveKEQPsvx4VosqCu",
+            ],
+            "0xFF at start" => [
+                "FF00000000000000000000000000000000000000000000000000000000000000",
+                "yT2LqZdUeHCbFNqehFWCchaP8L8i4D8kVJfWiiSMYeu",
+            ],
+            "0xFF at end" => [
+                "00000000000000000000000000000000000000000000000000000000000000FF",
+                "0000000000000000000000000000000000000000047",
+            ],
+            "DEADBEEF repeated" => [
+                "DEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEF",
+                "qnqUDILfbk3NCC7vxvHkREe9pHE2yEo82btf7NAUd15",
+            ],
+            "powers of 2" => [
+                "0102040810204080010204081020408001020408102040800102040810204080",
+                "0EohuKFHrEhFnG3di03eMYuQYvWADsM0zJM3rltF5VI",
+            ],
+            "all 0x80" => [
+                "8080808080808080808080808080808080808080808080808080808080808080",
+                "UTFUe65YURP79K2F1cha4IKEbPq2a7XncpwNMfh2aQa",
+            ],
+            "all 0x7F" => [
+                "7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F",
+                "UEUO6qXbbx9u10zJkeozSTo6jqHF9gMOXCmiUjF5xOR",
+            ],
+            "increment by 8" => [
+                "0008101820283038404850586068707880889098A0A8B0B8C0C8D0D8E0E8F0F8",
+                "00Shy7mTZ1Bu5bnRoNH1sQs0jRcI5ClWdZ1W9xSLm9I",
+            ],
+            "Hello World padded" => [
+                "48656C6C6F20576F726C64210000000000000000000000000000000000000000",
+                "HANLrIgIWPomzbqJv7smnL7lSvGNR0CfHOcpVlolAJs",
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider saltpackTestVectorProvider
+     * @see https://github.com/keybase/saltpack
+     */
+    public function testShouldMatchSaltpackTestVectors($hex, $expected)
+    {
+        $data = hex2bin($hex);
+
+        $php = new PhpBlockEncoder(Base62::GMP, 32);
+        $gmp = new GmpBlockEncoder(Base62::GMP, 32);
+        $bcmath = new BcmathBlockEncoder(Base62::GMP, 32);
+        $base62 = new Base62(Base62::GMP, 32);
 
         $this->assertEquals($expected, $php->encode($data));
         $this->assertEquals($expected, $gmp->encode($data));
