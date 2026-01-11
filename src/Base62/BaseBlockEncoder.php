@@ -45,7 +45,7 @@ abstract class BaseBlockEncoder
 
     public function __construct(
         protected readonly string $characters = Base62::GMP,
-        protected readonly int $blockSize = 1
+        protected readonly int $blockSize = 32
     ) {
         $uniques = count_chars($characters, 3);
         /** @phpstan-ignore-next-line */
