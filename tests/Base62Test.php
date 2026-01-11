@@ -938,4 +938,92 @@ class Base62Test extends TestCase
         $this->assertEquals($data, $bcmath->decode($expected));
         $this->assertEquals($data, $base62->decode($expected));
     }
+
+    public function saltpackMultiBlockTestVectorProvider()
+    {
+        return [
+            "33 bytes (block+1)" => [
+                "ABABABABABABABABABABABABABABABAB" .
+                "ABABABABABABABABABABABABABABABAB" . "AB",
+                "ehv1hsdOHPxDuX3xn9YyIKbgl4yJuySCWzdimD4heup2l",
+            ],
+            "48 bytes (1.5 blocks)" => [
+                "CDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCD" .
+                "CDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCD" .
+                "CDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCD",
+                "mnkbwPFgA0IQSyfN5zV322E08a3QPshxcSw8MGOr45l" .
+                "6GLTjuuesFLMWBXoF8GGpJ",
+            ],
+            "64 bytes (2 blocks)" => [
+                "EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF" .
+                "EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF" .
+                "EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF" .
+                "EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF",
+                "utaCAvry2add1QGmOpR7ljqJW58WumxihwEXwJj0TGh" .
+                "utaCAvry2add1QGmOpR7ljqJW58WumxihwEXwJj0TGh",
+            ],
+            "64 bytes alternating" => [
+                "00FF00FF00FF00FF00FF00FF00FF00FF" .
+                "00FF00FF00FF00FF00FF00FF00FF00FF" .
+                "00FF00FF00FF00FF00FF00FF00FF00FF" .
+                "00FF00FF00FF00FF00FF00FF00FF00FF",
+                "0Edz0QHWMhWDkqBpHJblBDwAhGSycXFAu0UZU7ZgjU7" .
+                "0Edz0QHWMhWDkqBpHJblBDwAhGSycXFAu0UZU7ZgjU7",
+            ],
+            "65 bytes (2 blocks+1)" => [
+                "42424242424242424242424242424242" .
+                "42424242424242424242424242424242" .
+                "42424242424242424242424242424242" .
+                "42424242424242424242424242424242" . "42",
+                "Fi8xOY8g0CByqH6y3k6yFmCN1r2c8w8hzgHVQDkPYHa" .
+                "Fi8xOY8g0CByqH6y3k6yFmCN1r2c8w8hzgHVQDkPYHa14",
+            ],
+            "96 bytes (3 blocks)" => [
+                "77777777777777777777777777777777" .
+                "77777777777777777777777777777777" .
+                "77777777777777777777777777777777" .
+                "77777777777777777777777777777777" .
+                "77777777777777777777777777777777" .
+                "77777777777777777777777777777777",
+                "SKPXoqA0a3CCwYbvYvmGZxf5pFmrkAt9o9XRXBdWv7H" .
+                "SKPXoqA0a3CCwYbvYvmGZxf5pFmrkAt9o9XRXBdWv7H" .
+                "SKPXoqA0a3CCwYbvYvmGZxf5pFmrkAt9o9XRXBdWv7H",
+            ],
+            "100 bytes" => [
+                "000102030405060708090A0B0C0D0E0F" .
+                "101112131415161718191A1B1C1D1E1F" .
+                "202122232425262728292A2B2C2D2E2F" .
+                "303132333435363738393A3B3C3D3E3F" .
+                "404142434445464748494A4B4C4D4E4F" .
+                "505152535455565758595A5B5C5D5E5F" . "60616263",
+                "003aUlTJC7tjlCTQj2uNU3MFagCXG9LRKRcwGkBIDlf" .
+                "7cMxemzhJjkW31yzTx5H07wJF2A2uBEOEec26ubYMsJ" .
+                "FEgKooW5RLbIKrUYErGAWCWMtO7YYD7L8rb7x51oVyx1lQkF9",
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider saltpackMultiBlockTestVectorProvider
+     * @see https://github.com/keybase/saltpack
+     */
+    public function testShouldMatchSaltpackMultiBlockTestVectors($hex, $expected)
+    {
+        $data = hex2bin($hex);
+
+        $php = new PhpBlockEncoder(Base62::GMP, 32);
+        $gmp = new GmpBlockEncoder(Base62::GMP, 32);
+        $bcmath = new BcmathBlockEncoder(Base62::GMP, 32);
+        $base62 = new Base62(Base62::GMP, 32);
+
+        $this->assertEquals($expected, $php->encode($data));
+        $this->assertEquals($expected, $gmp->encode($data));
+        $this->assertEquals($expected, $bcmath->encode($data));
+        $this->assertEquals($expected, $base62->encode($data));
+
+        $this->assertEquals($data, $php->decode($expected));
+        $this->assertEquals($data, $gmp->decode($expected));
+        $this->assertEquals($data, $bcmath->decode($expected));
+        $this->assertEquals($data, $base62->decode($expected));
+    }
 }
