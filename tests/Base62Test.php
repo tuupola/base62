@@ -36,6 +36,9 @@ namespace Tuupola\Base62;
 use InvalidArgumentException;
 use Tuupola\Base62;
 use Tuupola\Base62Proxy;
+use Tuupola\Base62\PhpBlockEncoder;
+use Tuupola\Base62\GmpBlockEncoder;
+use Tuupola\Base62\BcmathBlockEncoder;
 use PHPUnit\Framework\TestCase;
 
 class Base62Test extends TestCase
@@ -43,6 +46,7 @@ class Base62Test extends TestCase
     protected function tearDown(): void
     {
         Base62Proxy::$characters = Base62::GMP;
+        Base62Proxy::$blockSize = 0;
     }
 
     public function testShouldBeTrue()
@@ -656,5 +660,53 @@ class Base62Test extends TestCase
             "inverted character set" => [Base62::INVERTED],
             "custom character set" => ["1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"],
         ];
+    }
+
+    /**
+     * Test vectors from base62.js
+     * @see https://github.com/therootcompany/base62.js/issues/1
+     */
+    public function base62JsTestVectorProvider()
+    {
+        return [
+            "Hello, 世界 (UTF-8)" => [
+                "Hello, 世界",
+                "1wJfrzvdbuFbL65vcS",
+            ],
+            "Hello World (ASCII)" => [
+                "Hello World",
+                "73XpUgyMwkGr29M",
+            ],
+            "Mixed null and max bytes" => [
+                "\x00\x00\x00\x00\xff\xff\xff\xff",
+                "000004gfFC3",
+            ],
+            "Reversed pattern" => [
+                "\xff\xff\xff\xff\x00\x00\x00\x00",
+                "LygHZwPV2MC",
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider base62JsTestVectorProvider
+     * @see https://github.com/therootcompany/base62.js/issues/1
+     */
+    public function testShouldMatchBase62JsTestVectors($data, $expected)
+    {
+        $php = new PhpBlockEncoder(Base62::GMP, 32);
+        $gmp = new GmpBlockEncoder(Base62::GMP, 32);
+        $bcmath = new BcmathBlockEncoder(Base62::GMP, 32);
+        $base62 = new Base62(Base62::GMP, 32);
+
+        $this->assertEquals($expected, $php->encode($data));
+        $this->assertEquals($expected, $gmp->encode($data));
+        $this->assertEquals($expected, $bcmath->encode($data));
+        $this->assertEquals($expected, $base62->encode($data));
+
+        $this->assertEquals($data, $php->decode($expected));
+        $this->assertEquals($data, $gmp->decode($expected));
+        $this->assertEquals($data, $bcmath->decode($expected));
+        $this->assertEquals($data, $base62->decode($expected));
     }
 }
