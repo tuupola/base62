@@ -36,6 +36,9 @@ namespace Tuupola\Base62;
 use InvalidArgumentException;
 use Tuupola\Base62;
 use Tuupola\Base62Proxy;
+use Tuupola\Base62\PhpBlockEncoder;
+use Tuupola\Base62\GmpBlockEncoder;
+use Tuupola\Base62\BcmathBlockEncoder;
 use PHPUnit\Framework\TestCase;
 
 class Base62Test extends TestCase
@@ -43,6 +46,7 @@ class Base62Test extends TestCase
     protected function tearDown(): void
     {
         Base62Proxy::$characters = Base62::GMP;
+        Base62Proxy::$blockSize = 0;
     }
 
     public function testShouldBeTrue()
@@ -656,5 +660,438 @@ class Base62Test extends TestCase
             "inverted character set" => [Base62::INVERTED],
             "custom character set" => ["1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"],
         ];
+    }
+
+    /**
+     * Test vectors from base62.js
+     * @see https://github.com/therootcompany/base62.js/issues/1
+     */
+    public function base62JsTestVectorProvider()
+    {
+        return [
+            "Hello, 世界 (UTF-8)" => [
+                "Hello, 世界",
+                "1wJfrzvdbuFbL65vcS",
+            ],
+            "Hello World (ASCII)" => [
+                "Hello World",
+                "73XpUgyMwkGr29M",
+            ],
+            "Mixed null and max bytes" => [
+                "\x00\x00\x00\x00\xff\xff\xff\xff",
+                "000004gfFC3",
+            ],
+            "Reversed pattern" => [
+                "\xff\xff\xff\xff\x00\x00\x00\x00",
+                "LygHZwPV2MC",
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider base62JsTestVectorProvider
+     * @see https://github.com/therootcompany/base62.js/issues/1
+     */
+    public function testShouldMatchBase62JsTestVectors($data, $expected)
+    {
+        $php = new PhpBlockEncoder(Base62::GMP, 32);
+        $gmp = new GmpBlockEncoder(Base62::GMP, 32);
+        $bcmath = new BcmathBlockEncoder(Base62::GMP, 32);
+        $base62 = new Base62(Base62::GMP, 32);
+
+        $this->assertEquals($expected, $php->encode($data));
+        $this->assertEquals($expected, $gmp->encode($data));
+        $this->assertEquals($expected, $bcmath->encode($data));
+        $this->assertEquals($expected, $base62->encode($data));
+
+        $this->assertEquals($data, $php->decode($expected));
+        $this->assertEquals($data, $gmp->decode($expected));
+        $this->assertEquals($data, $bcmath->decode($expected));
+        $this->assertEquals($data, $base62->decode($expected));
+    }
+
+    public function ksuidTestVectorProvider()
+    {
+        return [
+            "KSUID example" => [
+                "066A029C73FC1AA3B2446246D6E89FCD909E8FE8",
+                "0ujzPyRiIAffKhBux4PvQdDqMHY",
+            ],
+            "KSUID min" => [
+                "0000000000000000000000000000000000000000",
+                "000000000000000000000000000",
+            ],
+            "KSUID max" => [
+                "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                "aWgEPTl1tmebfsQzFP4bxwgy80V",
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider ksuidTestVectorProvider
+     */
+    public function testShouldMatchKsuidTestVectors($hex, $expected)
+    {
+        $data = hex2bin($hex);
+
+        $php = new PhpBlockEncoder(Base62::GMP, 20);
+        $gmp = new GmpBlockEncoder(Base62::GMP, 20);
+        $bcmath = new BcmathBlockEncoder(Base62::GMP, 20);
+        $base62 = new Base62(Base62::GMP, 20);
+
+        $this->assertEquals($expected, $php->encode($data));
+        $this->assertEquals($expected, $gmp->encode($data));
+        $this->assertEquals($expected, $bcmath->encode($data));
+        $this->assertEquals($expected, $base62->encode($data));
+
+        $this->assertEquals($data, $php->decode($expected));
+        $this->assertEquals($data, $gmp->decode($expected));
+        $this->assertEquals($data, $bcmath->decode($expected));
+        $this->assertEquals($data, $base62->decode($expected));
+    }
+
+    public function saltpackTestVectorProvider()
+    {
+        return [
+            "min (all zeros)" => [
+                "0000000000000000000000000000000000000000000000000000000000000000",
+                "0000000000000000000000000000000000000000000",
+            ],
+            "max (all 0xFF)" => [
+                "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                "yhjskwdA6OZ1AL1YmHWZWm8LLG7HjnuCA2j5rOw8Xp1",
+            ],
+            "0x01 at start" => [
+                "0100000000000000000000000000000000000000000000000000000000000000",
+                "0EhWuMzfS7MPuxAu520Mu4XwCuyZfalRej3Z8gTlzA8",
+            ],
+            "0x01 at end" => [
+                "0000000000000000000000000000000000000000000000000000000000000001",
+                "0000000000000000000000000000000000000000001",
+            ],
+            "alternating 0x00 0xFF" => [
+                "00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF",
+                "0Edz0QHWMhWDkqBpHJblBDwAhGSycXFAu0UZU7ZgjU7",
+            ],
+            "alternating 0xFF 0x00" => [
+                "FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00",
+                "yT5tkWLdjh2nPUpjUxuoLYCAdzeJ7Gf1G2EWNHMRoKu",
+            ],
+            "ascending 0x00-0x1F" => [
+                "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F",
+                "003aUlTJC7tjlCTQj2uNU3MFagCXG9LRKRcwGkBIDlf",
+            ],
+            "descending 0x1F-0x00" => [
+                "1F1E1D1C1B1A191817161514131211100F0E0D0C0B0A09080706050403020100",
+                "7NUg80V82zhpOJzCktNvQChgC6CAxRM6U8CUhTn1IIq",
+            ],
+            "all 0x55" => [
+                "5555555555555555555555555555555555555555555555555555555555555555",
+                "KEZxaJXihSr0O70WG5qBqG2mRkhlFGdOigF1x8JNVwL",
+            ],
+            "all 0xAA" => [
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "eT9vAd5ROvi0mE12WBgNgW5YtVPWUXGnRMU3uGcl1sg",
+            ],
+            "first half 0x00 second 0xFF" => [
+                "00000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                "0000000000000000000007n42DGM5Tflk9n8mt7Fhc7",
+            ],
+            "first half 0xFF second 0x00" => [
+                "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000000000000000000000000000",
+                "yhjskwdA6OZ1AL1YmHWZWeLHJ2qveKEQPsvx4VosqCu",
+            ],
+            "0xFF at start" => [
+                "FF00000000000000000000000000000000000000000000000000000000000000",
+                "yT2LqZdUeHCbFNqehFWCchaP8L8i4D8kVJfWiiSMYeu",
+            ],
+            "0xFF at end" => [
+                "00000000000000000000000000000000000000000000000000000000000000FF",
+                "0000000000000000000000000000000000000000047",
+            ],
+            "DEADBEEF repeated" => [
+                "DEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEFDEADBEEF",
+                "qnqUDILfbk3NCC7vxvHkREe9pHE2yEo82btf7NAUd15",
+            ],
+            "powers of 2" => [
+                "0102040810204080010204081020408001020408102040800102040810204080",
+                "0EohuKFHrEhFnG3di03eMYuQYvWADsM0zJM3rltF5VI",
+            ],
+            "all 0x80" => [
+                "8080808080808080808080808080808080808080808080808080808080808080",
+                "UTFUe65YURP79K2F1cha4IKEbPq2a7XncpwNMfh2aQa",
+            ],
+            "all 0x7F" => [
+                "7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F",
+                "UEUO6qXbbx9u10zJkeozSTo6jqHF9gMOXCmiUjF5xOR",
+            ],
+            "increment by 8" => [
+                "0008101820283038404850586068707880889098A0A8B0B8C0C8D0D8E0E8F0F8",
+                "00Shy7mTZ1Bu5bnRoNH1sQs0jRcI5ClWdZ1W9xSLm9I",
+            ],
+            "Hello World padded" => [
+                "48656C6C6F20576F726C64210000000000000000000000000000000000000000",
+                "HANLrIgIWPomzbqJv7smnL7lSvGNR0CfHOcpVlolAJs",
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider saltpackTestVectorProvider
+     * @see https://github.com/keybase/saltpack
+     */
+    public function testShouldMatchSaltpackTestVectors($hex, $expected)
+    {
+        $data = hex2bin($hex);
+
+        $php = new PhpBlockEncoder(Base62::GMP, 32);
+        $gmp = new GmpBlockEncoder(Base62::GMP, 32);
+        $bcmath = new BcmathBlockEncoder(Base62::GMP, 32);
+        $base62 = new Base62(Base62::GMP, 32);
+
+        $this->assertEquals($expected, $php->encode($data));
+        $this->assertEquals($expected, $gmp->encode($data));
+        $this->assertEquals($expected, $bcmath->encode($data));
+        $this->assertEquals($expected, $base62->encode($data));
+
+        $this->assertEquals($data, $php->decode($expected));
+        $this->assertEquals($data, $gmp->decode($expected));
+        $this->assertEquals($data, $bcmath->decode($expected));
+        $this->assertEquals($data, $base62->decode($expected));
+    }
+
+    public function saltpackShortBlockTestVectorProvider()
+    {
+        return [
+            "1 byte 0x42" => [
+                "42",
+                "14",
+            ],
+            "2 bytes" => [
+                "DEAD",
+                "EpR",
+            ],
+            "4 bytes" => [
+                "DEADBEEF",
+                "44pZgF",
+            ],
+            "8 bytes" => [
+                "0123456789ABCDEF",
+                "063UfDVRKBz",
+            ],
+            "15 bytes" => [
+                "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                "1szWVIyZES2MJoAMUmjwV",
+            ],
+            "16 bytes (half block)" => [
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "5C2goAu3eRqUlrQWakAT4k",
+            ],
+            "16 bytes zeros" => [
+                "00000000000000000000000000000000",
+                "0000000000000000000000",
+            ],
+            "17 bytes" => [
+                "5555555555555555555555555555555555",
+                "AirYNaVjXVUNWoIlHrJc1oL",
+            ],
+            "24 bytes" => [
+                "808080808080808080808080808080808080808080808080",
+                "1NxOlR8WYsUZwUiaWrgO59M1nGcRGzeZk",
+            ],
+            "31 bytes (block-1)" => [
+                "7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F",
+                "7JydkDh0sEoLneRRY44bAHsH8CAxNAk6uTjhiFnfe3",
+            ],
+            "31 bytes max" => [
+                "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                "EhWuMzfS7MPuxAu520Mu4XwCuyZfalRej3Z8gTlzA7",
+            ],
+            "31 bytes min" => [
+                "00000000000000000000000000000000000000000000000000000000000000",
+                "000000000000000000000000000000000000000000",
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider saltpackShortBlockTestVectorProvider
+     * @see https://github.com/keybase/saltpack
+     */
+    public function testShouldMatchSaltpackShortBlockTestVectors($hex, $expected)
+    {
+        $data = hex2bin($hex);
+
+        $php = new PhpBlockEncoder(Base62::GMP, 32);
+        $gmp = new GmpBlockEncoder(Base62::GMP, 32);
+        $bcmath = new BcmathBlockEncoder(Base62::GMP, 32);
+        $base62 = new Base62(Base62::GMP, 32);
+
+        $this->assertEquals($expected, $php->encode($data));
+        $this->assertEquals($expected, $gmp->encode($data));
+        $this->assertEquals($expected, $bcmath->encode($data));
+        $this->assertEquals($expected, $base62->encode($data));
+
+        $this->assertEquals($data, $php->decode($expected));
+        $this->assertEquals($data, $gmp->decode($expected));
+        $this->assertEquals($data, $bcmath->decode($expected));
+        $this->assertEquals($data, $base62->decode($expected));
+    }
+
+    public function saltpackMultiBlockTestVectorProvider()
+    {
+        return [
+            "33 bytes (block+1)" => [
+                "ABABABABABABABABABABABABABABABAB" .
+                "ABABABABABABABABABABABABABABABAB" .
+                "AB",
+                "ehv1hsdOHPxDuX3xn9YyIKbgl4yJuySCWzdimD4heup2l",
+            ],
+            "48 bytes (1.5 blocks)" => [
+                "CDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCD" .
+                "CDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCD" .
+                "CDCDCDCDCDCDCDCDCDCDCDCDCDCDCDCD",
+                "mnkbwPFgA0IQSyfN5zV322E08a3QPshxcSw8MGOr45l" .
+                "6GLTjuuesFLMWBXoF8GGpJ",
+            ],
+            "64 bytes (2 blocks)" => [
+                "EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF" .
+                "EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF" .
+                "EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF" .
+                "EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF",
+                "utaCAvry2add1QGmOpR7ljqJW58WumxihwEXwJj0TGh" .
+                "utaCAvry2add1QGmOpR7ljqJW58WumxihwEXwJj0TGh",
+            ],
+            "64 bytes alternating" => [
+                "00FF00FF00FF00FF00FF00FF00FF00FF" .
+                "00FF00FF00FF00FF00FF00FF00FF00FF" .
+                "00FF00FF00FF00FF00FF00FF00FF00FF" .
+                "00FF00FF00FF00FF00FF00FF00FF00FF",
+                "0Edz0QHWMhWDkqBpHJblBDwAhGSycXFAu0UZU7ZgjU7" .
+                "0Edz0QHWMhWDkqBpHJblBDwAhGSycXFAu0UZU7ZgjU7",
+            ],
+            "65 bytes (2 blocks+1)" => [
+                "42424242424242424242424242424242" .
+                "42424242424242424242424242424242" .
+                "42424242424242424242424242424242" .
+                "42424242424242424242424242424242" .
+                "42",
+                "Fi8xOY8g0CByqH6y3k6yFmCN1r2c8w8hzgHVQDkPYHa" .
+                "Fi8xOY8g0CByqH6y3k6yFmCN1r2c8w8hzgHVQDkPYHa14",
+            ],
+            "96 bytes (3 blocks)" => [
+                "77777777777777777777777777777777" .
+                "77777777777777777777777777777777" .
+                "77777777777777777777777777777777" .
+                "77777777777777777777777777777777" .
+                "77777777777777777777777777777777" .
+                "77777777777777777777777777777777",
+                "SKPXoqA0a3CCwYbvYvmGZxf5pFmrkAt9o9XRXBdWv7H" .
+                "SKPXoqA0a3CCwYbvYvmGZxf5pFmrkAt9o9XRXBdWv7H" .
+                "SKPXoqA0a3CCwYbvYvmGZxf5pFmrkAt9o9XRXBdWv7H",
+            ],
+            "100 bytes" => [
+                "000102030405060708090A0B0C0D0E0F" .
+                "101112131415161718191A1B1C1D1E1F" .
+                "202122232425262728292A2B2C2D2E2F" .
+                "303132333435363738393A3B3C3D3E3F" .
+                "404142434445464748494A4B4C4D4E4F" .
+                "505152535455565758595A5B5C5D5E5F" .
+                "60616263",
+                "003aUlTJC7tjlCTQj2uNU3MFagCXG9LRKRcwGkBIDlf" .
+                "7cMxemzhJjkW31yzTx5H07wJF2A2uBEOEec26ubYMsJ" .
+                "FEgKooW5RLbIKrUYErGAWCWMtO7YYD7L8rb7x51oVyx1lQkF9",
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider saltpackMultiBlockTestVectorProvider
+     * @see https://github.com/keybase/saltpack
+     */
+    public function testShouldMatchSaltpackMultiBlockTestVectors($hex, $expected)
+    {
+        $data = hex2bin($hex);
+
+        $php = new PhpBlockEncoder(Base62::GMP, 32);
+        $gmp = new GmpBlockEncoder(Base62::GMP, 32);
+        $bcmath = new BcmathBlockEncoder(Base62::GMP, 32);
+        $base62 = new Base62(Base62::GMP, 32);
+
+        $this->assertEquals($expected, $php->encode($data));
+        $this->assertEquals($expected, $gmp->encode($data));
+        $this->assertEquals($expected, $bcmath->encode($data));
+        $this->assertEquals($expected, $base62->encode($data));
+
+        $this->assertEquals($data, $php->decode($expected));
+        $this->assertEquals($data, $gmp->decode($expected));
+        $this->assertEquals($data, $bcmath->decode($expected));
+        $this->assertEquals($data, $base62->decode($expected));
+    }
+
+    public function blockSizeTestVectorProvider()
+    {
+        return [
+            1 => [1, "3a2n343r3a2n343r3a2n343r3a2n343r3a2n343r3a2n343r3a2n343r3a2n343r"],
+            2 => [2, "EpRCiNEpRCiNEpRCiNEpRCiNEpRCiNEpRCiNEpRCiNEpRCiN"],
+            3 => [3, "0zEQY13xW90qVGY0lmAx0zEQY13xW90qVGY0lmAx0zEQY13xW9CiN"],
+            4 => [4, "44pZgF44pZgF44pZgF44pZgF44pZgF44pZgF44pZgF44pZgF"],
+            5 => [5, "GpwxKTWD8XsV2LER8kJkUI8Xp9BfGpwxKTWD8XsV2LCiN"],
+            6 => [6, "17WVQyXuv0xc47FXzj17WVQyXuv0xc47FXzj17WVQyXuvCiN"],
+            7 => [7, "4d4DnO034Q4zEGw5ILBl3y9AzwCMvO3bz7rEu4o344pZgF"],
+            8 => [8, "J7JQxv6CgJDJ7JQxv6CgJDJ7JQxv6CgJDJ7JQxv6CgJD"],
+            9 => [9, "1GwCFLPlcMhNG0zaiKwuoVldaX15gYOoJClFHaAI8Xp9Bf"],
+            10 => [10, "5FwIZMQOcPj64r4VTi2RjIh56bN95FwIZMQOcPj64rCiN"],
+            11 => [11, "Lhoig0azecED65uNNiTRVzXrH807ED4VTi2RjIh56bN9"],
+            12 => [12, "1RcvQTSSkZhqg5AR51RcvQTSSkZhqg5AR5J7JQxv6CgJD"],
+            13 => [13, "5y4j7JdWiJR3VlL5sE4ekhlBEj0Uqo2rBi7J0xc47FXzj"],
+            14 => [14, "Oe3WID5D4yFiV9T6FwbL8Et88lGQMSDxP82dup44pZgF"],
+            15 => [15, "1dlOXLC1W0Wmtkd69ppzq1lcURQ26G2RWATZyzESo1CiN"],
+            16 => [16, "6mBhJfVeGABNuCXRQc2hOZ6mBhJfVeGABNuCXRQc2hOZ"],
+            17 => [17, "RyyIrDOgEk30i3m5Ft59BU61HOvZYm6PmvzGuKsNWBrz"],
+            18 => [18, "1rXkzrjJuOs8QvvaXhbRFvQJZL8Et88lGQMSDxP82dup"],
+            19 => [19, "7h5O3Rr8CshWpDBmtA2aXl6epa6Qe5zP3JIEMjyFFgnn"],
+            20 => [20, "VluFKF1NtBrjXSSfrlSgtOVUb2V1RcvQTSSkZhqg5AR5"],
+            21 => [21, "27BoFHa1idszs29WOrzyT6jC2KwNaGw4v4b6UzEBTIUR"],
+            22 => [22, "8jglT6al6Kh5T6tJmgxtgBmbheT3PR4VTi2RjIh56bN9"],
+            23 => [23, "a4ea0BDmU9RuaCSPh3PJuCehgF5y54Y1N22JCo9rqLMt"],
+            24 => [24, "2OxDYekKuCV1FdTRK5m4YC4G4MQKe4wqFJ7JQxv6CgJD"],
+            25 => [25, "9v2Vz6FKK3c5AYzYoxqUnBpaM0ajFUQxlW3bz7rEu4o3"],
+            26 => [26, "exWO4HnHuovFLcUBmR6l96r06sRepxfKmEv0xc47FXzj"],
+            27 => [27, "2j7ljNhTVycGNNGuedzvufcIqSOoCcYMfnBeQI8Xp9Bf"],
+            28 => [28, "BGK55NrVs2HzcW5pvp9j7zq9obGRI7BtcZ66xD44pZgF"],
+            29 => [29, "kVOv0EWxb7SIR2W6QlEAL1LMWvrsgnh7fEvEiXG0lmAx"],
+            30 => [30, "361etMy065Gmq7eOYYV0UgnYD1ywTojC3eHcKltMrCiN"],
+            31 => [31, "CmsqqcpkP7lJfDanOgS22iibFoBdT7Sbn4KkHlkcPu3r"],
+            32 => [32, "qnqUDILfbk3NCC7vxvHkREe9pHE2yEo82btf7NAUd15"],
+        ];
+    }
+
+    /**
+     * @dataProvider blockSizeTestVectorProvider
+     * @see https://github.com/keybase/saltpack
+     */
+    public function testShouldEncodeWithDifferentBlockSizes($blockSize, $expected)
+    {
+        $data = hex2bin(
+            "DEADBEEFDEADBEEFDEADBEEFDEADBEEF" .
+            "DEADBEEFDEADBEEFDEADBEEFDEADBEEF"
+        );
+
+        $php = new PhpBlockEncoder(Base62::GMP, $blockSize);
+        $gmp = new GmpBlockEncoder(Base62::GMP, $blockSize);
+        $bcmath = new BcmathBlockEncoder(Base62::GMP, $blockSize);
+        $base62 = new Base62(Base62::GMP, $blockSize);
+
+        $this->assertEquals($expected, $php->encode($data));
+        $this->assertEquals($expected, $gmp->encode($data));
+        $this->assertEquals($expected, $bcmath->encode($data));
+        $this->assertEquals($expected, $base62->encode($data));
+
+        $this->assertEquals($data, $php->decode($expected));
+        $this->assertEquals($data, $gmp->decode($expected));
+        $this->assertEquals($data, $bcmath->decode($expected));
+        $this->assertEquals($data, $base62->decode($expected));
     }
 }

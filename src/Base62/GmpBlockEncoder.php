@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 /*
 
-Copyright (c) 2016-2021 Mika Tuupola
+Copyright (c) 2026 Mika Tuupola
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,44 +31,47 @@ SOFTWARE.
  * @license   https://www.opensource.org/licenses/mit-license.php
  */
 
-namespace Tuupola;
+namespace Tuupola\Base62;
 
 use Tuupola\Base62;
 
-class Base62Proxy
+class GmpBlockEncoder extends BaseBlockEncoder
 {
-    public static string $characters = Base62::GMP;
-    public static int $blockSize = 0;
-
-    /**
-     * Encode given data to a base62 string
-     */
-    public static function encode(string $data): string
+    protected function encodeBlock(string $data): string
     {
-        return (new Base62(self::$characters, self::$blockSize))->encode($data);
+        $hex = bin2hex($data);
+        $hex = ltrim($hex, "0");
+
+        if ("" === $hex) {
+            return "";
+        }
+
+        $base62 = gmp_strval(gmp_init($hex, 16), 62);
+
+        if (Base62::GMP === $this->characters) {
+            return $base62;
+        }
+
+        return strtr($base62, Base62::GMP, $this->characters);
     }
 
-    /**
-     * Decode given a base62 string back to data
-     */
-    public static function decode(string $data): string
+    protected function decodeBlock(string $data): string
     {
-        return (new Base62(self::$characters, self::$blockSize))->decode($data);
-    }
+        if (Base62::GMP !== $this->characters) {
+            $data = strtr($data, $this->characters, Base62::GMP);
+        }
 
-    /**
-     * Encode given integer to a base62 string
-     */
-    public static function encodeInteger(int $data): string
-    {
-        return (new Base62(self::$characters, self::$blockSize))->encodeInteger($data);
-    }
+        $data = ltrim($data, Base62::GMP[0]);
 
-    /**
-     * Decode given base62 string back to an integer
-     */
-    public static function decodeInteger(string $data): int
-    {
-        return (new Base62(self::$characters, self::$blockSize))->decodeInteger($data);
+        if ("" === $data) {
+            return "";
+        }
+
+        $hex = gmp_strval(gmp_init($data, 62), 16);
+        if (strlen($hex) % 2) {
+            $hex = "0" . $hex;
+        }
+
+        return (string) hex2bin($hex);
     }
 }
