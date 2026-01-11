@@ -28,6 +28,7 @@ SOFTWARE.
 
 /**
  * @see       https://github.com/tuupola/base62
+ * @see       https://github.com/keybase/saltpack/blob/master/specs/saltpack_armor.md
  * @license   https://www.opensource.org/licenses/mit-license.php
  */
 
@@ -38,6 +39,8 @@ use Tuupola\Base62;
 
 abstract class BaseBlockEncoder
 {
+    private const LOG2_62 = 5.954196310386876;
+
     protected readonly int $encodedBlockSize;
 
     public function __construct(
@@ -52,11 +55,11 @@ abstract class BaseBlockEncoder
         if ($blockSize < 1) {
             throw new InvalidArgumentException("Block size must be at least 1");
         }
-        $this->encodedBlockSize = (int) ceil($blockSize * log(256) / log(62));
+        $this->encodedBlockSize = (int) ceil($blockSize * 8 / self::LOG2_62);
     }
 
     /**
-     * Encode given data to a base62 string
+     * Encode given data to a base62 string (variable width)
      */
     public function encode(string $data): string
     {
@@ -69,14 +72,19 @@ abstract class BaseBlockEncoder
 
         foreach ($blocks as $block) {
             $encoded = $this->encodeBlock($block);
-            $result .= str_pad($encoded, $this->encodedBlockSize, $this->characters[0], STR_PAD_LEFT);
+            $blockSize = strlen($block);
+
+            /* Variable width: calculate minimum chars needed for this block size */
+            $encodedSize = (int) ceil($blockSize * 8 / self::LOG2_62);
+
+            $result .= str_pad($encoded, $encodedSize, $this->characters[0], STR_PAD_LEFT);
         }
 
         return $result;
     }
 
     /**
-     * Decode given a base62 string back to data
+     * Decode given a base62 string back to data (variable width)
      */
     public function decode(string $data): string
     {
@@ -87,11 +95,23 @@ abstract class BaseBlockEncoder
         }
 
         $result = "";
-        $blocks = str_split($data, $this->encodedBlockSize);
+        $remaining = $data;
 
-        foreach ($blocks as $block) {
+        while ("" !== $remaining) {
+            /* Full block or partial? */
+            if (strlen($remaining) >= $this->encodedBlockSize) {
+                $block = substr($remaining, 0, $this->encodedBlockSize);
+                $remaining = substr($remaining, $this->encodedBlockSize);
+                $decodedBlockSize = $this->blockSize;
+            } else {
+                /* Partial block: calculate decoded size from encoded size */
+                $block = $remaining;
+                $remaining = "";
+                $decodedBlockSize = (int) floor(strlen($block) * self::LOG2_62 / 8);
+            }
+
             $decoded = $this->decodeBlock($block);
-            $result .= str_pad($decoded, $this->blockSize, "\x00", STR_PAD_LEFT);
+            $result .= str_pad($decoded, $decodedBlockSize, "\x00", STR_PAD_LEFT);
         }
 
         return $result;
