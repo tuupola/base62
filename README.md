@@ -62,6 +62,8 @@ $default = new Base62(["characters" => Base62::GMP]);
 $inverted = new Base62(["characters" => Base62::INVERTED]);
 print $default->encode("Hello world!"); /* T8dgcjRGuYUueWht */
 print $inverted->encode("Hello world!"); /* t8DGCJrgUyuUEwHT */
+print $default->encodeInteger(27);  /* R */
+print $inverted->encodeInteger(27);  /* r */
 ```
 
 ## Speed
