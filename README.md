@@ -28,7 +28,7 @@ $ composer require "tuupola/base62:^1.0"
 This package has both pure PHP and [GMP](http://php.net/manual/en/ref.gmp.php) based encoders. By default encoder and decoder will use GMP functions if the extension is installed. If GMP is not available pure PHP encoder will be used instead.
 
 ``` php
-$base62 = new Tuupola\Base62;
+$base62 = new Tuupola\Base62();
 
 $encoded = $base62->encode(random_bytes(128));
 $decoded = $base62->decode($encoded);
@@ -93,6 +93,18 @@ $ make bench
 | benchPhpEncoder       | 669.959ops/s     | 526.31x   |
 | benchBcmathEncoder    | 72.956ops/s      | 4,833.21x |
 +-----------------------+------------------+-----------+
+```
+
+If you are sure you have GMP installed you can use the `GmpEncoder` directly.
+
+```php
+if (function_exists("gmp_init")) {
+    $base62 = new Tuupola\Base62\GmpEncoder();
+    $base62->encode("Hello world!"); /* T8dgcjRGuYUueWht */
+} else {
+    /* Handle error... */
+}
+
 ```
 
 ## Static Proxy
