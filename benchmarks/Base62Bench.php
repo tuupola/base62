@@ -3,7 +3,7 @@
 /*
  * This file is part of the Base62 package
  *
- * Copyright (c) 2016-2021 Mika Tuupola
+ * Copyright (c) 2016-2026 Mika Tuupola
  *
  * Licensed under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -30,17 +30,22 @@ class Base62Bench
 {
     private $data;
     private $gmp;
+    private $gmp2;
     private $php;
+    private $php2;
     private $bcmath;
+    private $bcmath2;
     private $encoded;
 
     public function init()
     {
         $this->data = random_bytes(128);
         $this->gmp = new GmpEncoder;
-        $this->gmp2 = new GmpEncoder(["characters" => Base62::INVERTED]);
+        $this->gmp2 = new GmpEncoder(Base62::INVERTED);
         $this->php = new PhpEncoder;
+        $this->php2 = new PhpEncoder(Base62::INVERTED);
         $this->bcmath = new BcmathEncoder;
+        $this->bcmath2 = new BcmathEncoder(Base62::INVERTED);
         $this->encoded = $this->php->encode($this->data);
     }
 
@@ -75,9 +80,27 @@ class Base62Bench
      * @Revs(100)
      * @Groups({"encoder"})
      */
+    public function benchPhpEncoderCustom()
+    {
+        $encoded = $this->php2->encode($this->data);
+    }
+
+    /**
+     * @Revs(100)
+     * @Groups({"encoder"})
+     */
     public function benchBcmathEncoder()
     {
         $encoded = $this->bcmath->encode($this->data);
+    }
+
+    /**
+     * @Revs(100)
+     * @Groups({"encoder"})
+     */
+    public function benchBcmathEncoderCustom()
+    {
+        $encoded = $this->bcmath2->encode($this->data);
     }
 
    /**
@@ -111,8 +134,26 @@ class Base62Bench
      * @Revs(100)
      * @Groups({"decoder"})
      */
+    public function benchPhpDecoderCustom()
+    {
+        $encoded = $this->php2->decode($this->encoded);
+    }
+
+    /**
+     * @Revs(100)
+     * @Groups({"decoder"})
+     */
     public function benchBcmathDecoder()
     {
         $encoded = $this->bcmath->decode($this->encoded);
+    }
+
+    /**
+     * @Revs(100)
+     * @Groups({"decoder"})
+     */
+    public function benchBcmathDecoderCustom()
+    {
+        $encoded = $this->bcmath2->decode($this->encoded);
     }
 }

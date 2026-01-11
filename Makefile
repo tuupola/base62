@@ -26,7 +26,8 @@ static: vendor
 	vendor/bin/phpstan analyse src --level max
 
 bench: vendor
-	vendor/bin/phpbench run benchmarks/ --report=default
+	vendor/bin/phpbench run benchmarks/ --report=short --group=encoder
+	vendor/bin/phpbench run benchmarks/ --report=short --group=decoder
 
 watch: vendor
 	find . -name "*.php" -not -path "./vendor/*" -o -name "*.json" -not -path "./vendor/*" | entr -c make test
