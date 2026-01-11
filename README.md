@@ -70,27 +70,31 @@ Install GMP if you can. It is much faster pure PHP encoder. Below benchmarks are
 
 ```
 $ php --version
-PHP 8.0.7 (cli) (built: Jun  4 2021 03:50:01) ( NTS )
+PHP 8.3.20 (cli) (built: Apr  8 2025 20:21:18) (NTS gcc x86_64)
 
 $ make bench
 
-+-----------------------+------------------+-----------+
-| subject               | mean             | diff      |
-+-----------------------+------------------+-----------+
-| benchGmpDecoder       | 140,409.997ops/s | 1.10x     |
-| benchGmpDecoderCustom | 154,607.297ops/s | 1.00x     |
-| benchPhpDecoder       | 721.147ops/s     | 214.39x   |
-| benchBcmathDecoder    | 72.191ops/s      | 2,141.64x |
-+-----------------------+------------------+-----------+
++--------------------------+------------------+
+| subject                  | mode             |
++--------------------------+------------------+
+| benchGmpEncoder          | 974,372.664ops/s |
+| benchGmpEncoderCustom    | 887,630.496ops/s |
+| benchPhpEncoder          | 1,993.159ops/s   |
+| benchPhpEncoderCustom    | 1,978.154ops/s   |
+| benchBcmathEncoder       | 155.390ops/s     |
+| benchBcmathEncoderCustom | 155.303ops/s     |
++--------------------------+------------------+
 
-+-----------------------+------------------+-----------+
-| subject               | mean             | diff      |
-+-----------------------+------------------+-----------+
-| benchGmpEncoder       | 352,609.309ops/s | 1.00x     |
-| benchGmpEncoderCustom | 350,140.056ops/s | 1.01x     |
-| benchPhpEncoder       | 669.959ops/s     | 526.31x   |
-| benchBcmathEncoder    | 72.956ops/s      | 4,833.21x |
-+-----------------------+------------------+-----------+
++--------------------------+------------------+
+| subject                  | mode             |
++--------------------------+------------------+
+| benchGmpDecoder          | 289,200.539ops/s |
+| benchGmpDecoderCustom    | 278,208.793ops/s |
+| benchPhpDecoder          | 2,030.965ops/s   |
+| benchPhpDecoderCustom    | 2,070.158ops/s   |
+| benchBcmathDecoder       | 148.407ops/s     |
+| benchBcmathDecoderCustom | 148.725ops/s     |
++--------------------------+------------------+
 ```
 
 ## Static Proxy

@@ -1,10 +1,11 @@
 {
-    "bootstrap": "vendor/autoload.php",
-    "reports": {
-        "default": {
-            "generator": "table",
-            "cols": [ "subject", "mean", "diff" ],
-            "break": ["groups"]
+    "$schema": "./vendor/phpbench/phpbench/phpbench.schema.json",
+    "runner.bootstrap": "vendor/autoload.php",
+    "runner.path": "benchmarks",
+    "report.generators": {
+        "short": {
+            "extends": "aggregate",
+            "cols": ["subject", "mode"]
         }
     }
 }
