@@ -860,4 +860,82 @@ class Base62Test extends TestCase
         $this->assertEquals($data, $bcmath->decode($expected));
         $this->assertEquals($data, $base62->decode($expected));
     }
+
+    public function saltpackShortBlockTestVectorProvider()
+    {
+        return [
+            "1 byte 0x42" => [
+                "42",
+                "14",
+            ],
+            "2 bytes" => [
+                "DEAD",
+                "EpR",
+            ],
+            "4 bytes" => [
+                "DEADBEEF",
+                "44pZgF",
+            ],
+            "8 bytes" => [
+                "0123456789ABCDEF",
+                "063UfDVRKBz",
+            ],
+            "15 bytes" => [
+                "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                "1szWVIyZES2MJoAMUmjwV",
+            ],
+            "16 bytes (half block)" => [
+                "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "5C2goAu3eRqUlrQWakAT4k",
+            ],
+            "16 bytes zeros" => [
+                "00000000000000000000000000000000",
+                "0000000000000000000000",
+            ],
+            "17 bytes" => [
+                "5555555555555555555555555555555555",
+                "AirYNaVjXVUNWoIlHrJc1oL",
+            ],
+            "24 bytes" => [
+                "808080808080808080808080808080808080808080808080",
+                "1NxOlR8WYsUZwUiaWrgO59M1nGcRGzeZk",
+            ],
+            "31 bytes (block-1)" => [
+                "7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F7F",
+                "7JydkDh0sEoLneRRY44bAHsH8CAxNAk6uTjhiFnfe3",
+            ],
+            "31 bytes max" => [
+                "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                "EhWuMzfS7MPuxAu520Mu4XwCuyZfalRej3Z8gTlzA7",
+            ],
+            "31 bytes min" => [
+                "00000000000000000000000000000000000000000000000000000000000000",
+                "000000000000000000000000000000000000000000",
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider saltpackShortBlockTestVectorProvider
+     * @see https://github.com/keybase/saltpack
+     */
+    public function testShouldMatchSaltpackShortBlockTestVectors($hex, $expected)
+    {
+        $data = hex2bin($hex);
+
+        $php = new PhpBlockEncoder(Base62::GMP, 32);
+        $gmp = new GmpBlockEncoder(Base62::GMP, 32);
+        $bcmath = new BcmathBlockEncoder(Base62::GMP, 32);
+        $base62 = new Base62(Base62::GMP, 32);
+
+        $this->assertEquals($expected, $php->encode($data));
+        $this->assertEquals($expected, $gmp->encode($data));
+        $this->assertEquals($expected, $bcmath->encode($data));
+        $this->assertEquals($expected, $base62->encode($data));
+
+        $this->assertEquals($data, $php->decode($expected));
+        $this->assertEquals($data, $gmp->decode($expected));
+        $this->assertEquals($data, $bcmath->decode($expected));
+        $this->assertEquals($data, $base62->decode($expected));
+    }
 }
