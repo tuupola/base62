@@ -709,4 +709,45 @@ class Base62Test extends TestCase
         $this->assertEquals($data, $bcmath->decode($expected));
         $this->assertEquals($data, $base62->decode($expected));
     }
+
+    public function knownTestVectorProvider()
+    {
+        return [
+            "KSUID example" => [
+                "066A029C73FC1AA3B2446246D6E89FCD909E8FE8",
+                "0ujzPyRiIAffKhBux4PvQdDqMHY",
+            ],
+            "KSUID min" => [
+                "0000000000000000000000000000000000000000",
+                "000000000000000000000000000",
+            ],
+            "KSUID max" => [
+                "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+                "aWgEPTl1tmebfsQzFP4bxwgy80V",
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider knownTestVectorProvider
+     */
+    public function testShouldMatchKnownTestVectors($hex, $expected)
+    {
+        $data = hex2bin($hex);
+
+        $php = new PhpBlockEncoder(Base62::GMP, 20);
+        $gmp = new GmpBlockEncoder(Base62::GMP, 20);
+        $bcmath = new BcmathBlockEncoder(Base62::GMP, 20);
+        $base62 = new Base62(Base62::GMP, 20);
+
+        $this->assertEquals($expected, $php->encode($data));
+        $this->assertEquals($expected, $gmp->encode($data));
+        $this->assertEquals($expected, $bcmath->encode($data));
+        $this->assertEquals($expected, $base62->encode($data));
+
+        $this->assertEquals($data, $php->decode($expected));
+        $this->assertEquals($data, $gmp->decode($expected));
+        $this->assertEquals($data, $bcmath->decode($expected));
+        $this->assertEquals($data, $base62->decode($expected));
+    }
 }
