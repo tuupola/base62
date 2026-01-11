@@ -944,7 +944,8 @@ class Base62Test extends TestCase
         return [
             "33 bytes (block+1)" => [
                 "ABABABABABABABABABABABABABABABAB" .
-                "ABABABABABABABABABABABABABABABAB" . "AB",
+                "ABABABABABABABABABABABABABABABAB" .
+                "AB",
                 "ehv1hsdOHPxDuX3xn9YyIKbgl4yJuySCWzdimD4heup2l",
             ],
             "48 bytes (1.5 blocks)" => [
@@ -974,7 +975,8 @@ class Base62Test extends TestCase
                 "42424242424242424242424242424242" .
                 "42424242424242424242424242424242" .
                 "42424242424242424242424242424242" .
-                "42424242424242424242424242424242" . "42",
+                "42424242424242424242424242424242" .
+                "42",
                 "Fi8xOY8g0CByqH6y3k6yFmCN1r2c8w8hzgHVQDkPYHa" .
                 "Fi8xOY8g0CByqH6y3k6yFmCN1r2c8w8hzgHVQDkPYHa14",
             ],
@@ -995,7 +997,8 @@ class Base62Test extends TestCase
                 "202122232425262728292A2B2C2D2E2F" .
                 "303132333435363738393A3B3C3D3E3F" .
                 "404142434445464748494A4B4C4D4E4F" .
-                "505152535455565758595A5B5C5D5E5F" . "60616263",
+                "505152535455565758595A5B5C5D5E5F" .
+                "60616263",
                 "003aUlTJC7tjlCTQj2uNU3MFagCXG9LRKRcwGkBIDlf" .
                 "7cMxemzhJjkW31yzTx5H07wJF2A2uBEOEec26ubYMsJ" .
                 "FEgKooW5RLbIKrUYErGAWCWMtO7YYD7L8rb7x51oVyx1lQkF9",
@@ -1015,6 +1018,71 @@ class Base62Test extends TestCase
         $gmp = new GmpBlockEncoder(Base62::GMP, 32);
         $bcmath = new BcmathBlockEncoder(Base62::GMP, 32);
         $base62 = new Base62(Base62::GMP, 32);
+
+        $this->assertEquals($expected, $php->encode($data));
+        $this->assertEquals($expected, $gmp->encode($data));
+        $this->assertEquals($expected, $bcmath->encode($data));
+        $this->assertEquals($expected, $base62->encode($data));
+
+        $this->assertEquals($data, $php->decode($expected));
+        $this->assertEquals($data, $gmp->decode($expected));
+        $this->assertEquals($data, $bcmath->decode($expected));
+        $this->assertEquals($data, $base62->decode($expected));
+    }
+
+    public function blockSizeTestVectorProvider()
+    {
+        return [
+            1 => [1, "3a2n343r3a2n343r3a2n343r3a2n343r3a2n343r3a2n343r3a2n343r3a2n343r"],
+            2 => [2, "EpRCiNEpRCiNEpRCiNEpRCiNEpRCiNEpRCiNEpRCiNEpRCiN"],
+            3 => [3, "0zEQY13xW90qVGY0lmAx0zEQY13xW90qVGY0lmAx0zEQY13xW9CiN"],
+            4 => [4, "44pZgF44pZgF44pZgF44pZgF44pZgF44pZgF44pZgF44pZgF"],
+            5 => [5, "GpwxKTWD8XsV2LER8kJkUI8Xp9BfGpwxKTWD8XsV2LCiN"],
+            6 => [6, "17WVQyXuv0xc47FXzj17WVQyXuv0xc47FXzj17WVQyXuvCiN"],
+            7 => [7, "4d4DnO034Q4zEGw5ILBl3y9AzwCMvO3bz7rEu4o344pZgF"],
+            8 => [8, "J7JQxv6CgJDJ7JQxv6CgJDJ7JQxv6CgJDJ7JQxv6CgJD"],
+            9 => [9, "1GwCFLPlcMhNG0zaiKwuoVldaX15gYOoJClFHaAI8Xp9Bf"],
+            10 => [10, "5FwIZMQOcPj64r4VTi2RjIh56bN95FwIZMQOcPj64rCiN"],
+            11 => [11, "Lhoig0azecED65uNNiTRVzXrH807ED4VTi2RjIh56bN9"],
+            12 => [12, "1RcvQTSSkZhqg5AR51RcvQTSSkZhqg5AR5J7JQxv6CgJD"],
+            13 => [13, "5y4j7JdWiJR3VlL5sE4ekhlBEj0Uqo2rBi7J0xc47FXzj"],
+            14 => [14, "Oe3WID5D4yFiV9T6FwbL8Et88lGQMSDxP82dup44pZgF"],
+            15 => [15, "1dlOXLC1W0Wmtkd69ppzq1lcURQ26G2RWATZyzESo1CiN"],
+            16 => [16, "6mBhJfVeGABNuCXRQc2hOZ6mBhJfVeGABNuCXRQc2hOZ"],
+            17 => [17, "RyyIrDOgEk30i3m5Ft59BU61HOvZYm6PmvzGuKsNWBrz"],
+            18 => [18, "1rXkzrjJuOs8QvvaXhbRFvQJZL8Et88lGQMSDxP82dup"],
+            19 => [19, "7h5O3Rr8CshWpDBmtA2aXl6epa6Qe5zP3JIEMjyFFgnn"],
+            20 => [20, "VluFKF1NtBrjXSSfrlSgtOVUb2V1RcvQTSSkZhqg5AR5"],
+            21 => [21, "27BoFHa1idszs29WOrzyT6jC2KwNaGw4v4b6UzEBTIUR"],
+            22 => [22, "8jglT6al6Kh5T6tJmgxtgBmbheT3PR4VTi2RjIh56bN9"],
+            23 => [23, "a4ea0BDmU9RuaCSPh3PJuCehgF5y54Y1N22JCo9rqLMt"],
+            24 => [24, "2OxDYekKuCV1FdTRK5m4YC4G4MQKe4wqFJ7JQxv6CgJD"],
+            25 => [25, "9v2Vz6FKK3c5AYzYoxqUnBpaM0ajFUQxlW3bz7rEu4o3"],
+            26 => [26, "exWO4HnHuovFLcUBmR6l96r06sRepxfKmEv0xc47FXzj"],
+            27 => [27, "2j7ljNhTVycGNNGuedzvufcIqSOoCcYMfnBeQI8Xp9Bf"],
+            28 => [28, "BGK55NrVs2HzcW5pvp9j7zq9obGRI7BtcZ66xD44pZgF"],
+            29 => [29, "kVOv0EWxb7SIR2W6QlEAL1LMWvrsgnh7fEvEiXG0lmAx"],
+            30 => [30, "361etMy065Gmq7eOYYV0UgnYD1ywTojC3eHcKltMrCiN"],
+            31 => [31, "CmsqqcpkP7lJfDanOgS22iibFoBdT7Sbn4KkHlkcPu3r"],
+            32 => [32, "qnqUDILfbk3NCC7vxvHkREe9pHE2yEo82btf7NAUd15"],
+        ];
+    }
+
+    /**
+     * @dataProvider blockSizeTestVectorProvider
+     * @see https://github.com/keybase/saltpack
+     */
+    public function testShouldEncodeWithDifferentBlockSizes($blockSize, $expected)
+    {
+        $data = hex2bin(
+            "DEADBEEFDEADBEEFDEADBEEFDEADBEEF" .
+            "DEADBEEFDEADBEEFDEADBEEFDEADBEEF"
+        );
+
+        $php = new PhpBlockEncoder(Base62::GMP, $blockSize);
+        $gmp = new GmpBlockEncoder(Base62::GMP, $blockSize);
+        $bcmath = new BcmathBlockEncoder(Base62::GMP, $blockSize);
+        $base62 = new Base62(Base62::GMP, $blockSize);
 
         $this->assertEquals($expected, $php->encode($data));
         $this->assertEquals($expected, $gmp->encode($data));
